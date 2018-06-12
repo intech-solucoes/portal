@@ -1,6 +1,16 @@
 import React from "react";
+import { PlanoService } from "prevsystem-service";
 
 export default class Planos extends React.Component {
+
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            listaPlanos: []
+        }
+
+    }
 
     render() {
         return (
@@ -12,7 +22,8 @@ export default class Planos extends React.Component {
                                 <thead>
                                     <tr>
                                         <th>Plano</th>
-                                        <th width="280px" >Situação</th>
+                                        <th width="280px">Situação</th>
+                                        <th>Data de inscrição</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -30,43 +41,32 @@ export default class Planos extends React.Component {
 }
 
 class TabelaPlanos extends React.Component {
+    constructor(props){
+        super(props);
+
+        this.state = { listaPlanos: [] }
+        
+        PlanoService.Buscar()
+            .then((result) => {
+                this.setState({
+                    listaPlanos: result.data
+                }, () => { console.log(this.state) });
+            });
+    }
 
     render() {
         return (
-            listaPlanos.map(plano => {
-                if (plano.situacao === "ATIVO") {
-                    return (
-                        <tr>
-                            <td>{plano.nome}</td>
-                            <td><span className="label label-success">{plano.situacao}</span></td>
-                            <td width="200"><a href="">Extrato</a></td>
-                        </tr>
-                    );
-                } else {
-                    return (
-                        <tr>
-                            <td>{plano.nome}</td>
-                            <td><span className="label label-success">{plano.situacao}</span></td>
-                            <td></td>
-                        </tr>
-                    );
-                }
+            this.state.listaPlanos.map(plano => {
+                return (
+                    <tr>
+                        <td>{plano.DS_PLANO}</td>
+                        <td><span className="label label-success">{plano.DS_CATEGORIA}</span></td>
+                        <td>{plano.DT_INSC_PLANO}</td>
+                        {plano.DS_CATEGORIA === 'ATIVO' ? <td width="200"><a href="">Extrato</a></td> : <td></td>}
+                    </tr>
+                );
             })
         );
     }
-
 }
-
-const listaPlanos = [
-    {
-        id: "1",
-        nome: "BENEFÍCIO DEFINIDO",
-        situacao: "ATIVO"
-    },
-    {
-        id: "2",
-        nome: "BENEFÍCIO DEFINIDO",
-        situacao: "ASSISTIDO"
-    }
-];
 
