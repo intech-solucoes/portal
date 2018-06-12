@@ -1,5 +1,5 @@
 import React from "react";
-import { FuncionarioService } from "prevsystem-service";;
+import { FuncionarioService } from "prevsystem-service";
 
 import FormFieldStatic from "../_shared/FormFieldStatic";
 import BoxListaPlanos from "../_shared/plano/BoxListaPlanos";
