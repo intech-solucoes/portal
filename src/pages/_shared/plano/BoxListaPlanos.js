@@ -1,9 +1,7 @@
 import React from "react";
 
-import PlanoService from "../../../services/PlanoService";
+import { PlanoService } from "../../../services";
 import FormFieldStatic from "../FormFieldStatic";
-
-const service = new PlanoService();
 
 export default class BoxListaPlanos extends React.Component {
     constructor(props) {
@@ -15,15 +13,14 @@ export default class BoxListaPlanos extends React.Component {
 
     componentWillMount() {
         var self = this;
-        service.Buscar((result) => {
-            console.log(result.data);
+        PlanoService.Buscar()
+            .then((result) => {
 
-            self.setState({
-                planos: result.data
+                self.setState({
+                    planos: result.data
+                });
+                
             });
-        }, (err) => {
-            console.error(err);
-        })
     }
 
     render() {

@@ -31,13 +31,15 @@ export default class MasterPage extends React.Component {
     }
 
     componentWillMount() {
-        UsuarioService.BuscarUsuario(() => {}, (err) => {
-            if(err.message.indexOf("401") > -1)
-            {
-                localStorage.removeItem("token");
-                document.location = ".";
-            }
-        });
+        UsuarioService.VerificarLogin()
+            .then(() => {})
+            .catch((err) => {
+                if(err.message.indexOf("401") > -1)
+                {
+                    localStorage.removeItem("token");
+                    document.location = ".";
+                }
+            });
     }
 
     getRota() {

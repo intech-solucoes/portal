@@ -1,7 +1,7 @@
 import React from "react";
 import LoginForm from "../_shared/LoginForm";
 
-import UsuarioService from "../../services/UsuarioService";
+import { UsuarioService, FuncionarioService } from "../../services";
 
 export default class LoginPage extends React.Component {
     constructor(props) {
@@ -14,17 +14,26 @@ export default class LoginPage extends React.Component {
     onSubmit(cpf, senha) {
         this.loginForm.current.limparErro();
 
-        UsuarioService.Login(cpf, senha, (result) => {
-            localStorage.setItem("token", result.data.AccessToken);
-            document.location = ".";
-        }, (err) => {
+        UsuarioService.Login(cpf, senha)
+            .then((result) => {
+                localStorage.setItem("token", result.data.AccessToken);
+                
+                FuncionarioService.BuscarDados()
+                    .then((result) => {
+                        localStorage.setItem("fundacao", result.data.funcionario.CD_FUNDACAO);
+                        localStorage.setItem("empresa", result.data.funcionario.CD_EMPRESA);
 
-            if(err.message.indexOf("401") > -1)
-                this.loginForm.current.mostrarErro("CPF ou senha incorretos!");
-            else
-                console.error(err);
+                        document.location = ".";
+                    });
+            })
+            .catch((err) => {
 
-        });
+                if(err.message.indexOf("401") > -1)
+                    this.loginForm.current.mostrarErro("CPF ou senha incorretos!");
+                else
+                    console.error(err);
+
+            });
     }
 
     render() {

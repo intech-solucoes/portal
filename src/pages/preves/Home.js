@@ -2,10 +2,7 @@ import React from "react";
 import { FuncionarioService } from '../../services';
 
 import FormFieldStatic from "../_shared/FormFieldStatic";
-import UltimasMargens from "../_shared/margem/UltimasMargens";
 import BoxListaPlanos from "../_shared/plano/BoxListaPlanos";
-
-var service = new FuncionarioService();
 
 export default class Home extends React.Component {
     static defaultProps = {
@@ -25,13 +22,14 @@ export default class Home extends React.Component {
 
     componentWillMount() {
         var self = this;
-        service.BuscarDados((result) => {
-            self.setState({
-                dados: result.data
+        FuncionarioService.BuscarDados()
+            .then((result) => {
+
+                self.setState({
+                    dados: result.data
+                });
+
             });
-        }, (err) => {
-            console.error(err);
-        })
     }
 
     render() {
@@ -103,7 +101,7 @@ export default class Home extends React.Component {
                         </div>
                     </div>
 
-                    <div className="box">
+                    {/* <div className="box">
                         <div className="box-title">
                             Últimas Margens
                         </div>
@@ -111,7 +109,7 @@ export default class Home extends React.Component {
                         <div className="box-content">
                             <UltimasMargens />
                         </div>
-                    </div>
+                    </div> */}
 
                     <BoxListaPlanos />
                 </div>
