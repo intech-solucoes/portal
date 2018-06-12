@@ -1,6 +1,6 @@
 import React from "react";
 
-import { PlanoService } from "../../../services";
+import { PlanoService } from "prevsystem-service";
 import FormFieldStatic from "../FormFieldStatic";
 
 export default class BoxListaPlanos extends React.Component {
@@ -19,7 +19,7 @@ export default class BoxListaPlanos extends React.Component {
                 self.setState({
                     planos: result.data
                 });
-                
+
             });
     }
 

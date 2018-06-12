@@ -1,7 +1,7 @@
 import React from "react";
 import LoginForm from "../_shared/LoginForm";
 
-import { UsuarioService, FuncionarioService } from "../../services";
+import { UsuarioService, FuncionarioService } from "prevsystem-service";;
 
 export default class LoginPage extends React.Component {
     constructor(props) {

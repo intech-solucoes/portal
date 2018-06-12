@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route} from "react-router-dom";
 
-import UsuarioService from "../services/UsuarioService";
+import { UsuarioService } from  "prevsystem-service";;
 
 import { Home, Planos, Beneficios, ContraCheque, InformeRendimentos, Documentos, Mensagens, Recadastramento,
         TrocarSenha, ControleFuncionalidades, ListarParticipantes } from ".";

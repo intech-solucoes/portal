@@ -1,5 +1,5 @@
 import React from "react";
-import { FuncionarioService } from '../../services';
+import { FuncionarioService } from "prevsystem-service";;
 
 import FormFieldStatic from "../_shared/FormFieldStatic";
 import BoxListaPlanos from "../_shared/plano/BoxListaPlanos";
@@ -101,17 +101,7 @@ export default class Home extends React.Component {
                         </div>
                     </div>
 
-                    {/* <div className="box">
-                        <div className="box-title">
-                            Últimas Margens
-                        </div>
-                        
-                        <div className="box-content">
-                            <UltimasMargens />
-                        </div>
-                    </div> */}
-
-                    <BoxListaPlanos />
+                    <BoxListaPlanos mostrarBotaoExtrato={false} />
                 </div>
             </div>
         );
