@@ -1,0 +1,54 @@
+.navbar-default {
+    position: fixed;
+    display: none;
+    width: 0px;
+    z-index: 2001;
+    height: 100%;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    background: #FFF;
+    -webkit-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    transition: all 0.4s;
+    overflow: auto;
+
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            position: relative;
+            display: block;
+
+            &.navbar-header {
+                padding: 33px 40px;
+                float: none;
+
+                img {
+                    width: 100%;
+                }
+            }
+
+            &:hover a {
+                color: $color-primary;
+                text-decoration: none;
+            }
+
+            a {
+                position: relative;
+                display: block;
+                font-weight: 400;
+                font-size: 16px;
+                color: #676a6c;
+                padding: 10px 15px;
+
+                .fas {
+                    width: 20px;
+                    text-align: center;
+                    margin-right: 8px;
+                }
+            }
+        }
+    }
+}
