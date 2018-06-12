@@ -1,7 +1,7 @@
 import MasterPage from "./MasterPage";
 import MasterPageLogin from "./MasterPageLogin";
 
-var config = require("../../config.json");
+var config = require("../config.json");
 
 function getPage(pageName) {
     try {
