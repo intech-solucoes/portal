@@ -101,7 +101,7 @@ export default class Home extends React.Component {
                         </div>
                     </div>
 
-                    <BoxListaPlanos mostrarBotaoExtrato={false} />
+                    <BoxListaPlanos />
                 </div>
             </div>
         );

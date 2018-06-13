@@ -18,7 +18,7 @@ export default class BoxListaPlanos extends React.Component {
 
                 self.setState({
                     planos: result.data
-                });
+                }, () => { console.log(self.state) });
 
             });
     }
@@ -45,6 +45,12 @@ export default class BoxListaPlanos extends React.Component {
                                         <div>Você não possui benefícios neste plano.</div>
                                     }
                                 </div>
+
+                                {(plano.DS_CATEGORIA === "ATIVO" || plano.DS_CATEGORIA === "AUTOPATROCINIO") && 
+                                    <div className="form-row">
+                                        <button className="btn btn-primary">Extrato</button>
+                                    </div>
+                                }
 
                                 {/* <div className="form-row">
                                     <FormFieldStatic titulo="Salário de Contribuição" valor={"R$" + 5000.25} />

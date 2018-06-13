@@ -50,7 +50,7 @@ class TabelaPlanos extends React.Component {
             .then((result) => {
                 this.setState({
                     listaPlanos: result.data
-                }, () => { console.log(this.state) });
+                });
             });
     }
 
@@ -62,7 +62,11 @@ class TabelaPlanos extends React.Component {
                         <td>{plano.DS_PLANO}</td>
                         <td><span className="label label-success">{plano.DS_CATEGORIA}</span></td>
                         <td>{plano.DT_INSC_PLANO}</td>
-                        {plano.DS_CATEGORIA === 'ATIVO' ? <td width="200"><a href="">Extrato</a></td> : <td></td>}
+                        <td>
+                            {(plano.DS_CATEGORIA === 'ATIVO' || plano.DS_CATEGORIA === 'AUTOPATROCINIO') &&
+                                <button className="btn btn-primary" onClick={() => {}}>Extrato</button>}
+                        </td>
+                        
                     </tr>
                 );
             })
