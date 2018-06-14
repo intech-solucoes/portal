@@ -73,9 +73,9 @@ class TabelaPastas extends React.Component {
                                 </thead>
                                 <tbody>
                                     {
-                                        listaDiretorios.map(diretorio => {
+                                        listaDiretorios.map((diretorio, index) => {
                                             return (
-                                                <tr>
+                                                <tr key={index}>
                                                     <td><i className="fa fa-folder-open"></i></td>
                                                     <td><a id={"abrir-pasta-" + diretorio.id} href="">{diretorio.nome}</a></td>
                                                     <td align="right"><button id={"deletar-pasta-" + diretorio.id} className="btn btn-sm btn-danger"><i className="fa fa-trash"></i></button></td>

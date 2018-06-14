@@ -18,7 +18,7 @@ export default class BoxListaPlanos extends React.Component {
 
                 self.setState({
                     planos: result.data
-                }, () => { console.log(self.state) });
+                });
 
             });
     }
@@ -44,11 +44,11 @@ export default class BoxListaPlanos extends React.Component {
                                     {!plano.ProcessoBeneficio &&
                                         <div>Você não possui benefícios neste plano.</div>
                                     }
-                                </div>
+                                </div><br />
 
                                 {(plano.DS_CATEGORIA === "ATIVO" || plano.DS_CATEGORIA === "AUTOPATROCINIO") && 
                                     <div className="form-row">
-                                        <button className="btn btn-primary">Extrato</button>
+                                        <button className="btn btn-primary" onClick={() => {}}>Extrato</button>
                                     </div>
                                 }
 

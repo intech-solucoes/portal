@@ -166,9 +166,9 @@ export default class MensagemNova extends React.Component {
                                 </thead>
                                 <tbody>
                                     {
-                                        historicoMensagens.map(mensagem => {
+                                        historicoMensagens.map((mensagem, index) => {
                                             return (
-                                                <tr>
+                                                <tr key={index}>
                                                     <th width="55px">
                                                         <button id={"mensagem-" + mensagem.id} className="btn btn-default" onClick={() => this.toggleModal(mensagem.id)}><i className="fa fa-search"></i></button>
                                                         {this.renderModal(this.state.mensagemId)}

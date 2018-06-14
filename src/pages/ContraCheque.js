@@ -4,9 +4,9 @@ export default class ContraCheque extends React.Component {
 
     render() {
         return (
-            listaContraCheque.map(contraCheque => {
+            listaContraCheque.map((contraCheque, index) => {
                 return (
-                    <div className="row">
+                    <div key={index} className="row">
                         <div id={"plano-" + contraCheque.id} className="col-lg-8">
                             <div className="box">
                                 <div className="box-title">
@@ -25,9 +25,9 @@ export default class ContraCheque extends React.Component {
                                         </thead>
                                         <tbody>
                                             {
-                                                contraCheque.valores.map(valor => {
+                                                contraCheque.valores.map((valor, index) => {
                                                     return (
-                                                        <tr>
+                                                        <tr key={index} >
                                                             <td>{valor.referencia}</td>
                                                             <td className="text-info">{valor.bruto}</td>
                                                             <td className="text-danger">{valor.descontos}</td>

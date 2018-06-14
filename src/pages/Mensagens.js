@@ -49,9 +49,9 @@ class TabelaMensagens extends React.Component {
                     </thead>
                     <tbody>
                         {
-                            listaMensagens.map(mensagem => {
+                            listaMensagens.map((mensagem, index) => {
                                 return (
-                                    <tr>
+                                    <tr key={index}>
                                         <td><button id={"mensagem-" + mensagem.id} className="btn btn-default btn-sm"><i className="fa fa-search" /></button></td>
                                         <td>{mensagem.dataCriacao}</td>
                                         <td>{mensagem.titulo}</td>

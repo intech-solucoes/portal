@@ -56,11 +56,11 @@ class TabelaPlanos extends React.Component {
 
     render() {
         return (
-            this.state.listaPlanos.map(plano => {
+            this.state.listaPlanos.map((plano, index) => {
                 return (
-                    <tr>
+                    <tr key={index}>
                         <td>{plano.DS_PLANO}</td>
-                        <td><span className="label label-success">{plano.DS_CATEGORIA}</span></td>
+                        <td><h5><span className="badge badge-primary">{plano.DS_CATEGORIA}</span></h5></td>
                         <td>{plano.DT_INSC_PLANO}</td>
                         <td>
                             {(plano.DS_CATEGORIA === 'ATIVO' || plano.DS_CATEGORIA === 'AUTOPATROCINIO') &&

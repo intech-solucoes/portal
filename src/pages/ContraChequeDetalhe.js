@@ -49,9 +49,9 @@ export default class ContraChequeDetalhe extends React.Component {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    listaRendimentos.map(rendimento => {
+                                                    listaRendimentos.map((rendimento, index) => {
                                                         return (
-                                                            <tr>
+                                                            <tr key={index}>
                                                                 <td>{rendimento.descricao}</td>
                                                                 <td>R$ {rendimento.valor}</td>
                                                             </tr>
