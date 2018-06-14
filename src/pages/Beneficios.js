@@ -1,12 +1,26 @@
-import React from 'react';
+import React from 'react'
 
-export default class BeneficioItem extends React.Component {
+export default class Beneficios extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            listaPlanos: []
+        }
+
+    }
+
+    componentDidMount() {
+        
+    }
+
     render() {
         return (
-            listaPlanos.map(plano => {
+            listaPlanos.map((plano, index) => {
                 if(plano.temEspecie) {
                     return (
-                        <div className="box">
+                        <div key={index} className="box">
                             <div className="box-title">
                                 PLANO {plano.nome} <label id="situacao"><small>SITUAÇÃO: {plano.situacaoPlano}</small></label>
                             </div>
@@ -21,9 +35,9 @@ export default class BeneficioItem extends React.Component {
                                     </thead>
                                     <tbody>
                                         {
-                                            plano.itens.map(item => {
+                                            plano.itens.map((item, index) => {
                                                 return (
-                                                    <tr>
+                                                    <tr key={index}>
                                                         <td>{item.especie}</td>
                                                         <td>{item.situacaoAtual}</td>
                                                     </tr>
@@ -37,7 +51,7 @@ export default class BeneficioItem extends React.Component {
                     )
                 } else {
                     return (
-                        <div className="box">
+                        <div key={index} className="box">
                             <div className="box-title">
                                 PLANO {plano.nome} <label id="situacao"><small>SITUAÇÃO: {plano.situacaoPlano}</small></label>
                             </div>
