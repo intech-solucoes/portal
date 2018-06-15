@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
-import { Login } from ".";
+import { Login, EsqueciSenha } from ".";
 
 export default class MasterPageLogin extends React.Component {
 	render() {
@@ -10,6 +10,7 @@ export default class MasterPageLogin extends React.Component {
 				<Router>
 					<div>
 						<Route exact path="/" component={Login} />
+						<Route path="/esqueciSenha" component={EsqueciSenha} />
 					</div>
 				</Router>
 			</div>
