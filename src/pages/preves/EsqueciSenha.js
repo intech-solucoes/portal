@@ -28,7 +28,6 @@ export default class EsqueciSenha extends React.Component {
     }
     
     componentDidMount() {
-
     }
 
     validarCampos() {
@@ -108,7 +107,6 @@ export default class EsqueciSenha extends React.Component {
             }, () => { this.enviarSenha() })
         }
 
-        console.log(this.state);
     }
 
     /**
@@ -116,10 +114,25 @@ export default class EsqueciSenha extends React.Component {
      */
     enviarSenha() {
         console.log(this.state);
-        UsuarioService.PrimeiroAcesso(this.state.cpf, this.state.dataNascimento);
-        console.log("Senha enviada");
-    }
 
+        var data = {
+            cpf: this.state.cpf,
+            dataNascimento: this.state.dataNascimento
+        }
+        
+        UsuarioService.PrimeiroAcesso(data)
+            .then((result) => {
+                window.alert(result.data);
+                this.props.history.push('/');
+            })
+            .catch((err) => { 
+                this.setState({
+                    mensagemErro: "Dados inválidos!"
+                }, () => { 
+                    console.error(err);
+                })
+            });
+    }
 
     render() {
         return(
