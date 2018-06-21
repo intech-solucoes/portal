@@ -5802,6 +5802,9 @@ react-fontawesome@^1.6.1:
   dependencies:
     prop-types "^15.5.6"
 
+react-lib@../lib/react-lib/:
+  version "1.0.0"
+
 react-popper@^0.8.3:
   version "0.8.3"
   resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-0.8.3.tgz#0f73333137c9fb0af6ec4074d2d0585a0a0461e1"

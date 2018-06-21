@@ -1,16 +1,89 @@
 import React from 'react';
-import { Badge } from 'reactstrap';
+import DataInvalida from './_shared/Data';
 
 export default class MensagemNova extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+
+            // States campos
+            titulo: "",
+            mensagem: "",
+            enviarEmail: false,
+            enviarSms: false,
+            enviarPortal: false,
+            dataExpiracao: "",
+            fundacao: "",
+            empresa: "",
+            plano: "",
+            situacaoPlano: "",
+            matricula: "",
+
+            // States validação
+            erroTituloVazio: false,
+            erroMensagemVazia: false,
+            erroEnviarVia: false,
+            erroDataInvalida: false,
+            erroMatriculaInvalida: false,
+
+            // States Listas
+            listaFundacao: [],
+            listaEmpresa: [],
+            listaPlano: [],
+            listaSituacaoPlano: [],
+
             modalVisivel: false,
             mensagemId: 1
         }
+
         this.toggleModal = this.toggleModal.bind(this);
+        this.onChangeInput = this.onChangeInput.bind(this);
+        this.onChangeCheckbox = this.onChangeCheckbox.bind(this);
+        this.validar = this.validar.bind(this);
+        this.validarVazio = this.validarVazio.bind(this);
+        this.validarData = this.validarData.bind(this);
+        this.validarCheckboxes = this.validarCheckboxes.bind(this);
     }
 
+    onChangeInput(event) {
+        var target = event.target;
+        var valor = target.value;
+        var campo = target.name;
+
+        this.setState({
+            [campo]: valor
+        }, () => { console.log(this.state) })
+
+    }
+    
+    onChangeCheckbox(event) {
+        var target = event.target;
+        var campo = target.name;
+
+        if(campo === 'enviarEmail') {
+            this.setState({
+                enviarEmail: !this.state.enviarEmail
+            }, () => { console.log(this.state) })
+
+        } else if(campo === 'enviarSms') {
+            this.setState({
+                enviarSms: !this.state.enviarSms
+            }, () => { console.log(this.state) })   
+
+        } else {
+            this.setState({
+                enviarPortal: !this.state.enviarPortal
+            }, () => { console.log(this.state) })
+
+        }
+    }
+
+    toggleModal(id) {
+        this.setState({ 
+            modalVisivel: !this.state.modalVisivel,
+            mensagemId : id
+        });
+    }
 
     renderModal(id) {
         if (this.state.modalVisivel) {
@@ -31,10 +104,17 @@ export default class MensagemNova extends React.Component {
                                 <p><b>Plano: </b>{historicoMensagens[id].plano}</p>
                                 <p><b>Situação Plano: </b>{historicoMensagens[id].situacaoPlano}</p>
                                 <p><b>Matrícula: </b>{historicoMensagens[id].matricula}</p>
-                                <p> <Badge color="success">Portal</Badge>                                                            
-                                    <Badge color="warning">SMS</Badge>
-                                    <Badge color="danger">E-mail</Badge>
-                                    <Badge color="info">Mobile</Badge></p>
+                                <div className="btn-toolbar">
+                                    <div className="btn-group mr-2">
+                                        <label className="badge badge-success">Portal</label>
+                                    </div>
+                                    <div className="btn-group mr-2">
+                                        <label className="badge badge-info">SMS</label>
+                                    </div>
+                                    <div className="btn-group mr-2">
+                                        <label className="badge badge-danger">E-mail</label>
+                                    </div>
+                                </div><br/>
                                 <p>{historicoMensagens[id].conteudo}</p>        
                             </div>
                             <div className="modal-footer">
@@ -51,11 +131,57 @@ export default class MensagemNova extends React.Component {
         }
     }
 
-    toggleModal(id) {
-        this.setState({ modalVisivel: !this.state.modalVisivel,
-                        mensagemId : id
-                     });
-        console.log(this.state.mensagemId);
+    validar() {
+        var tituloVazio = this.validarVazio(this.state.titulo, "erroTituloVazio");
+        var conteudoVazio = this.validarVazio(this.state.mensagem, "erroMensagemVazia");
+        var checkboxVazia = this.validarCheckboxes();
+        var dataInvalida = this.validarData();
+
+        if(!tituloVazio && !conteudoVazio && !checkboxVazia && !dataInvalida) {
+            console.log("Enviando mensagem...");
+            // Chamar rota /mensagem/enviar
+        } else {
+            window.scrollTo(0, 60);
+            console.log(this.state);
+        }
+
+    }
+
+    validarVazio(valor, campoErro) {
+        var campoVazio = (valor === "");
+        this.setState({
+            [campoErro]: campoVazio
+        }, () => { 
+            console.log(campoErro, ":", campoVazio);
+        })
+        return campoVazio;
+    }
+
+    validarCheckboxes() {
+        var checkboxVazia = (!this.state.enviarEmail && !this.state.enviarSms && !this.state.enviarPortal)
+        this.setState({
+            erroEnviarVia: checkboxVazia
+        })
+        return checkboxVazia;
+    }
+
+    validarData() {
+        var dataObjeto = this.converteData(this.state.dataExpiracao);
+        var dataInvalida = DataInvalida(dataObjeto, this.state.dataExpiracao);
+
+        this.setState({ 
+            erroDataInvalida: dataInvalida 
+        });
+        return dataInvalida;
+    }
+
+    /**
+     * @param {string} dataString Data a ser convertida para Date().
+     * @description Método responsável por converter a data recebida (no formato 'dd/mm/aaaa') para date (Objeto).
+     */
+    converteData(dataString) {
+        var dataPartes = dataString.split("/");
+        return new Date(dataPartes[2], dataPartes[1] - 1, dataPartes[0]);
     }
 
     render () {
@@ -71,40 +197,60 @@ export default class MensagemNova extends React.Component {
                             <div className="row">
                                 <div className="col-lg-6">
                                     <div className="form-group">
-                                        <label htmlFor="message-title"><b>Título</b></label>
-                                        <input id="message-title" className="form-control"></input>
+                                        <label htmlFor="titulo"><b>Título</b></label>
+                                        <input name="titulo" id="titulo" className="form-control" maxLength="50" value={this.state.titulo} onChange={this.onChangeInput} />
+                                            {this.state.erroTituloVazio &&
+                                                <div className="text-danger mt-2 mb-2">
+                                                    <i className="fas fa-exclamation-circle"></i>&nbsp;
+                                                    Campo Obrigatório!
+                                                </div>
+                                            }
                                     </div>
                                     <div className="form-group">
-                                        <label htmlFor="message-content"><b>Corpo da Mensagem:</b></label>
-                                        <textarea id="message-content" className="form-control" rows="10"></textarea>
+                                        <label htmlFor="mensagem"><b>Corpo da Mensagem:</b></label>
+                                        <textarea name="mensagem" id="mensagem" className="form-control" rows="10" value={this.state.mensagem} onChange={this.onChangeInput}/>
+                                        {this.state.erroMensagemVazia &&
+                                            <div className="text-danger mt-2 mb-2">
+                                                <i className="fas fa-exclamation-circle"></i>&nbsp;
+                                                Campo Obrigatório!
+                                            </div>
+                                        }
                                     </div>
         
                                     <div className="form-group">
                                         <label><b>Enviar via:</b></label>
                                         <div className="row">
-                                            <div className="col-lg-3">
-                                                <input id="email-check" type="checkbox"></input>&nbsp;
-                                                <label htmlFor="email-check"><b>E-mail</b></label>
+                                            <div className="col-lg-2">
+                                                <input name="enviarEmail" id="enviarEmail" type="checkbox" value={this.state.enviarEmail} onChange={this.onChangeCheckbox} />&nbsp;
+                                                <label htmlFor="enviarEmail"><b>E-mail</b></label>
                                             </div>
-                                            <div className="col-lg-3">
-                                                <input id="mobile-check" type="checkbox"></input>&nbsp;
-                                                <label htmlFor="mobile-check"><b>Mobile</b></label>
+                                            <div className="col-lg-2">
+                                                <input name="enviarSms" id="enviarSms" type="checkbox" value={this.state.enviarSms} onChange={this.onChangeCheckbox} />&nbsp;
+                                                <label htmlFor="enviarSms"><b>SMS</b></label>
                                             </div>
-                                            <div className="col-lg-3">
-                                                <input id="sms-check" type="checkbox"></input>&nbsp;
-                                                <label htmlFor="sms-check"><b>SMS</b></label>
+                                            <div className="col-lg-2">
+                                                <input name="enviarPortal" id="enviarPortal" type="checkbox" value={this.state.enviarPortal} onChange={this.onChangeCheckbox} />&nbsp; 
+                                                <label htmlFor="enviarPortal"><b>Portal</b></label>
                                             </div>
-                                            <div className="col-lg-3">
-                                                <input id="portal-check" type="checkbox"></input>&nbsp; 
-                                                <label htmlFor="portal-check"><b>Portal</b></label>
+                                            {this.state.erroEnviarVia &&
+                                            <div className="text-danger col-12 mt-2 mb-2">
+                                                <i className="fas fa-exclamation-circle"></i>&nbsp;
+                                                Marque ao menos uma opção!
                                             </div>
+                                            }
                                         </div>
                                     </div>
         
                                     <div className="form-group">
-                                        <label htmlFor="date-expiration"><b>Data de Expiração:</b></label>
-                                        <input id="date-expiration" className="form-control date"></input>
-                                        <span className="text text-primary">Deixe em branco para indicar que a mensagem não terá uma data de expiração</span>
+                                        <label htmlFor="dataExpiracao"><b>Data de Expiração:</b></label>
+                                        <input name="dataExpiracao" id="dataExpiracao" className="form-control" onChange={this.onChangeInput} />
+                                        <span className="text text-secondary">Deixe em branco para indicar que a mensagem não terá uma data de expiração</span>
+                                        {this.state.erroDataInvalida &&
+                                            <div className="text-danger mt-2 mb-2">
+                                                <i className="fas fa-exclamation-circle"></i>&nbsp;
+                                                Data inválida!
+                                            </div>
+                                        }
                                     </div>
                                 </div>
         
@@ -117,8 +263,9 @@ export default class MensagemNova extends React.Component {
                                     </div>
         
                                     <div className="form-group">
-                                        <label htmlFor="company"><b>Empresa:</b></label>
-                                        <select className="form-control" id="company">
+                                        <label htmlFor="empresa"><b>Empresa:</b></label>
+                                        <select name="empresa" className="form-control" id="empresa">
+                                            <option>Todas(os)</option>
                                             <option>BRB - BANCO DE BRASÍLIA S.A</option>
                                             <option>REGIUS - SOCIEDADE CIVIL DE PREVIDÊNCIA PRIVADA</option>
                                             <option>CARTÃO BRB S/A - PATROCINADORA</option>
@@ -129,25 +276,29 @@ export default class MensagemNova extends React.Component {
                                     </div>
         
                                     <div className="form-group">
-                                        <label htmlFor="plan"><b>Plano</b></label>
-                                        <input id="plan" className="form-control"></input>
+                                        <label htmlFor="plano"><b>Plano:</b></label>
+                                        <select name="plano" className="form-control" id="plano">
+                                            <option>Todas(os)</option>
+                                        </select>
                                     </div>
         
                                     <div className="form-group">
-                                        <label htmlFor="plan-situation"><b>Situação do plano</b></label>
-                                        <input id="plan-situation" className="form-control"></input>
+                                        <label htmlFor="situacaoPlano"><b>Situação do plano</b></label>
+                                        <select name="situacaoPlano" className="form-control" id="situacaoPlano">
+                                            <option>Todas(os)</option>
+                                        </select>
                                     </div>
         
                                     <div className="form-group">
                                         <label htmlFor="registration"><b>Matrícula</b></label>
-                                        <input id="registration" className="form-control"></input>
-                                        <span className="text text-primary">Deixe em branco para enviar para todas as matrículas dentro dos parâmetros acima</span>
+                                        <input id="registration" className="form-control" />
+                                        <span className="text text-secondary">Deixe em branco para enviar para todas as matrículas dentro dos parâmetros acima</span>
                                     </div>
         
         
                                 </div>
                             </div>
-                            <button type="submit" className="btn btn-primary">Enviar</button>
+                            <button type="button" className="btn btn-primary" onClick={() => this.validar()}>Enviar</button>
                         </div>
                     </div>
         
@@ -175,11 +326,16 @@ export default class MensagemNova extends React.Component {
                                                     </th>
                                                     <th width="115px">{mensagem.dataCriacao}</th>
                                                     <th>
-                                                        <div>
-                                                            <Badge color="success">Portal</Badge>
-                                                            <Badge color="info">Mobile</Badge>
-                                                            <Badge color="warning">SMS</Badge>
-                                                            <Badge color="danger">E-mail</Badge>
+                                                        <div className="form-row btn-toolbar">
+                                                            <div className="btn-group mr-2">
+                                                                <label className="badge badge-success">Portal</label>
+                                                            </div>
+                                                            <div className="btn-group mr-2">
+                                                                <label className="badge badge-info">SMS</label>
+                                                            </div>
+                                                            <div className="btn-group mr-2">
+                                                                <label className="badge badge-danger">E-mail</label>
+                                                            </div>
                                                         </div>
                                                         <p>{mensagem.titulo}</p>
                                                     </th>

@@ -80,9 +80,11 @@ export default class MasterPage extends React.Component {
 
         const Rotas = () => (
             <Router>
-    			<div id="route">
+                <div id="route">
                     { rotas.map((rota, index) => <Route key={index} exact={rota.exact} path={rota.caminho} component={rota.componente} />) }
-    			</div>
+                    <Route path="/planos/:plano" component={DetalhesPlano} />
+                    <Route path="/mensagem/enviar" component={MensagemNova} />
+                </div>
     		</Router>
         );
 

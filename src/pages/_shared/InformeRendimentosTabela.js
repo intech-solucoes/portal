@@ -4,19 +4,19 @@ export default class InformeRendimentosTabela extends React.Component {
     
     render() {
         return (
-            listaInforme.map(informe => {
+            listaInforme.map((informe, index) => {
                 return (
-                    <div>
+                    <div key={index}>
                         <h5><b>{informe.nomeGrupo}</b></h5>
 
-                        <table class="table table-striped">
+                        <table className="table table-striped">
                             <tbody>
                                 {
-                                    informe.itens.map(item => {
+                                    informe.itens.map((item, index) => {
                                         return (
-                                            <tr>
+                                            <tr key={index}>
                                                 <td>{item.descricao}</td>
-                                                <td class="text-right">
+                                                <td className="text-right">
                                                     {item.valor}
                                                 </td>
                                             </tr>

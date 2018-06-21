@@ -65,10 +65,11 @@ class TabelaPlanos extends React.Component {
                         <td>{plano.DS_PLANO}</td>
                         <td><h5><span className="badge badge-primary">{plano.DS_CATEGORIA}</span></h5></td>
                         <td>{plano.DT_INSC_PLANO}</td>
-                        <td>
+                        {/*<td>
                             {(plano.DS_CATEGORIA === 'ATIVO' || plano.DS_CATEGORIA === 'AUTOPATROCINIO') &&
                                 <button className="btn btn-primary" onClick={() => {}}>Extrato</button>}
-                        </td>
+                        </td>*/}
+                        <td><a href={'/planos/' + plano.CD_PLANO}>Detalhes do plano</a></td>
                         
                     </tr>
                 );
