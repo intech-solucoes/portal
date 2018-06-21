@@ -3,18 +3,17 @@ import { BrowserRouter as Router, Route} from "react-router-dom";
 
 import { UsuarioService } from  "prevsystem-service";
 
-import { Home, Planos, Beneficios, ContraCheque, InformeRendimentos, Documentos, Mensagens, Recadastramento,
-        TrocarSenha, ControleFuncionalidades, ListarParticipantes } from ".";
+import { Home, Planos, Documentos, Mensagens, TrocarSenha, ControleFuncionalidades, ListarParticipantes } from ".";
+
+const config = require("../config.json");
+
+const usuarioService = new UsuarioService(config);
 
 const rotas = [
     { titulo: "Home",                   icone: "fas fa-home",               caminho: "/",                          componente: () => <Home />,                      exact: true },
     { titulo: "Planos",                 icone: "fas fa-list",               caminho: "/planos",                    componente: () => <Planos /> },
-    { titulo: "Benefícios",             icone: "fas fa-money-bill-alt",     caminho: "/beneficios",                componente: () => <Beneficios /> },
-    { titulo: "Contracheque",           icone: "fas fa-closed-captioning",  caminho: "/contracheque",              componente: () => <ContraCheque /> },
-    { titulo: "Informe de Rendimentos", icone: "fas fa-chart-pie",          caminho: "/informeRendimentos",        componente: () => <InformeRendimentos /> },
     { titulo: "Documentos",             icone: "fas fa-file",               caminho: "/documentos",                componente: () => <Documentos /> },
     { titulo: "Mensagens",              icone: "fas fa-envelope",           caminho: "/mensagens",                 componente: () => <Mensagens />,                 exact: true },
-    { titulo: "Recadastramento",        icone: "fas fa-file-alt",           caminho: "/recadastramento",           componente: () => <Recadastramento />,           exact: true },
     { titulo: "Trocar senha",           icone: "fas fa-lock",               caminho: "/trocarSenha",               componente: () => <TrocarSenha /> },
     { titulo: "Painel de Controle",     icone: "fas fa-cogs",               caminho: "/controleFuncionalidades",   componente: () => <ControleFuncionalidades /> },
     { titulo: "Listar Participantes",   icone: "fas fa-users",              caminho: "/listarParticipantes",       componente: () => <ListarParticipantes /> }
@@ -31,7 +30,7 @@ export default class MasterPage extends React.Component {
     }
 
     componentWillMount() {
-        UsuarioService.VerificarLogin()
+        usuarioService.VerificarLogin()
             .then(() => {})
             .catch((err) => {
                 if(err.message.indexOf("401") > -1)

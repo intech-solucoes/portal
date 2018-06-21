@@ -3,6 +3,10 @@ import React from "react";
 import { PlanoService } from "prevsystem-service";
 import FormFieldStatic from "../FormFieldStatic";
 
+const config = require("../../../config.json");
+
+const planoService = new PlanoService(config);
+
 export default class BoxListaPlanos extends React.Component {
     constructor(props) {
         super(props);
@@ -13,7 +17,7 @@ export default class BoxListaPlanos extends React.Component {
 
     componentWillMount() {
         var self = this;
-        PlanoService.Buscar()
+        planoService.Buscar()
             .then((result) => {
 
                 self.setState({

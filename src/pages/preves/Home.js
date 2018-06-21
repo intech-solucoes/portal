@@ -4,6 +4,10 @@ import { FuncionarioService } from "prevsystem-service";
 import FormFieldStatic from "../_shared/FormFieldStatic";
 import BoxListaPlanos from "../_shared/plano/BoxListaPlanos";
 
+const config = require("../../config.json");
+
+const funcionarioService = new FuncionarioService(config);
+
 export default class Home extends React.Component {
     static defaultProps = {
         title: "123"
@@ -22,7 +26,7 @@ export default class Home extends React.Component {
 
     componentWillMount() {
         var self = this;
-        FuncionarioService.BuscarDados()
+        funcionarioService.BuscarDados()
             .then((result) => {
 
                 self.setState({

@@ -1,7 +1,11 @@
 import React from "react";
 import LoginForm from "../_shared/LoginForm";
 
-import { UsuarioService, FuncionarioService } from "prevsystem-service";;
+import { UsuarioService, FuncionarioService } from "prevsystem-service";
+import config from "../../config.json";
+
+const usuarioService = new UsuarioService(config);
+const funcionarioService = new FuncionarioService(config);
 
 export default class LoginPage extends React.Component {
     constructor(props) {
@@ -14,11 +18,11 @@ export default class LoginPage extends React.Component {
     onSubmit(cpf, senha) {
         this.loginForm.current.limparErro();
 
-        UsuarioService.Login(cpf, senha)
+        usuarioService.Login(cpf, senha)
             .then((result) => {
                 localStorage.setItem("token", result.data.AccessToken);
                 
-                FuncionarioService.BuscarDados()
+                funcionarioService.BuscarDados()
                     .then((result) => {
                         localStorage.setItem("fundacao", result.data.funcionario.CD_FUNDACAO);
                         localStorage.setItem("empresa", result.data.funcionario.CD_EMPRESA);

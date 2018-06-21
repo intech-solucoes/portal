@@ -1,6 +1,9 @@
 import React from "react";
 import { PlanoService } from "prevsystem-service";
 
+const config = require("../config.json");
+const planoService = new PlanoService(config);
+
 export default class Planos extends React.Component {
 
     constructor(props) {
@@ -46,7 +49,7 @@ class TabelaPlanos extends React.Component {
 
         this.state = { listaPlanos: [] }
         
-        PlanoService.Buscar()
+        planoService.Buscar()
             .then((result) => {
                 this.setState({
                     listaPlanos: result.data

@@ -2,7 +2,7 @@ import React from "react";
 
 const LoginPage = () => (
     <div>
-        <div class="logo">
+        <div className="logo">
             <img src="~/Imagens/regius.png" alt="Intech" />
         </div>
 
