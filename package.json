@@ -1,34 +1,44 @@
 {
-    "name": "portalprev",
-    "version": "0.0.1",
-    "private": true,
-    "homepage": ".",
-    "dependencies": {
-        "axios": "^0.18.0",
-        "bootstrap": "^4.0.0",
-        "global": "^4.3.2",
-        "prevsystem-service": "../prevsystem-service",
-        "react": "^16.3.1",
-        "react-dom": "^16.3.1",
-        "react-fontawesome": "^1.6.1",
-        "react-router-dom": "^4.2.2",
-        "react-scripts": "1.1.1",
-        "reactstrap": "^5.0.0-beta.3"
-    },
-    "scripts": {
-        "copy": "node ./node_modules/cpx/bin/ ./node_modules/bootstrap/dist/css/bootstrap.min.css ./public/css",
-        "build-css": "sass -t compressed ./src/styles/main.scss ./public/css/main.css",
-        "watch-css": "sass -t compressed --watch ./src/styles/main.scss:./public/css/main.css",
-        "clean": "node ./node_modules/rimraf/bin.js ./public/css && node ./node_modules/mkdirp/ ./public/css",
-        "start": "yarn build && react-scripts start",
-        "build": "yarn clean && yarn copy && yarn build-css",
-        "build:prod": "react-scripts build",
-        "test": "react-scripts test --env=jsdom",
-        "eject": "react-scripts eject"
-    },
-    "devDependencies": {
-        "cpx": "^1.5.0",
-        "mkdirp": "^0.5.1",
-        "rimraf": "^2.6.2"
-    }
+  "name": "portalprev",
+  "version": "0.0.1",
+  "private": true,
+  "homepage": ".",
+  "main": "./src/index.js",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bootstrap": "^4.0.0",
+    "cpy-cli": "^2.0.0",
+    "global": "^4.3.2",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1",
+    "react-fontawesome": "^1.6.1",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.1.1",
+    "reactstrap": "^5.0.0-beta.3"
+  },
+  "scripts": {
+    "copy": "node ./node_modules/cpx/bin/ ./node_modules/bootstrap/dist/css/bootstrap.min.css ./public/css",
+    "build-css": "sass -t compressed ./src/styles/main.scss ./public/css/main.css",
+    "watch-css": "sass -t compressed --watch ./src/styles/main.scss:./public/css/main.css",
+    "clean": "node ./node_modules/rimraf/bin.js ./public/css && node ./node_modules/mkdirp/ ./public/css",
+    "start": "yarn build && react-scripts start",
+    "start:preves": "yarn build:config-preves && yarn start",
+    "start:regius": "./node_modules/.bin/cpy src/configs/config.regius.dev.json src --rename=config.json && yarn start",
+    "build": "yarn clean && yarn copy && yarn build-css",
+    "build:config-preves": "./node_modules/.bin/cpy src/configs/config.preves.dev.json src --rename=config.json",
+    "build:config-preves-test": "./node_modules/.bin/cpy src/configs/config.preves.test.json src --rename=config.json",
+    "build:config-preves-prod": "./node_modules/.bin/cpy src/configs/config.preves.prod.json src --rename=config.json",
+    "build:config-regius": "./node_modules/.bin/cpy src/configs/config.regius.dev.json src --rename=config.json",
+    "build:config-regius-test": "./node_modules/.bin/cpy src/configs/config.regius.dev.json src --rename=config.json",
+    "build:prod": "react-scripts build",
+    "build:preves-test": "yarn build:config-preves-test && yarn build:prod",
+    "build:preves-prod": "yarn build:config-preves-prod && yarn build:prod",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "cpx": "^1.5.0",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.6.2"
+  }
 }
