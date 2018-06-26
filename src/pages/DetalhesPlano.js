@@ -3,6 +3,9 @@ import FormFieldStatic from './_shared/FormFieldStatic';
 import DataInvalida from './_shared/Data';
 import { PlanoService } from 'prevsystem-service';
 
+const config = require("../config.json");
+const planoService = new PlanoService(config);
+
 export default class DetalhesPlano extends React.Component {
     constructor(props) {
         super(props);
@@ -38,14 +41,14 @@ export default class DetalhesPlano extends React.Component {
     }
 
     buscarPlano() {
-        var plano = this.props.match.params.plano;    // Pega o plano atual a partir da rota.
+        var plano = this.props.routeProps.match.params.plano;    // Pega o plano atual a partir da rota.
 
-        PlanoService.BuscarPorFundacaoEmpresaPlano(plano)
-        .then((result) => {
-            this.setState({
-                plano: result.data
-            })
-        });
+        planoService.BuscarPorFundacaoEmpresaPlano(plano)
+            .then((result) => {
+                this.setState({
+                    plano: result.data
+                })
+            });
     }
 
     toggleModal() {
@@ -200,25 +203,24 @@ export default class DetalhesPlano extends React.Component {
     }
 
     gerarExtrato() {
-        var dataInicio = this.state.dataInicio.replace('/', '.');
-        dataInicio = dataInicio.replace('/', '.');
-
-        var dataFim = this.state.dataFim.replace('/', '.');
-        dataFim = dataFim.replace('/', '.');
+        var dataInicio = this.state.dataInicio.replace(new RegExp('/', 'g'), '.');
+        var dataFim = this.state.dataFim.replace(new RegExp('/', 'g'), '.');
 
         var dados = {
-            plano: this.props.match.params.plano,
+            plano: this.props.routeProps.match.params.plano,
             dataInicio: dataInicio,
             dataFim: dataFim
         }
 
-        console.log(dados);
-        console.log(this.state);
-
-        PlanoService.BuscarPorFundacaoEmpresaPlanoReferencia(dados)
-        .then((result) => {
-            document.location = result.data;
-        });
+        planoService.RelatorioExtratoPorFundacaoEmpresaPlanoReferencia(dados)
+            .then((result) => {
+                const url = window.URL.createObjectURL(new Blob([result.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'extrato.pdf');
+                document.body.appendChild(link);
+                link.click();
+            });
     }
 
     render() {
@@ -226,11 +228,6 @@ export default class DetalhesPlano extends React.Component {
             <div>
                 <div className="row-12">
                     <div className="box">
-                        <div className="box-title">
-                            <div className="form-group">
-                                <h3><FormFieldStatic titulo="Detalhes do Plano" valor={this.state.plano.DS_PLANO} /></h3>
-                            </div>
-                        </div>
                         <div className="box-content">
                             <div className="form-row">
                                 <FormFieldStatic titulo="Nome" valor={this.state.plano.DS_PLANO} />

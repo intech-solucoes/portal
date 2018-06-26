@@ -1,4 +1,4 @@
 {
     "cliente": "preves",
-    "apiUrl": "http://localhost/PrevesAPI/api"
+    "apiUrl": "http://10.10.170.11/PrevesAPI/api"
 }

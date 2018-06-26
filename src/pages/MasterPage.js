@@ -3,25 +3,27 @@ import { BrowserRouter as Router, Route} from "react-router-dom";
 
 import { UsuarioService } from  "prevsystem-service";
 
-import { Home, Planos, Documentos, Mensagens, TrocarSenha, ControleFuncionalidades, ListarParticipantes } from ".";
+import { Home, Planos, Documentos, Mensagens, TrocarSenha, ControleFuncionalidades, DetalhesPlano, MensagemNova } from ".";
 
 const config = require("../config.json");
 
 const usuarioService = new UsuarioService(config);
 
 const rotas = [
-    { titulo: "Home",                   icone: "fas fa-home",               caminho: "/",                          componente: () => <Home />,                      exact: true },
-    { titulo: "Planos",                 icone: "fas fa-list",               caminho: "/planos",                    componente: () => <Planos /> },
-    { titulo: "Documentos",             icone: "fas fa-file",               caminho: "/documentos",                componente: () => <Documentos /> },
-    { titulo: "Mensagens",              icone: "fas fa-envelope",           caminho: "/mensagens",                 componente: () => <Mensagens />,                 exact: true },
-    { titulo: "Trocar senha",           icone: "fas fa-lock",               caminho: "/trocarSenha",               componente: () => <TrocarSenha /> },
-    { titulo: "Painel de Controle",     icone: "fas fa-cogs",               caminho: "/controleFuncionalidades",   componente: () => <ControleFuncionalidades /> },
-    { titulo: "Listar Participantes",   icone: "fas fa-users",              caminho: "/listarParticipantes",       componente: () => <ListarParticipantes /> }
+    { titulo: "Home",                   icone: "fas fa-home",               caminho: "/",                          componente: () => <Home />,                                          mostrarMenu: true,     exact: true },
+    { titulo: "Planos",                 icone: "fas fa-list",               caminho: "/planos",                    componente: () => <Planos />,                                        mostrarMenu: true,     exact: true },
+    { titulo: "Documentos",             icone: "fas fa-file",               caminho: "/documentos",                componente: () => <Documentos />,                                    mostrarMenu: true },
+    //{ titulo: "Mensagens",              icone: "fas fa-envelope",           caminho: "/mensagens",                 componente: () => <Mensagens />,                                     mostrarMenu: true,     exact: true },
+    //{ titulo: "Trocar senha",           icone: "fas fa-lock",               caminho: "/trocarSenha",               componente: () => <TrocarSenha />,                                   mostrarMenu: true },
+    //{ titulo: "Painel de Controle",     icone: "fas fa-cogs",               caminho: "/controleFuncionalidades",   componente: () => <ControleFuncionalidades />,                       mostrarMenu: true },
+    { titulo: "Detalhes do Plano",      icone: "",                          caminho: "/planos/:plano",             componente: (routeProps) => <DetalhesPlano routeProps={routeProps}        />},
+    { titulo: "Nova Mensagem",          icone: "",                          caminho: "/mensagem/nova",             componente: (routeProps) => <MensagemNova routeProps={routeProps}         />}
 ];
 
 export default class MasterPage extends React.Component {
     getTitle() {
         var rota = window.location.pathname;
+        console.log(rota);
         for(var i = 0; i < rotas.length; i++) {
             if(rota === rotas[i].caminho) {
                 return(<h2>{rotas[i].titulo}</h2>);
@@ -57,17 +59,22 @@ export default class MasterPage extends React.Component {
         const Menu = () => (
             <ul>
                 <li className="navbar-header">
-                    <img src="./imagens/preves/logo.png" alt="Preves" />
+                    <img src="/imagens/preves/logo.png" alt="Preves" />
                 </li>
                 {
-                    rotas.map((rota, index) => (
-                        <li key={index}>
-                            <a href={rota.caminho}>
-                                <i className={rota.icone}></i>
-                                {rota.titulo}
-                            </a>
-                        </li>
-                    ))
+                    rotas.map((rota, index) => {
+                        if(rota.mostrarMenu) {
+                            return (
+                                <li key={index}>
+                                    <a href={rota.caminho}>
+                                        <i className={rota.icone}></i>
+                                        {rota.titulo}
+                                    </a>
+                                </li>
+                            );
+                        }
+                        else return "";
+                    })
                 }
                 <li>
                     <a href="." onClick={this.logout}>
@@ -82,8 +89,6 @@ export default class MasterPage extends React.Component {
             <Router>
                 <div id="route">
                     { rotas.map((rota, index) => <Route key={index} exact={rota.exact} path={rota.caminho} component={rota.componente} />) }
-                    <Route path="/planos/:plano" component={DetalhesPlano} />
-                    <Route path="/mensagem/enviar" component={MensagemNova} />
                 </div>
     		</Router>
         );
