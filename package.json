@@ -6,7 +6,6 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^4.0.0",
-    "cpy-cli": "^2.0.0",
     "global": "^4.3.2",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
@@ -30,13 +29,14 @@
     "build:config-regius": "./node_modules/.bin/cpy src/configs/config.regius.dev.json src --rename=config.json",
     "build:config-regius-test": "./node_modules/.bin/cpy src/configs/config.regius.dev.json src --rename=config.json",
     "build:prod": "react-scripts build",
-    "build:preves-test": "yarn build:config-preves-test && yarn build:prod && ./node_modules/.bin/cpy build/* Z:/PortalPrevesTeste",
-    "build:preves-prod": "yarn build:config-preves-prod && yarn build:prod",
+    "build:preves-test": "yarn build:config-preves-test && yarn build:prod && ./node_modules/.bin/cpy **/* Z:/PortalPrevesTeste --parents --cwd=build",
+    "build:preves-prod": "yarn build:config-preves-prod && yarn build:prod && ./node_modules/.bin/cpy **/* Z:/PortalPreves --parents --cwd=build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
     "cpx": "^1.5.0",
+    "cpy-cli": "^2.0.0",
     "mkdirp": "^0.5.1",
     "rimraf": "^2.6.2"
   }

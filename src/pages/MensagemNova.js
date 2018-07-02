@@ -1,5 +1,10 @@
 import React from 'react';
+import { MensagemService } from "prevsystem-service";
 import DataInvalida from './_shared/Data';
+import ListaMensagens from "./_shared/mensagem/ListaMensagens";
+
+const config = require("../config.json");
+const mensagemService = new MensagemService(config);
 
 export default class MensagemNova extends React.Component {
     constructor(props) {
@@ -31,6 +36,7 @@ export default class MensagemNova extends React.Component {
             listaEmpresa: [],
             listaPlano: [],
             listaSituacaoPlano: [],
+            mensagens: [],
 
             modalVisivel: false,
             mensagemId: 1
@@ -43,6 +49,13 @@ export default class MensagemNova extends React.Component {
         this.validarVazio = this.validarVazio.bind(this);
         this.validarData = this.validarData.bind(this);
         this.validarCheckboxes = this.validarCheckboxes.bind(this);
+    }
+
+    componentDidMount() {
+        mensagemService.BuscarTodas()
+            .then((result) => {
+                this.setState({ mensagens: result.data });
+            });
     }
 
     onChangeInput(event) {
@@ -83,52 +96,6 @@ export default class MensagemNova extends React.Component {
             modalVisivel: !this.state.modalVisivel,
             mensagemId : id
         });
-    }
-
-    renderModal(id) {
-        if (this.state.modalVisivel) {
-            return (
-                <div className="modal" role="dialog">
-                    <div className="modal-dialog modal-lg" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title" id="basicPercentModalTitle">{historicoMensagens[id].titulo}</h5>
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={() => this.toggleModal()}>
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div className="modal-body">
-                                <p><b>Data de Criação: </b>{historicoMensagens[id].dataCriacao}</p>
-                                <p><b>Fundação: </b>{historicoMensagens[id].fundacao}</p>
-                                <p><b>Empresa: </b>{historicoMensagens[id].empresa}</p>
-                                <p><b>Plano: </b>{historicoMensagens[id].plano}</p>
-                                <p><b>Situação Plano: </b>{historicoMensagens[id].situacaoPlano}</p>
-                                <p><b>Matrícula: </b>{historicoMensagens[id].matricula}</p>
-                                <div className="btn-toolbar">
-                                    <div className="btn-group mr-2">
-                                        <label className="badge badge-success">Portal</label>
-                                    </div>
-                                    <div className="btn-group mr-2">
-                                        <label className="badge badge-info">SMS</label>
-                                    </div>
-                                    <div className="btn-group mr-2">
-                                        <label className="badge badge-danger">E-mail</label>
-                                    </div>
-                                </div><br/>
-                                <p>{historicoMensagens[id].conteudo}</p>        
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-default" onClick={() => this.toggleModal()}>Fechar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-        else
-        {
-            return <div></div>
-        }
     }
 
     validar() {
@@ -301,93 +268,18 @@ export default class MensagemNova extends React.Component {
                             <button type="button" className="btn btn-primary" onClick={() => this.validar()}>Enviar</button>
                         </div>
                     </div>
-        
+
                     <div className="box">
                         <div className="box-title">
                             HISTÓRICO DE MENSAGENS
                         </div>
                         <div className="box-content">
-                            <table className="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Data de criação</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        historicoMensagens.map((mensagem, index) => {
-                                            return (
-                                                <tr key={index}>
-                                                    <th width="55px">
-                                                        <button id={"mensagem-" + mensagem.id} className="btn btn-default" onClick={() => this.toggleModal(mensagem.id)}><i className="fa fa-search"></i></button>
-                                                        {this.renderModal(this.state.mensagemId)}
-                                                    </th>
-                                                    <th width="115px">{mensagem.dataCriacao}</th>
-                                                    <th>
-                                                        <div className="form-row btn-toolbar">
-                                                            <div className="btn-group mr-2">
-                                                                <label className="badge badge-success">Portal</label>
-                                                            </div>
-                                                            <div className="btn-group mr-2">
-                                                                <label className="badge badge-info">SMS</label>
-                                                            </div>
-                                                            <div className="btn-group mr-2">
-                                                                <label className="badge badge-danger">E-mail</label>
-                                                            </div>
-                                                        </div>
-                                                        <p>{mensagem.titulo}</p>
-                                                    </th>
-                                                </tr>
-                                            );
-                                        })
-                                    }
-                                </tbody>
-                            </table>
+                            <ListaMensagens mensagens={this.state.mensagens} />
                         </div>
-                    </div> 
+                    </div>
         
                 </div>
             </div>
         );
     }
-
 }
-
-const historicoMensagens = [
-    {
-        id: "0",
-        dataCriacao: "21/12/2017",
-        titulo: "Aumento de percentual",
-        fundacao: "PREVES - SOCIEDADE CIVIL DE PREVIDENCIA PRIVADA",
-        empresa: "BRB - BANCO DE BRASÍLIA S.A.",
-        plano: "CONTRIBUIÇÃO DEFINIDA",
-        situacaoPlano: "ATIVO",
-        matricula: "000067611",
-        conteudo: "A data limite para aumento de percentual está chegando. Entre em contato e garanta um futuro melhor. PREVES"
-    },
-    {
-        id: "1",
-        dataCriacao: "02/01/2018",
-        titulo: "Saudações PREVES",
-        fundacao: "PREVES - SOCIEDADE CIVIL DE PREVIDENCIA PRIVADA",
-        empresa: "Todas",
-        plano: "BENEFÍCIO DEFINIDO",
-        situacaoPlano: "Todos",
-        matricula: "000048181",
-        conteudo: "Teste"
-    },
-    {
-        id: "2",
-        dataCriacao: "04/01/2018",
-        titulo: "PREVES Informa",
-        fundacao: "PREVES - SOCIEDADE CIVIL DE PREVIDENCIA PRIVADA",
-        empresa: "Todas",
-        plano: "BENEFÍCIO DEFINIDO",
-        situacaoPlano: "Todos",
-        matricula: "00001234",
-        conteudo: "Informativo Preves: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis posuere risus et lacinia pellentesque. In ut imperdiet velit. Cras sagittis quam ac lorem ornare, vitae porta nulla mollis."
-    }
-];
-
