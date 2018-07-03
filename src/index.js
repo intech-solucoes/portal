@@ -3,8 +3,6 @@ import ReactDOM from "react-dom";
 
 import { MasterPage, MasterPageLogin } from "./pages";
 
-//import registerServiceWorker from './registerServiceWorker';
-
 var page;
 var loggedIn = localStorage.getItem("token");
 
@@ -19,5 +17,3 @@ else {
 }
 
 ReactDOM.render(page, document.getElementById("root"));
-
-//registerServiceWorker();

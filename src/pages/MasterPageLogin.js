@@ -5,8 +5,6 @@ import { Login, EsqueciSenha, ListarParticipantes } from ".";
 
 export default class MasterPageLogin extends React.Component {
 	render() {
-		console.log(window.location);
-
 		return (
 			<div className="panel-login middle-box">
 				<Router>

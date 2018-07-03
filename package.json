@@ -6,11 +6,15 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^4.0.0",
-    "cpy-cli": "^2.0.0",
+    "cldr": "^4.10.0",
+    "cldr-data": "^32.0.1",
     "global": "^4.3.2",
+    "globalize": "^1.3.0",
+    "globalize-webpack-plugin": "^2.1.0",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
     "react-fontawesome": "^1.6.1",
+    "react-globalize": "^1.0.0",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.1",
     "reactstrap": "^5.0.0-beta.3"
@@ -30,13 +34,14 @@
     "build:config-regius": "./node_modules/.bin/cpy src/configs/config.regius.dev.json src --rename=config.json",
     "build:config-regius-test": "./node_modules/.bin/cpy src/configs/config.regius.dev.json src --rename=config.json",
     "build:prod": "react-scripts build",
-    "build:preves-test": "yarn build:config-preves-test && yarn build:prod && ./node_modules/.bin/cpy build/* Z:/PortalPrevesTeste",
-    "build:preves-prod": "yarn build:config-preves-prod && yarn build:prod",
+    "build:preves-test": "yarn build:config-preves-test && yarn build:prod && ./node_modules/.bin/cpy **/* Z:/PortalPrevesTeste --parents --cwd=build",
+    "build:preves-prod": "yarn build:config-preves-prod && yarn build:prod && ./node_modules/.bin/cpy **/* Z:/PortalPreves --parents --cwd=build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
     "cpx": "^1.5.0",
+    "cpy-cli": "^2.0.0",
     "mkdirp": "^0.5.1",
     "rimraf": "^2.6.2"
   }

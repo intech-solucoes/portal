@@ -1,6 +1,27 @@
 import React from 'react';
+import { MensagemService } from "prevsystem-service";
+
+import ListaMensagens from "./_shared/mensagem/ListaMensagens";
+
+const config = require("../config.json");
+const mensagemService = new MensagemService(config);
 
 export default class Mensagens extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            mensagens: []
+        }
+    }
+
+    componentDidMount() {
+        mensagemService.BuscarPorFundacaoEmpresaPlano('0001')
+            .then((result) => {
+                this.setState({ mensagens: result.data });
+            });
+    }
 
     handleClick = () => {
         this.props.history.push('/mensagens/nova');
@@ -24,7 +45,13 @@ export default class Mensagens extends React.Component {
                             </a>
                             <br/>
                             <br/>
-                            <TabelaMensagens />
+
+                            {this.state.mensagens.length > 0 &&
+                                <ListaMensagens mensagens={this.state.mensagens} />}
+
+                            {this.state.mensagens.length === 0 &&
+                                <label id="sem-mensagem">Nenhuma mensagem enviada.</label>}
+                            
                         </div>
                     </div>
                 </div>
@@ -32,58 +59,3 @@ export default class Mensagens extends React.Component {
         );
     }
 }
-
-const temMensagem = true;
-class TabelaMensagens extends React.Component {
-    
-    render() {
-        if (temMensagem) {
-            return (
-                <table className="table table-striped">
-                    <thead>
-                        <tr>
-                            <th width="2px"></th>
-                            <th width="120px">Data de criação</th>
-                            <th>Título</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            listaMensagens.map((mensagem, index) => {
-                                return (
-                                    <tr key={index}>
-                                        <td><button id={"mensagem-" + mensagem.id} className="btn btn-default btn-sm"><i className="fa fa-search" /></button></td>
-                                        <td>{mensagem.dataCriacao}</td>
-                                        <td>{mensagem.titulo}</td>
-                                    </tr>
-                                );
-                            })
-                        }
-                    </tbody>
-                </table>
-            );
-        } else {
-            return (
-                <label id="sem-mensagem">Nenhuma mensagem enviada.</label>
-            );
-        }
-    }
-}
-
-var listaMensagens = [
-    {
-        id: "1",
-        dataCriacao: "21/12/2017",
-        titulo: "Aumento de percentual"
-    },
-    {
-        id: "2",
-        dataCriacao: "28/12/2017",
-        titulo: "Data limite"
-    },
-    {
-        id: "3",
-        dataCriacao: "09/02/2018",
-        titulo: "Teste Portal"
-    }
-];

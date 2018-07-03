@@ -1,11 +1,63 @@
 import React from 'react';
-import InformeRendimentosTabela from './_shared/InformeRendimentosTabela';
+import { InfoRendService } from "prevsystem-service";
 
-var informe = true;
+var config = require("../config.json");
+var infoRendService = new InfoRendService(config);
 
 export default class InformeRendimentos extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            datas: [],
+            dataSelecionada: {},
+            informe: {
+                Grupos: []
+            }
+        }
+
+        this.selecionarAno = this.selecionarAno.bind(this);
+        this.gerarRelatorio = this.gerarRelatorio.bind(this);
+    }
+
+    componentDidMount() {
+        infoRendService.BuscarReferencias()
+            .then(result => {
+                this.setState({
+                    datas: result.data
+                }, () => this.selecionarAno(this.state.datas[0]));
+            });
+    }
+
+    selecionarAno(ano) {
+        this.setState({
+            dataSelecionada: ano
+        }, () => {
+
+            infoRendService.BuscarPorReferencia(ano)
+                .then(result => {
+                    this.setState({
+                        informe: result.data
+                    });
+                });
+
+        });
+    }
+
+    gerarRelatorio() {
+        infoRendService.Relatorio(this.state.dataSelecionada)
+            .then((result) => {
+                const url = window.URL.createObjectURL(new Blob([result.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'informe de rendimentos.pdf');
+                document.body.appendChild(link);
+                link.click();
+            });
+    }
+
     render() {
-        if (informe) {
+        if (this.state.datas.length > 0) {
             return (
                 <div>
                     <div className="row">
@@ -21,17 +73,38 @@ export default class InformeRendimentos extends React.Component {
                                             <label htmlFor="referencia" className="col-sm-2 col-form-label"><b>Referência:</b></label>
                                             <div className="col-sm-6">
                                                 <select id="referencia" className="form-control">
-                                                    <option>2018</option>
-                                                    <option>2017</option>
+                                                    {this.state.datas.map((data, index) => <option key={index}>{data}</option>)}
                                                 </select>
                                             </div>
                                         </div>
                                     </form>
-                                    <h4>Ano Calendário: <span className="text-primary">2017</span></h4>
-                                    <AnoAtual />
+                                    <h4>Ano Exercício: <span className="text-primary">{this.state.informe.ANO_EXERCICIO}</span></h4>
+                                    <h4>Ano Calendário: <span className="text-primary">{this.state.informe.ANO_CALENDARIO}</span></h4>
                                     <br/>
-                                    <InformeRendimentosTabela />
-                                    <button id="gerar-informe" className="btn btn-primary">Gerar Informe de Rendimentos</button>
+                                    
+                                    {
+                                        this.state.informe.Grupos.map((informe, index) => {
+                                            return (
+                                                <div key={index}>
+                                                    <h5><b>{informe.DES_GRUPO}</b></h5>
+
+                                                    <table className="table table-striped">
+                                                        <tbody>
+                                                            <tr key={index}>
+                                                                <td>{informe.DES_INFO_REND}</td>
+                                                                <td className="text-right">
+                                                                    R$ {informe.VAL_LINHA}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <br/>
+                                                </div>
+                                            )
+                                        })
+                                    }
+
+                                    <button id="gerar-informe" className="btn btn-primary" onClick={this.gerarRelatorio}>Gerar Informe de Rendimentos</button>
                                 </div>
                             </div>
                         </div>
@@ -44,15 +117,5 @@ export default class InformeRendimentos extends React.Component {
             );
         }
 
-    }
-}
-
-class AnoAtual extends React.Component {
-    render() {
-      return (
-            <div>
-                <h4>Ano Exercício: <span id="ano-atual" className="text text-primary">{(new Date().getFullYear())}</span></h4>
-            </div>
-        );
     }
 }
