@@ -36,7 +36,7 @@ export default class LoginForm extends React.Component {
         return (
             <form>
                 <div className="form-group">
-                    <input name="usuario" placeholder="Usuário" className="form-control" value={this.state.usuario} onChange={(e) => handleFieldChange(this, e)} />
+                    <input name="usuario" placeholder="CPF (somente números)" className="form-control" value={this.state.usuario} onChange={(e) => handleFieldChange(this, e)} />
                 </div>
 
                 <div className="form-group">

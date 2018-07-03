@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route} from "react-router-dom";
 
 import { UsuarioService } from  "prevsystem-service";
 
-import { Home, Planos, Documentos, Mensagens, TrocarSenha, ControleFuncionalidades, DetalhesPlano, MensagemNova } from ".";
+import { Home, Planos, Documentos, Mensagens, TrocarSenha, ControleFuncionalidades, DetalhesPlano, MensagemNova, DadosPessoais } from ".";
 
 const config = require("../config.json");
 
@@ -11,10 +11,11 @@ const usuarioService = new UsuarioService(config);
 
 const rotas = [
     { titulo: "Home",                   icone: "fas fa-home",               caminho: "/",                          componente: () => <Home />,                                          mostrarMenu: true,     exact: true },
+    { titulo: "Dados Pessoais",         icone: "fas fa-clipboard",          caminho: "/dados",                     componente: () => <DadosPessoais />,                                 mostrarMenu: true },
     { titulo: "Planos",                 icone: "fas fa-list",               caminho: "/planos",                    componente: () => <Planos />,                                        mostrarMenu: true,     exact: true },
     { titulo: "Documentos",             icone: "fas fa-file",               caminho: "/documentos",                componente: () => <Documentos />,                                    mostrarMenu: true },
     //{ titulo: "Mensagens",              icone: "fas fa-envelope",           caminho: "/mensagens",                 componente: () => <Mensagens />,                                     mostrarMenu: true,     exact: true },
-    //{ titulo: "Trocar senha",           icone: "fas fa-lock",               caminho: "/trocarSenha",               componente: () => <TrocarSenha />,                                   mostrarMenu: true },
+    { titulo: "Trocar senha",           icone: "fas fa-lock",               caminho: "/trocarSenha",               componente: () => <TrocarSenha />,                                   mostrarMenu: true },
     //{ titulo: "Painel de Controle",     icone: "fas fa-cogs",               caminho: "/controleFuncionalidades",   componente: () => <ControleFuncionalidades />,                       mostrarMenu: true },
     { titulo: "Detalhes do Plano",      icone: "",                          caminho: "/planos/:plano",             componente: (routeProps) => <DetalhesPlano routeProps={routeProps}        />},
     { titulo: "Nova Mensagem",          icone: "",                          caminho: "/mensagem/nova",             componente: (routeProps) => <MensagemNova routeProps={routeProps}         />}

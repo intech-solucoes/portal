@@ -230,18 +230,15 @@ export default class DetalhesPlano extends React.Component {
                     <div className="box">
                         <div className="box-content">
                             <div className="form-row">
-                                <FormFieldStatic titulo="Nome" valor={this.state.plano.DS_PLANO} />
+                                <FormFieldStatic titulo="Plano" valor={this.state.plano.DS_PLANO} />
                             </div>
                             <div className="form-row">
-                                <FormFieldStatic titulo="Situação" valor={this.state.plano.DS_CATEGORIA} col="6" />
+                                <FormFieldStatic titulo="Situação no Plano" valor={this.state.plano.DS_CATEGORIA} col="6" />
                                 <FormFieldStatic titulo="Data de inscrição" valor={this.state.plano.DT_INSC_PLANO} col="6" />
                             </div>
                             <div className="form-row">
-                                <FormFieldStatic titulo="Salário de Contribuição" valor='' col="6" />
-                                <FormFieldStatic titulo="Percentual de Contribuição" valor='' col="6" />
-                            </div>
-                            <div className="form-row">
-                                <FormFieldStatic titulo="Saldo" valor='' />
+                                <FormFieldStatic titulo="Último Salário de Contribuição" valor='' col="6" />
+                                <FormFieldStatic titulo="Percentual de Contribuição Atual" valor='' col="6" />
                             </div>
                             <div className="form-row btn-toolbar">
                                 <div className="btn-group mr-2">

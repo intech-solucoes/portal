@@ -28,6 +28,7 @@ export const ContraChequeDetalhe = getPage("ContraChequeDetalhe");
 export const ListarParticipantes = getPage("ListarParticipantes");
 export const EsqueciSenha = getPage("EsqueciSenha");
 export const DetalhesPlano = getPage("DetalhesPlano");
+export const DadosPessoais = getPage("DadosPessoais");
 
 export {
     MasterPage, MasterPageLogin
