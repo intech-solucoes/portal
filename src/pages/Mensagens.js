@@ -49,7 +49,7 @@ export default class Mensagens extends React.Component {
                             {this.state.mensagens.length > 0 &&
                                 <ListaMensagens mensagens={this.state.mensagens} />}
 
-                            {this.state.mensagens.length == 0 &&
+                            {this.state.mensagens.length === 0 &&
                                 <label id="sem-mensagem">Nenhuma mensagem enviada.</label>}
                             
                         </div>

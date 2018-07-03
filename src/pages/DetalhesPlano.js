@@ -19,15 +19,16 @@ export default class DetalhesPlano extends React.Component {
             erroCampoInvalido: false,
             mensagemErro: "",
 
+            cdPlano: props.routeProps.match.params.plano,
             plano: {},
             extrato: {}
         }
 
-        this.buscarPlano = this.buscarPlano.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
         this.renderModal = this.renderModal.bind(this);
         this.onChangeInput = this.onChangeInput.bind(this);
         this.gerarExtrato = this.gerarExtrato.bind(this);
+        this.gerarCertificado = this.gerarCertificado.bind(this);
 
         this.validarCampos = this.validarCampos.bind(this);
         this.validarVazios = this.validarVazios.bind(this);
@@ -37,13 +38,7 @@ export default class DetalhesPlano extends React.Component {
     }
 
     componentWillMount() {
-        this.buscarPlano();
-    }
-
-    buscarPlano() {
-        var plano = this.props.routeProps.match.params.plano;    // Pega o plano atual a partir da rota.
-
-        planoService.BuscarPorFundacaoEmpresaPlano(plano)
+        planoService.BuscarPorFundacaoEmpresaPlano(this.state.cdPlano)
             .then((result) => {
                 this.setState({
                     plano: result.data
@@ -205,19 +200,25 @@ export default class DetalhesPlano extends React.Component {
     gerarExtrato() {
         var dataInicio = this.state.dataInicio.replace(new RegExp('/', 'g'), '.');
         var dataFim = this.state.dataFim.replace(new RegExp('/', 'g'), '.');
-
-        var dados = {
-            plano: this.props.routeProps.match.params.plano,
-            dataInicio: dataInicio,
-            dataFim: dataFim
-        }
-
-        planoService.RelatorioExtratoPorFundacaoEmpresaPlanoReferencia(dados)
+        
+        planoService.RelatorioExtratoPorPlanoReferencia(this.state.cdPlano, dataInicio, dataFim)
             .then((result) => {
                 const url = window.URL.createObjectURL(new Blob([result.data]));
                 const link = document.createElement('a');
                 link.href = url;
                 link.setAttribute('download', 'extrato.pdf');
+                document.body.appendChild(link);
+                link.click();
+            });
+    }
+
+    gerarCertificado() {
+        planoService.RelatorioCertificado(this.state.cdPlano)
+            .then((result) => {
+                const url = window.URL.createObjectURL(new Blob([result.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'certificado.pdf');
                 document.body.appendChild(link);
                 link.click();
             });
@@ -249,7 +250,7 @@ export default class DetalhesPlano extends React.Component {
                                 </div>
                                 {this.renderModal()}
                                 <div className="btn-group mr-2">
-                                    <button type="button" id="gerarCertificado" className="btn btn-primary btn-md">Gerar Certificado de Participação</button>
+                                    <button type="button" id="gerarCertificado" className="btn btn-primary btn-md" onClick={this.gerarCertificado}>Gerar Certificado de Participação</button>
                                 </div>
                             </div>
                         </div>

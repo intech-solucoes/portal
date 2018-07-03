@@ -31,12 +31,7 @@ export default class Login extends React.Component {
                     });
             })
             .catch((err) => {
-
-                if(err.message.indexOf("401") > -1)
-                    this.loginForm.current.mostrarErro("CPF ou senha incorretos!");
-                else
-                    console.error(err);
-
+                this.loginForm.current.mostrarErro(err.response.data);
             });
     }
 

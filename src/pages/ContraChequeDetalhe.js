@@ -1,12 +1,59 @@
 import React from 'react';
+import { ContrachequeService, PlanoService } from "prevsystem-service";
+
+var config = require("../config.json");
+var contrachequeService = new ContrachequeService(config);
+var planoService = new PlanoService(config);
 
 var erro = false;
-export default class ContraChequeDetalhe extends React.Component {
+export default class ContrachequeDetalhe extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            plano: {},
+            resumo: {},
+            contracheque: {
+                Proventos: [],
+                Descontos: [],
+                Resumo: {}
+            },
+            cdPlano: props.routeProps.match.params.plano,
+            dataReferencia: props.routeProps.match.params.data
+        };
+
+        this.gerarRelatorio = this.gerarRelatorio.bind(this);
+    }
+
+    componentDidMount() {
+        planoService.BuscarPorFundacaoEmpresaPlano(this.state.cdPlano)
+            .then(result => {
+                this.setState({ plano: result.data });
+            });
+
+        contrachequeService.BuscarPorPlanoReferenciaTipoFolha(this.state.cdPlano, this.state.dataReferencia)
+            .then(result => {
+                this.setState({ contracheque: result.data });
+            });
+    }
+
+    gerarRelatorio() {
+        contrachequeService.Relatorio(this.state.cdPlano, this.state.dataReferencia)
+            .then((result) => {
+                const url = window.URL.createObjectURL(new Blob([result.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'contracheque.pdf');
+                document.body.appendChild(link);
+                link.click();
+            });
+    }
 
     render() {
         if(erro) {
             return (
-                <div className="alert alert-danger">Não há detalhes do mês {listaCCDetalheMensal.mes}/{listaCCDetalheMensal.ano}</div>
+                <div className="alert alert-danger">Não há detalhes para o mês escolhido!</div>
             );
         } else {
             return (
@@ -17,15 +64,15 @@ export default class ContraChequeDetalhe extends React.Component {
                                 <div className="row text-center">
                                     <div className="col-lg-4">
                                         <h5>BRUTO</h5>
-                                        <span className="text text-info">R$ {listaCCDetalheMensal.bruto}</span>
+                                        <span className="text text-info">R$ {this.state.contracheque.Resumo.Bruto}</span>
                                     </div>
                                     <div className="col-lg-4">
                                         <h5>DESCONTOS</h5>
-                                        <span className="text text-danger">R$ {listaCCDetalheMensal.desconto}</span>
+                                        <span className="text text-danger">R$ {this.state.contracheque.Resumo.Descontos}</span>
                                     </div>
                                     <div className="col-lg-4">
                                         <h5>LÍQUIDO</h5>
-                                        <span className="text text-warning">R$ {listaCCDetalheMensal.liquido}</span>
+                                        <span className="text text-warning">R$ {this.state.contracheque.Resumo.Liquido}</span>
                                     </div>    
                                 </div>
                             </div>
@@ -49,11 +96,11 @@ export default class ContraChequeDetalhe extends React.Component {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    listaRendimentos.map((rendimento, index) => {
+                                                    this.state.contracheque.Proventos.map((rendimento, index) => {
                                                         return (
                                                             <tr key={index}>
-                                                                <td>{rendimento.descricao}</td>
-                                                                <td>R$ {rendimento.valor}</td>
+                                                                <td>{rendimento.DS_RUBRICA}</td>
+                                                                <td>R$ {rendimento.VALOR_MC}</td>
                                                             </tr>
                                                         );
                                                     })
@@ -75,11 +122,11 @@ export default class ContraChequeDetalhe extends React.Component {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    listaDescontos.map(desconto => {
+                                                    this.state.contracheque.Descontos.map((desconto, index) => {
                                                         return (
-                                                            <tr>
-                                                                <td>{desconto.descricao}</td>
-                                                                <td>R$ {desconto.valor}</td>
+                                                            <tr key={index}>
+                                                                <td>{desconto.DS_RUBRICA}</td>
+                                                                <td>R$ {desconto.VALOR_MC}</td>
                                                             </tr>
                                                         );
                                                     })
@@ -88,7 +135,7 @@ export default class ContraChequeDetalhe extends React.Component {
                                         </table>
                                     </div>
                                 </div>
-                                <button className="btn btn-default">Imprimir</button>
+                                <button id="gerar-contracheque" className="btn btn-primary" onClick={this.gerarRelatorio}>Imprimir</button>
                             </div>
                         </div>
                     </div>
@@ -100,48 +147,3 @@ export default class ContraChequeDetalhe extends React.Component {
     }
 
 }
-
-const listaRendimentos = [
-    {
-        descricao: "1520 SUPLEMENTACAO DE APOSENT. ANTECIPADA",
-        valor: "12.067,11"
-    },
-    {
-        descricao: "9144 CONTRIBUICAO REGIUS PARIDADE",
-        valor: "605,00"
-    },
-    {
-        descricao: "1520 SUPLEMENTACAO DE APOSENT. ANTECIPADA",
-        valor: "111,66"
-    }
-];
-
-const listaDescontos = [
-    {
-        descricao: "9101 CONTRIBUICAO REGIUS",
-        valor: "1.816,31"
-    },
-    {
-        descricao: "9102 CONTRIBUICAO EXTRAORDINARIA",
-        valor: "399,03"
-    },
-    {
-        descricao: "9601 CONTRIBUICAO BRB SAUDE - CAIXA DE ASSIST",
-        valor: "111,81"
-    },
-    {
-        descricao: "9611 UTILIZACAO BRB SAUDE - CAIXA DE ASSISTEN",
-        valor: "79,62"
-    },  
-];
-
-const listaCCDetalheMensal= {
-    ano: "2018",
-    mes: "02",
-    bruto: "2.618,04",
-    desconto: "911,91",
-    liquido: "1645,33",
-}
-
-
-

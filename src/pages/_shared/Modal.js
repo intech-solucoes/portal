@@ -40,21 +40,21 @@ export default class Modal extends React.Component {
                                 <p><b>Matrícula: {this.state.mensagem.NUM_MATRICULA}</b></p>
                                 <div className="btn-toolbar">
                                     {/* Badge do Portal */}
-                                    {this.state.mensagem.IND_PORTAL == "SIM" &&
+                                    {this.state.mensagem.IND_PORTAL === "SIM" &&
                                         <div className="btn-group mr-2">
                                             <label className="badge badge-success">Portal</label>
                                         </div>
                                     }
 
                                     {/* Badge de SMS */}
-                                    {this.state.mensagem.IND_PORTAL == "SIM" &&
+                                    {this.state.mensagem.IND_PORTAL === "SIM" &&
                                         <div className="btn-group mr-2">
                                             <label className="badge badge-info">SMS</label>
                                         </div>
                                     }
                                     
                                     {/* Badge de E-mail */}
-                                    {this.state.mensagem.IND_PORTAL == "SIM" &&
+                                    {this.state.mensagem.IND_PORTAL === "SIM" &&
                                         <div className="btn-group mr-2">
                                             <label className="badge badge-danger">E-mail</label>
                                         </div>
