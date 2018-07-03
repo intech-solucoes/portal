@@ -31,12 +31,7 @@ export default class Login extends React.Component {
                     });
             })
             .catch((err) => {
-
-                if(err.message.indexOf("401") > -1)
-                    this.loginForm.current.mostrarErro("CPF ou senha incorretos!");
-                else
-                    console.error(err);
-
+                this.loginForm.current.mostrarErro(err.response.data);
             });
     }
 
@@ -52,9 +47,8 @@ export default class Login extends React.Component {
 
                 <h5>
                     <b>Área de Acesso Restrito</b><br />
-                    Para informações, entre em contato com a Preves<br />
+                    Para informações, entre em contato com a <a href="http://www.preves.es.gov.br/contato.html;">Preves</a><br />
                     <br />
-                    Telefone: (61) 0000-0000
                 </h5>
 
                 <LoginForm ref={this.loginForm} mostrarPrimeiroAcesso={true} onSubmit={this.onSubmit} usuarioPlaceholder={"CPF"} />
