@@ -1,6 +1,9 @@
 import React from 'react';
 import { InfoRendService } from "prevsystem-service";
 
+var ReactIntl = require('react-intl');
+var FormattedNumber = ReactIntl.FormattedNumber;
+
 var config = require("../config.json");
 var infoRendService = new InfoRendService(config);
 
@@ -93,7 +96,7 @@ export default class InformeRendimentos extends React.Component {
                                                             <tr key={index}>
                                                                 <td>{informe.DES_INFO_REND}</td>
                                                                 <td className="text-right">
-                                                                    R$ {informe.VAL_LINHA}
+                                                                    <FormattedNumber currency="BRL" style="currency" value={informe.VAL_LINHA} />
                                                                 </td>
                                                             </tr>
                                                         </tbody>

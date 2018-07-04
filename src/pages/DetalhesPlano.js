@@ -1,10 +1,13 @@
 import React from 'react';
 import FormFieldStatic from './_shared/FormFieldStatic';
 import DataInvalida from './_shared/Data';
-import { PlanoService } from 'prevsystem-service';
+import { PlanoService, DependenteService } from 'prevsystem-service';
+
+var InputMask = require('react-input-mask');
 
 const config = require("../config.json");
 const planoService = new PlanoService(config);
+const dependenteService = new DependenteService(config);
 
 export default class DetalhesPlano extends React.Component {
     constructor(props) {
@@ -21,7 +24,8 @@ export default class DetalhesPlano extends React.Component {
 
             cdPlano: props.routeProps.match.params.plano,
             plano: {},
-            extrato: {}
+            extrato: {},
+            dependentes: []
         }
 
         this.toggleModal = this.toggleModal.bind(this);
@@ -40,10 +44,13 @@ export default class DetalhesPlano extends React.Component {
     componentWillMount() {
         planoService.BuscarPorFundacaoEmpresaPlano(this.state.cdPlano)
             .then((result) => {
-                this.setState({
-                    plano: result.data
-                })
+                this.setState({ plano: result.data })
             });
+
+            dependenteService.Buscar()
+                .then(result => {
+                    this.setState({ dependentes: result.data });
+                });
     }
 
     toggleModal() {
@@ -86,15 +93,16 @@ export default class DetalhesPlano extends React.Component {
                                     <div className="col-lg-6">
                                         <div className="form-group" align="center">
                                             <label htmlFor="dataInicio"><b>Data de Início:</b></label>
-                                            <input name="dataInicio" maxLength="10" id="dataInicio" type="text" className="form-control" 
-                                                   value={this.state.dataInicio} onChange={this.onChangeInput} />
+                                            <InputMask mask="99/99/9999" placeholder="__/__/____" className="form-control"
+                                                       name="dataInicio" value={this.state.dataInicio} onChange={this.onChangeInput} />
+                                                   
                                         </div>
                                     </div>
                                     <div className="col-lg-6">
                                         <div className="form-group" align="center">
                                             <label htmlFor="dataFim"><b>Data Final:</b></label>
-                                            <input name="dataFim" maxLength="10" id="dataFim" type="text" className="form-control" 
-                                                   value={this.state.dataFim} onChange={this.onChangeInput} />
+                                            <InputMask mask="99/99/9999" placeholder="__/__/____" className="form-control"
+                                                       name="dataFim" value={this.state.dataFim} onChange={this.onChangeInput} />
                                         </div>
                                     </div>
                                 </div>
@@ -238,8 +246,8 @@ export default class DetalhesPlano extends React.Component {
                                 <FormFieldStatic titulo="Data de inscrição" valor={this.state.plano.DT_INSC_PLANO} col="6" />
                             </div>
                             <div className="form-row">
-                                <FormFieldStatic titulo="Último Salário de Contribuição" valor='' col="6" />
-                                <FormFieldStatic titulo="Percentual de Contribuição Atual" valor='' col="6" />
+                                <FormFieldStatic titulo="Último Salário de Contribuição" dinheiro={true} valor={this.state.plano.SalarioContribuicao} col="6" />
+                                <FormFieldStatic titulo="Percentual de Contribuição Atual" valor={this.state.plano.PercentualContribuicao + '%'} col="6" />
                             </div>
                             <div className="form-row btn-toolbar">
                                 <div className="btn-group mr-2">
@@ -253,6 +261,32 @@ export default class DetalhesPlano extends React.Component {
                         </div>
                     </div>
                 </div>
+
+                {this.state.dependentes.length > 0 &&
+                    <div className="row-12">
+                        <div className="box">
+                            <div className="box-title">
+                                Dependentes
+                            </div>
+                            <div className="box-content">
+
+                                {
+                                    this.state.dependentes.map((dependente, index) => {
+                                        return (
+                                            <div key={index}>
+                                                <div className="form-row">
+                                                    <FormFieldStatic titulo="Nome" valor={dependente.NOME_DEP} />
+                                                </div>
+
+                                                <hr style={{margin: '15px 0'}} />
+                                            </div>
+                                        );
+                                    })
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         )
     }

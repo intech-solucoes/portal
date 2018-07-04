@@ -37,15 +37,20 @@ export default class Mensagens extends React.Component {
                         </div>
 
                         <div className="box-content">
-                            <a href="/mensagem/nova" className="btn-link">
-                                <button className="btn btn-primary">
-                                    <i className="fas fa-envelope"></i>&nbsp;
-                                    Nova Mensagem
-                                </button>
-                            </a>
-                            <br/>
-                            <br/>
-
+                        
+                            {localStorage.getItem("adm") === "S" &&
+                                <div>
+                                    <a href="/mensagem/nova" className="btn-link">
+                                        <button className="btn btn-primary">
+                                            <i className="fas fa-envelope"></i>&nbsp;
+                                            Nova Mensagem
+                                        </button>
+                                    </a>
+                                    <br/>
+                                    <br/>
+                                </div>
+                            }
+                            
                             {this.state.mensagens.length > 0 &&
                                 <ListaMensagens mensagens={this.state.mensagens} />}
 

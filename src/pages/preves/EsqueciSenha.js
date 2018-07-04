@@ -3,6 +3,8 @@ import { handleFieldChange } from "react-lib";
 import DataInvalida from '../_shared/Data';
 import  { UsuarioService } from 'prevsystem-service';
 
+var InputMask = require('react-input-mask');
+
 var config = require('../../config.json');
 var usuarioService = new UsuarioService(config);
 
@@ -151,16 +153,21 @@ export default class EsqueciSenha extends React.Component {
                         <div className="form-group">
                             <input name="cpf" placeholder="CPF (somente números)" maxLength="14" className="form-control" value={this.state.cpf} onChange={(e) => handleFieldChange(this, e)} />
                         </div>
+
                         <div className="form-group">
-                            <input name="dataNascimento" placeholder="Data de Nascimento" maxLength="10" className="form-control" value={this.state.dataNascimento} onChange={(e) => handleFieldChange(this, e)} />
+                            <InputMask mask="99/99/9999" placeholder="Data de Nascimento" className="form-control"
+                                       name="dataNascimento" value={this.state.dataNascimento} onChange={(e) => handleFieldChange(this, e)} />
                         </div>
+
                         {this.state.mensagemErro !== "" &&
                             <div className="text-danger">
-                                <i className="fas fa-exclamation-circle"></i>&nbsp;
                                 {this.state.mensagemErro}
                             </div>
-                        }<br/>
+                        }
+                        <br/>
+
                         <button className="btn btn-primary btn-block" type="button" onClick={this.validarCampos}>Enviar Nova Senha</button>
+                        <button className="btn btn-default btn-block" type="button" onClick={() => document.location = "/"}>Cancelar</button>
                     </form>
                 </div>
             </div>

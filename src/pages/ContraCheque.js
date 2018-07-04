@@ -1,6 +1,9 @@
 import React from 'react';
 import { ContrachequeService, PlanoService } from "prevsystem-service";
 
+var ReactIntl = require('react-intl');
+var FormattedNumber = ReactIntl.FormattedNumber;
+
 var config = require("../config.json");
 var contrachequeService = new ContrachequeService(config);
 var planoService = new PlanoService(config);
@@ -24,7 +27,7 @@ export default class ContraCheque extends React.Component {
     }
 
     buscarDatas(planos) {
-        planos.map((plano, index) => {
+        planos.map((plano) => {
 
             contrachequeService.BuscarDatas(plano.CD_PLANO)
                 .then(result => {
@@ -68,13 +71,13 @@ export default class ContraCheque extends React.Component {
                                                                 {valor.DT_REFERENCIA}
                                                             </td>
                                                             <td className="text-info">
-                                                                {valor.VAL_BRUTO}
+                                                                <FormattedNumber currency="BRL" style="currency" value={valor.VAL_BRUTO} />
                                                             </td>
                                                             <td className="text-danger">
-                                                                {valor.VAL_DESCONTOS}
+                                                                <FormattedNumber currency="BRL" style="currency" value={valor.VAL_DESCONTOS} />
                                                             </td>
                                                             <td className="text-success">
-                                                                {valor.VAL_LIQUIDO}
+                                                                <FormattedNumber currency="BRL" style="currency" value={valor.VAL_LIQUIDO} />
                                                             </td>
                                                             <td>
                                                                 <a href={`/contracheque/${plano.CD_PLANO}/${valor.DT_REFERENCIA.replace(new RegExp('/', 'g'), '.')}` }>Detalhar</a>

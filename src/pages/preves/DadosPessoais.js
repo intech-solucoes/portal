@@ -2,7 +2,6 @@ import React from "react";
 import { FuncionarioService } from "prevsystem-service";
 
 import FormFieldStatic from "../_shared/FormFieldStatic";
-import BoxListaPlanos from "../_shared/plano/BoxListaPlanos";
 
 const config = require("../../config.json");
 
@@ -25,11 +24,10 @@ export default class DadosPessoais extends React.Component {
     }
 
     componentWillMount() {
-        var self = this;
         funcionarioService.BuscarDados()
             .then((result) => {
 
-                self.setState({
+                this.setState({
                     dados: result.data
                 });
 
@@ -104,8 +102,6 @@ export default class DadosPessoais extends React.Component {
                             <br/>
                         </div>
                     </div>
-
-                    <BoxListaPlanos />
                 </div>
             </div>
         );

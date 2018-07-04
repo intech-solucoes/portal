@@ -22,6 +22,7 @@ export const InformeRendimentos = getPage("InformeRendimentos");
 export const Documentos = getPage("Documentos");
 export const Mensagens = getPage("Mensagens");
 export const Recadastramento = getPage("Recadastramento");
+export const RecadastramentoProtocolo = getPage("RecadastramentoProtocolo");
 export const TrocarSenha = getPage("TrocarSenha");
 export const ControleFuncionalidades = getPage("ControleFuncionalidades");
 export const MensagemNova = getPage("MensagemNova");

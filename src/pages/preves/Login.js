@@ -26,6 +26,7 @@ export default class Login extends React.Component {
                     .then((result) => {
                         localStorage.setItem("fundacao", result.data.funcionario.CD_FUNDACAO);
                         localStorage.setItem("empresa", result.data.funcionario.CD_EMPRESA);
+                        localStorage.setItem("adm", result.data.usuario.IND_ADMINISTRADOR);
 
                         document.location = ".";
                     });

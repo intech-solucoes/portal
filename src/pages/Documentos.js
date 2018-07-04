@@ -99,51 +99,53 @@ export default class Documentos extends React.Component {
     render() {
         return (
             <div className="row">
-                <div className="col-lg-4">
-                    <div className="box">
-                        <div className="box-title">
-                            UPLOAD DE DOCUMENTOS
+                {localStorage.getItem("adm") === "S" &&
+                    <div className="col-lg-4">
+                        <div className="box">
+                            <div className="box-title">
+                                UPLOAD DE DOCUMENTOS
+                            </div>
+                            <div className="box-content">
+                                <div className="form-group">
+                                    <label htmlFor="titulo-documento"><b>Título:</b></label>
+                                    <input name="nomeDocumento" className="form-control" value={this.state.nomeDocumento} onChange={(e) => handleFieldChange(this, e)}></input>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="plano-documento"><b>Plano:</b></label>
+                                    <select id="plano-documento" className="form-control">
+                                        <option>TODOS</option>
+                                        {this.state.planos.map((plano, index) => {
+                                            return <option key={index} value={plano.CD_PLANO}>{plano.DS_PLANO}</option>
+                                        })}
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="selecionar-documento"><b>Arquivo:</b></label>
+                                    <form>
+                                        <input id="selecionar-documento" type="file" onChange={this.uploadFile} value={this.state.arquivoUpload}></input>
+                                        <hr/>
+                                        <button id="salvar-documento" className="btn btn-primary" disabled={!this.state.podeCriarDocumento} onClick={this.salvarDocumento}>Salvar</button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                        <div className="box-content">
-                            <div className="form-group">
-                                <label htmlFor="titulo-documento"><b>Título:</b></label>
-                                <input name="nomeDocumento" className="form-control" value={this.state.nomeDocumento} onChange={(e) => handleFieldChange(this, e)}></input>
+
+                        <div className="box">
+                            <div className="box-title">
+                                CRIAÇÃO DE PASTA
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="plano-documento"><b>Plano:</b></label>
-                                <select id="plano-documento" className="form-control">
-                                    <option>TODOS</option>
-                                    {this.state.planos.map((plano, index) => {
-                                        return <option key={index} value={plano.CD_PLANO}>{plano.DS_PLANO}</option>
-                                    })}
-                                </select>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="selecionar-documento"><b>Arquivo:</b></label>
-                                <form>
-                                    <input id="selecionar-documento" type="file" onChange={this.uploadFile} value={this.state.arquivoUpload}></input>
-                                    <hr/>
-                                    <button id="salvar-documento" className="btn btn-primary" disabled={!this.state.podeCriarDocumento} onClick={this.salvarDocumento}>Salvar</button>
-                                </form>
+
+                            <div className="box-content">
+                                <div className="form-group">
+                                    <label htmlFor="nomePasta"><b>Nome:</b></label>
+                                    <input name="nomePasta" className="form-control" value={this.state.nomePasta} onChange={(e) => handleFieldChange(this, e)}></input>
+                                </div>
+                                <hr/>
+                                <button id="salvar-pasta" className="btn btn-primary" onClick={this.salvarPasta}>Salvar</button>
                             </div>
                         </div>
                     </div>
-
-                    <div className="box">
-                        <div className="box-title">
-                            CRIAÇÃO DE PASTA
-                        </div>
-
-                        <div className="box-content">
-                            <div className="form-group">
-                                <label htmlFor="nomePasta"><b>Nome:</b></label>
-                                <input name="nomePasta" className="form-control" value={this.state.nomePasta} onChange={(e) => handleFieldChange(this, e)}></input>
-                            </div>
-                            <hr/>
-                            <button id="salvar-pasta" className="btn btn-primary" onClick={this.salvarPasta}>Salvar</button>
-                        </div>
-                    </div>
-                </div>
+                }
 
                 <div className="col-lg-8">
                     <div className="box">

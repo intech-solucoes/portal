@@ -1,6 +1,9 @@
 import React from 'react';
 import { ContrachequeService, PlanoService } from "prevsystem-service";
 
+var ReactIntl = require('react-intl');
+var FormattedNumber = ReactIntl.FormattedNumber;
+
 var config = require("../config.json");
 var contrachequeService = new ContrachequeService(config);
 var planoService = new PlanoService(config);
@@ -64,15 +67,21 @@ export default class ContrachequeDetalhe extends React.Component {
                                 <div className="row text-center">
                                     <div className="col-lg-4">
                                         <h5>BRUTO</h5>
-                                        <span className="text text-info">R$ {this.state.contracheque.Resumo.Bruto}</span>
+                                        <span className="text text-info">
+                                            <FormattedNumber currency="BRL" style="currency" value={this.state.contracheque.Resumo.Bruto} />
+                                        </span>
                                     </div>
                                     <div className="col-lg-4">
                                         <h5>DESCONTOS</h5>
-                                        <span className="text text-danger">R$ {this.state.contracheque.Resumo.Descontos}</span>
+                                        <span className="text text-danger">
+                                            <FormattedNumber currency="BRL" style="currency" value={this.state.contracheque.Resumo.Descontos} />
+                                        </span>
                                     </div>
                                     <div className="col-lg-4">
                                         <h5>LÍQUIDO</h5>
-                                        <span className="text text-warning">R$ {this.state.contracheque.Resumo.Liquido}</span>
+                                        <span className="text text-warning">
+                                            <FormattedNumber currency="BRL" style="currency" value={this.state.contracheque.Resumo.Liquido} />
+                                        </span>
                                     </div>    
                                 </div>
                             </div>
@@ -100,7 +109,9 @@ export default class ContrachequeDetalhe extends React.Component {
                                                         return (
                                                             <tr key={index}>
                                                                 <td>{rendimento.DS_RUBRICA}</td>
-                                                                <td>R$ {rendimento.VALOR_MC}</td>
+                                                                <td>
+                                                                    <FormattedNumber currency="BRL" style="currency" value={rendimento.VALOR_MC} />
+                                                                </td>
                                                             </tr>
                                                         );
                                                     })
@@ -126,7 +137,9 @@ export default class ContrachequeDetalhe extends React.Component {
                                                         return (
                                                             <tr key={index}>
                                                                 <td>{desconto.DS_RUBRICA}</td>
-                                                                <td>R$ {desconto.VALOR_MC}</td>
+                                                                <td>
+                                                                    <FormattedNumber currency="BRL" style="currency" value={desconto.VALOR_MC} />
+                                                                </td>
                                                             </tr>
                                                         );
                                                     })
