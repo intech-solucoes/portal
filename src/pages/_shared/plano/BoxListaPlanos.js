@@ -55,11 +55,7 @@ export default class BoxListaPlanos extends React.Component {
                                         <button className="btn btn-primary" onClick={() => {}}>Extrato</button>
                                     </div>
                                 }
-
-                                {/* <div className="form-row">
-                                    <FormFieldStatic titulo="Salário de Contribuição" valor={"R$" + 5000.25} />
-                                    <FormFieldStatic titulo="Percentual de Contribuição" valor={3 + "%"} />
-                                </div> */}
+                                
                             </div>
                         </div>
                     </div>

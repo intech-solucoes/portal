@@ -12,7 +12,7 @@ const usuarioService = new UsuarioService(config);
 
 const rotas = [
     { titulo: "Home",                   icone: "fas fa-home",               caminho: "/",                          componente: () => <Home />,                                          mostrarMenu: true,     exact: true },
-    { titulo: "Dados Pessoais",         icone: "fas fa-clipboard",          caminho: "/dados",                     componente: () => <DadosPessoais />,                                 mostrarMenu: true },
+    { titulo: "Dados Pessoais",         icone: "fas fa-user",               caminho: "/dados",                     componente: () => <DadosPessoais />,                                 mostrarMenu: true },
     { titulo: "Planos",                 icone: "fas fa-list",               caminho: "/planos",                    componente: () => <Planos />,                                        mostrarMenu: true,     exact: true },
     { titulo: "Contracheque",           icone: "fas fa-closed-captioning",                 caminho: "/contracheque",              componente: () => <Contracheque />,                                  mostrarMenu: true,     exact: true },
     { titulo: "Inf. Rendimentos", icone: "fas fa-chart-pie",                 caminho: "/infoRend",              componente: () => <InformeRendimentos />,                                  mostrarMenu: true,     exact: true },
