@@ -17,9 +17,12 @@ export default class DetalhesPlano extends React.Component {
             dataInicio: "01/04/2014",
             dataFim: "01/03/2018",
 
+            // States de validação e mensagens de erro.
             erroCampoVazio: false,
             erroCampoInvalido: false,
             mensagemErro: "",
+            erroDataInicialSuperior: false,
+            erroDataFinalSuperior: false,
 
             cdPlano: props.routeProps.match.params.plano,
             plano: {},
@@ -32,7 +35,6 @@ export default class DetalhesPlano extends React.Component {
         this.gerarExtrato = this.gerarExtrato.bind(this);
         this.gerarCertificado = this.gerarCertificado.bind(this);
 
-        this.validarCampos = this.validarCampos.bind(this);
         this.validarVazios = this.validarVazios.bind(this);
         this.validarInvalidos = this.validarInvalidos.bind(this);
         this.converteData = this.converteData.bind(this);
@@ -161,6 +163,19 @@ export default class DetalhesPlano extends React.Component {
         // Variável que armazena true caso um dos campos esteja inválido.
         var dataInvalida = dataInicioInvalida || dataFimInvalida;
 
+        if(dataInicioObjeto > dataFimObjeto) {
+            this.setState({ erroDataInicialSuperior: true })
+
+        } else if(dataFimObjeto > new Date()) {
+            this.setState({ erroDataFinalSuperior: true })
+
+        } else {
+            this.setState({
+                erroDataInicialSuperior: false,
+                erroDataFinalSuperior: false
+            })
+        }
+
         this.setState({ 
             erroCampoInvalido: dataInvalida 
         }, () => { this.renderizaMensagemErro() });
@@ -182,14 +197,20 @@ export default class DetalhesPlano extends React.Component {
     renderizaMensagemErro() {
         // Mensagem de campo vazio é renderizada caso um dos dois campos esteja vazio.
         if(this.state.erroCampoVazio) {
-            this.setState({
-                mensagemErro: "Preencha todos os campos!"
-            })
+            this.setState({ mensagemErro: "Preencha todos os campos!" })
+
         // Mensagem de campo inválido é renderizada caso um dos dois campos esteja inválido.
         } else if(this.state.erroCampoInvalido) {
-            this.setState({
-                mensagemErro: "Preencha todos os campos corretamente!"
-            })
+            this.setState({ mensagemErro: "Preencha todos os campos corretamente!" })
+
+        // Mensagem de data inicial superior é renderizada caso a data inicial seja superior que a data final.
+        } else if(this.state.erroDataInicialSuperior) {
+            this.setState({ mensagemErro: "A data inicial é superior à data final!" })
+
+        // Mensagem de data final superior é renderizada caso a data final seja maior que a data atual.
+        } else if(this.state.erroDataFinalSuperior) {
+            this.setState({ mensagemErro: "A data final é superior à data atual!" })
+
         // Nenhuma mensagem de erro é renderizada se os dois campos estão preenchidos corretamente.
         } else {
             this.setState({

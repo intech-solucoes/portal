@@ -1,4 +1,9 @@
 
+var diaAtual = new Date().getDate();
+var mesAtual = new Date().getMonth();
+mesAtual++;    // getMonth() retorna o mês atual entre 0 e 11. Com o incremento o valor fica entre 1 e 12.
+var anoAtual = new Date().getFullYear();
+
 /** 
  * @param {Object} dataObjeto - objeto do tipo 'date' com a data a ser verificada.
  * @param {string} dataString - string com a mesma data a ser comparada.
@@ -6,8 +11,9 @@
  * @description verificar se a data de nascimento não ultrapassa a data atual e está dentro dos limites.
  */
 export default function DataInvalida(dataObjeto, dataString) {
-    if(dataString === '')
-        return false;
+    var dia = dataObjeto.getDate(); 
+    var mes = dataObjeto.getMonth() + 1; 
+    var ano = dataObjeto.getFullYear(); 
 
     if(dataString.length < 10)
         return true;
@@ -15,6 +21,21 @@ export default function DataInvalida(dataObjeto, dataString) {
     var dataInvalida = VerificaLimitesData(dataObjeto, dataString);
     if(dataInvalida)
         return true;
+
+    // Verifica se a data é superior à data atual. 
+    if(ano > anoAtual) 
+        return true; 
+ 
+    if(ano === anoAtual) 
+    { 
+        if(mes > mesAtual) 
+            return true; 
+         
+        if(mes === mesAtual) { 
+            if(dia > diaAtual) 
+                return true; 
+        } 
+    } 
 
     return false;
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { handleFieldChange } from "react-lib";
-import DataInvalida from '../_shared/Data';
+import DataInvalida from '../_shared/ValidacaoDataNascimento';
 import  { UsuarioService } from 'prevsystem-service';
 
 var config = require('../../config.json');

@@ -118,8 +118,6 @@ export default class MensagemNova extends React.Component {
         var campoVazio = (valor === "");
         this.setState({
             [campoErro]: campoVazio
-        }, () => { 
-            console.log(campoErro, ":", campoVazio);
         })
         return campoVazio;
     }
@@ -136,10 +134,17 @@ export default class MensagemNova extends React.Component {
         var dataObjeto = this.converteData(this.state.dataExpiracao);
         var dataInvalida = DataInvalida(dataObjeto, this.state.dataExpiracao);
 
-        this.setState({ 
-            erroDataInvalida: dataInvalida 
-        });
-        return dataInvalida;
+        if(dataObjeto < new Date()) {
+            this.setState({ 
+                erroDataInvalida: true 
+            });
+            return true;
+        } else {
+            this.setState({ 
+                erroDataInvalida: dataInvalida 
+            });
+            return dataInvalida;
+        }
     }
 
     /**
@@ -202,7 +207,7 @@ export default class MensagemNova extends React.Component {
                                             {this.state.erroEnviarVia &&
                                             <div className="text-danger col-12 mt-2 mb-2">
                                                 <i className="fas fa-exclamation-circle"></i>&nbsp;
-                                                Marque ao menos uma opção!
+                                                Selecione ao menos uma opção!
                                             </div>
                                             }
                                         </div>
