@@ -167,7 +167,10 @@ export default class DetalhesPlano extends React.Component {
             this.setState({ erroDataInicialSuperior: true })
 
         } else if(dataFimObjeto > new Date()) {
-            this.setState({ erroDataFinalSuperior: true })
+            this.setState({ 
+                erroDataFinalSuperior: true,
+                erroDataInicialSuperior: false
+            })
 
         } else {
             this.setState({

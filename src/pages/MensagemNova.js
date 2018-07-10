@@ -3,6 +3,7 @@ import { MensagemService } from "prevsystem-service";
 import DataInvalida from './_shared/Data';
 import ListaMensagens from "./_shared/mensagem/ListaMensagens";
 
+var InputMask = require('react-input-mask');
 const config = require("../config.json");
 const mensagemService = new MensagemService(config);
 
@@ -30,6 +31,7 @@ export default class MensagemNova extends React.Component {
             erroEnviarVia: false,
             erroDataInvalida: false,
             erroMatriculaInvalida: false,
+            erroFundacao: false,
 
             // States Listas
             listaFundacao: [],
@@ -49,6 +51,8 @@ export default class MensagemNova extends React.Component {
         this.validarVazio = this.validarVazio.bind(this);
         this.validarData = this.validarData.bind(this);
         this.validarCheckboxes = this.validarCheckboxes.bind(this);
+        this.validarFundacao = this.validarFundacao.bind(this);
+        this.renderMensagemErro = this.renderMensagemErro.bind(this);
     }
 
     componentDidMount() {
@@ -103,6 +107,7 @@ export default class MensagemNova extends React.Component {
         var conteudoVazio = this.validarVazio(this.state.mensagem, "erroMensagemVazia");
         var checkboxVazia = this.validarCheckboxes();
         var dataInvalida = this.validarData();
+        var fundacaoVazia = this.validarFundacao();
 
         if(!tituloVazio && !conteudoVazio && !checkboxVazia && !dataInvalida) {
             console.log("Enviando mensagem...");
@@ -156,6 +161,30 @@ export default class MensagemNova extends React.Component {
         return new Date(dataPartes[2], dataPartes[1] - 1, dataPartes[0]);
     }
 
+    validarFundacao() {
+        if(this.state.fundacao === "") {
+            this.setState({ erroFundacao: true });
+            return true;
+            
+        } else {
+            this.setState({ erroFundacao: false });
+            return false;
+        }
+    }
+
+    renderMensagemErro(stateErro, mensagemErro) {
+        if(stateErro) {
+            return(
+                <div className="text-danger mt-2 mb-2">
+                    <i className="fas fa-exclamation-circle"></i>&nbsp;
+                    {mensagemErro}
+                </div>
+            );
+        } else {
+            return(<div></div>);
+        }
+    }
+
     render () {
         return (
             <div className="row">
@@ -171,22 +200,12 @@ export default class MensagemNova extends React.Component {
                                     <div className="form-group">
                                         <label htmlFor="titulo"><b>Título</b></label>
                                         <input name="titulo" id="titulo" className="form-control" maxLength="50" value={this.state.titulo} onChange={this.onChangeInput} />
-                                            {this.state.erroTituloVazio &&
-                                                <div className="text-danger mt-2 mb-2">
-                                                    <i className="fas fa-exclamation-circle"></i>&nbsp;
-                                                    Campo Obrigatório!
-                                                </div>
-                                            }
+                                            {this.renderMensagemErro(this.state.erroTituloVazio, "Campo Obrigatório!")}
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="mensagem"><b>Corpo da Mensagem:</b></label>
                                         <textarea name="mensagem" id="mensagem" className="form-control" rows="10" value={this.state.mensagem} onChange={this.onChangeInput}/>
-                                        {this.state.erroMensagemVazia &&
-                                            <div className="text-danger mt-2 mb-2">
-                                                <i className="fas fa-exclamation-circle"></i>&nbsp;
-                                                Campo Obrigatório!
-                                            </div>
-                                        }
+                                        {this.renderMensagemErro(this.state.erroMensagemVazia, "Campo Obrigatório!")}
                                     </div>
         
                                     <div className="form-group">
@@ -204,60 +223,59 @@ export default class MensagemNova extends React.Component {
                                                 <input name="enviarPortal" id="enviarPortal" type="checkbox" value={this.state.enviarPortal} onChange={this.onChangeCheckbox} />&nbsp; 
                                                 <label htmlFor="enviarPortal"><b>Portal</b></label>
                                             </div>
-                                            {this.state.erroEnviarVia &&
-                                            <div className="text-danger col-12 mt-2 mb-2">
-                                                <i className="fas fa-exclamation-circle"></i>&nbsp;
-                                                Selecione ao menos uma opção!
-                                            </div>
+                                            {this.state.erroEnviarVia && 
+                                                <div className="text-danger col-12 mt-2 mb-2"> 
+                                                    <i className="fas fa-exclamation-circle"></i>&nbsp; 
+                                                    Selecione ao menos uma opção! 
+                                                </div> 
                                             }
                                         </div>
                                     </div>
         
                                     <div className="form-group">
                                         <label htmlFor="dataExpiracao"><b>Data de Expiração:</b></label>
-                                        <input name="dataExpiracao" id="dataExpiracao" className="form-control" onChange={this.onChangeInput} />
+                                        <InputMask mask="99/99/9999" name="dataExpiracao" id="dataExpiracao" className="form-control" onChange={this.onChangeInput} />
                                         <span className="text text-secondary">Deixe em branco para indicar que a mensagem não terá uma data de expiração</span>
-                                        {this.state.erroDataInvalida &&
-                                            <div className="text-danger mt-2 mb-2">
-                                                <i className="fas fa-exclamation-circle"></i>&nbsp;
-                                                Data inválida!
-                                            </div>
-                                        }
+                                        {this.renderMensagemErro(this.state.erroDataInvalida, "Data inválida!")}
                                     </div>
                                 </div>
         
                                 <div className="col-lg-6">
                                     <div className="form-group">
                                         <label htmlFor="fundation"><b>Fundação:</b></label>
-                                        <select className="form-control" id="fundation">
-                                            <option>REGIUS - SOCIEDADE CIVIL DE PREVIDÊNCIA PRIVADA</option>
+                                        <select name="fundacao" className="form-control" id="fundacao" value={this.state.fundacao} onChange={this.onChangeInput}>
+                                            <option value="">Selecione uma fundação</option>
+                                            <option value="1">REGIUS - SOCIEDADE CIVIL DE PREVIDÊNCIA PRIVADA</option>
                                         </select>
+                                        {this.renderMensagemErro(this.state.erroFundacao, "Selecione a fundação!")}
                                     </div>
         
                                     <div className="form-group">
                                         <label htmlFor="empresa"><b>Empresa:</b></label>
-                                        <select name="empresa" className="form-control" id="empresa">
-                                            <option>Todas(os)</option>
-                                            <option>BRB - BANCO DE BRASÍLIA S.A</option>
-                                            <option>REGIUS - SOCIEDADE CIVIL DE PREVIDÊNCIA PRIVADA</option>
-                                            <option>CARTÃO BRB S/A - PATROCINADORA</option>
-                                            <option>BRB - ADMINISTRADORA E CORRETORA DE SEGUROS S.A.</option>
-                                            <option>METRO DF - COMPANHIA DO METROPOLITANO DO DF - PATROCINADORA</option>
-                                            <option>SAÚDE BRB - CAIXA DE ASSISTÊNCIA</option>
+                                        <select name="empresa" className="form-control" id="empresa" value={this.state.empresa} onChange={this.onChangeInput}>
+                                            <option value="0">Todas(os)</option>
+                                            <option value="1">BRB - BANCO DE BRASÍLIA S.A</option>
+                                            <option value="2">REGIUS - SOCIEDADE CIVIL DE PREVIDÊNCIA PRIVADA</option>
+                                            <option value="3">CARTÃO BRB S/A - PATROCINADORA</option>
+                                            <option value="4">BRB - ADMINISTRADORA E CORRETORA DE SEGUROS S.A.</option>
+                                            <option value="5">METRO DF - COMPANHIA DO METROPOLITANO DO DF - PATROCINADORA</option>
+                                            <option value="6">SAÚDE BRB - CAIXA DE ASSISTÊNCIA</option>
                                         </select>
                                     </div>
         
                                     <div className="form-group">
                                         <label htmlFor="plano"><b>Plano:</b></label>
-                                        <select name="plano" className="form-control" id="plano">
-                                            <option>Todas(os)</option>
+                                        <select name="plano" className="form-control" id="plano" value={this.state.plano} onChange={this.onChangeInput}>
+                                            <option value="0">Todas(os)</option>
+                                            <option value="1">BRB - BANCO DE BRASÍLIA S.A</option>
                                         </select>
                                     </div>
         
                                     <div className="form-group">
                                         <label htmlFor="situacaoPlano"><b>Situação do plano</b></label>
-                                        <select name="situacaoPlano" className="form-control" id="situacaoPlano">
-                                            <option>Todas(os)</option>
+                                        <select name="situacaoPlano" className="form-control" id="situacaoPlano" value={this.state.situacaoPlano} onChange={this.onChangeInput}>
+                                            <option value="0">Todas(os)</option>
+                                            <option value="1">BRB - BANCO DE BRASÍLIA S.A</option>
                                         </select>
                                     </div>
         
@@ -266,7 +284,6 @@ export default class MensagemNova extends React.Component {
                                         <input id="registration" className="form-control" />
                                         <span className="text text-secondary">Deixe em branco para enviar para todas as matrículas dentro dos parâmetros acima</span>
                                     </div>
-        
         
                                 </div>
                             </div>
