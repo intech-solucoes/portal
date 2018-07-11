@@ -18,7 +18,6 @@ export default class ContraCheque extends React.Component {
     }
 
     componentDidMount() {
-        console.log('1');
         planoService.Buscar()
             .then(result => this.buscarDatas(result.data));
     }
@@ -34,7 +33,6 @@ export default class ContraCheque extends React.Component {
                         planos: [...this.state.planos, plano]
                     });
                 });
-
         });
     }
 

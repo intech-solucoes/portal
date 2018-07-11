@@ -53,6 +53,7 @@ export default class MensagemNova extends React.Component {
         this.validarCheckboxes = this.validarCheckboxes.bind(this);
         this.validarFundacao = this.validarFundacao.bind(this);
         this.renderMensagemErro = this.renderMensagemErro.bind(this);
+        this.validarMatricula = this.validarMatricula.bind(this);
     }
 
     componentDidMount() {
@@ -108,8 +109,9 @@ export default class MensagemNova extends React.Component {
         var checkboxVazia = this.validarCheckboxes();
         var dataInvalida = this.validarData();
         var fundacaoVazia = this.validarFundacao();
+        var matriculaInvalida = this.validarMatricula();
 
-        if(!tituloVazio && !conteudoVazio && !checkboxVazia && !dataInvalida) {
+        if(!tituloVazio && !conteudoVazio && !checkboxVazia && !dataInvalida && !fundacaoVazia && !matriculaInvalida) {
             console.log("Enviando mensagem...");
             // Chamar rota /mensagem/enviar
         } else {
@@ -161,6 +163,10 @@ export default class MensagemNova extends React.Component {
         return new Date(dataPartes[2], dataPartes[1] - 1, dataPartes[0]);
     }
 
+    /**
+     * @description Método que valida o campo fundação, que deve ser selecionado com uma opção diferente da opção default.
+     * @returns {boolean} True para fundação inválida (opção default) e false para fundação válida (sem erro).
+     */
     validarFundacao() {
         if(this.state.fundacao === "") {
             this.setState({ erroFundacao: true });
@@ -169,6 +175,25 @@ export default class MensagemNova extends React.Component {
         } else {
             this.setState({ erroFundacao: false });
             return false;
+        }
+    }
+
+    /**
+     * @description Método que valida o campo Matrícula, que deve ser apenas vazio ou ter exatamente 9 caracteres.
+     * @returns {boolean} False para matrícula sem erros, true para matrícula inválida.
+     */
+    validarMatricula() {
+        // O valor da matrícula para validação por tamanho é feita a partir do valor no campo, pois deve-se tratar esse valor removendo os underline (_) da string.
+        var matricula = document.getElementById("matricula").value;
+        matricula = matricula.split('_').join("");
+
+        if(this.state.matricula === "" || matricula.length === 9) {
+            this.setState({ erroMatriculaInvalida: false })
+            return false;
+
+        } else {
+            this.setState({ erroMatriculaInvalida: true });
+            return true;
         }
     }
 
@@ -234,7 +259,7 @@ export default class MensagemNova extends React.Component {
         
                                     <div className="form-group">
                                         <label htmlFor="dataExpiracao"><b>Data de Expiração:</b></label>
-                                        <InputMask mask="99/99/9999" name="dataExpiracao" id="dataExpiracao" className="form-control" onChange={this.onChangeInput} />
+                                        <input name="dataExpiracao" id="dataExpiracao" className="form-control" onChange={this.onChangeInput} />
                                         <span className="text text-secondary">Deixe em branco para indicar que a mensagem não terá uma data de expiração</span>
                                         {this.renderMensagemErro(this.state.erroDataInvalida, "Data inválida!")}
                                     </div>
@@ -242,7 +267,7 @@ export default class MensagemNova extends React.Component {
         
                                 <div className="col-lg-6">
                                     <div className="form-group">
-                                        <label htmlFor="fundation"><b>Fundação:</b></label>
+                                        <label htmlFor="fundacao"><b>Fundação:</b></label>
                                         <select name="fundacao" className="form-control" id="fundacao" value={this.state.fundacao} onChange={this.onChangeInput}>
                                             <option value="">Selecione uma fundação</option>
                                             <option value="1">REGIUS - SOCIEDADE CIVIL DE PREVIDÊNCIA PRIVADA</option>
@@ -280,11 +305,11 @@ export default class MensagemNova extends React.Component {
                                     </div>
         
                                     <div className="form-group">
-                                        <label htmlFor="registration"><b>Matrícula</b></label>
-                                        <input id="registration" className="form-control" />
+                                        <label htmlFor="matricula"><b>Matrícula</b></label>
+                                        <InputMask mask="999999999" id="matricula" name="matricula" className="form-control" value={this.state.matricula} onChange={this.onChangeInput} />
                                         <span className="text text-secondary">Deixe em branco para enviar para todas as matrículas dentro dos parâmetros acima</span>
                                     </div>
-        
+                                    {this.renderMensagemErro(this.state.erroMatriculaInvalida, "Matrícula Inválida!")}
                                 </div>
                             </div>
                             <button type="button" className="btn btn-primary" onClick={() => this.validar()}>Enviar</button>
