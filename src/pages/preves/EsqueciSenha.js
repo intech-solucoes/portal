@@ -80,7 +80,6 @@ export default class EsqueciSenha extends React.Component {
             }, () => { this.renderizaMensagemErro() })
         }
 
-        console.log(this.state);
     }
     
     /**
@@ -118,10 +117,7 @@ export default class EsqueciSenha extends React.Component {
      * Método que chama o service que cria um POST com Cpf e DataNascimento para rota '/usuario/criarAcesso'. Após isso, redireciona para tela de login.
      */
     enviarSenha() {
-        var cpf = this.state.cpf;
-        var dataNascimento = this.state.dataNascimento;
-
-        usuarioService.PrimeiroAcesso(cpf, dataNascimento)
+        usuarioService.PrimeiroAcesso(this.state.cpf, this.state.dataNascimento)
             .then((result) => {
                 window.alert(result.data);
                 this.props.history.push('/');
@@ -136,7 +132,7 @@ export default class EsqueciSenha extends React.Component {
     }
 
     render() {
-        return(
+        return (
             <div className="box">
                 <div className="logo">
                     <img src="./imagens/preves/logo.png" alt="Preves" />
@@ -149,7 +145,7 @@ export default class EsqueciSenha extends React.Component {
                     <p align="middle">Preencha as informações para que possamos gerar uma senha que será enviada para seu email cadastrado.</p>
                     <form>
                         <div className="form-group">
-                            <input name="cpf" placeholder="CPF (somente números)" maxLength="14" className="form-control" value={this.state.cpf} onChange={(e) => handleFieldChange(this, e)} />
+                            <input name="cpf" placeholder="CPF (somente números)" maxLength="11" className="form-control" value={this.state.cpf} onChange={(e) => handleFieldChange(this, e)} />
                         </div>
                         <div className="form-group">
                             <input name="dataNascimento" placeholder="Data de Nascimento" maxLength="10" className="form-control" value={this.state.dataNascimento} onChange={(e) => handleFieldChange(this, e)} />

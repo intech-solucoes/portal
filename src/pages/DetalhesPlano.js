@@ -14,8 +14,8 @@ export default class DetalhesPlano extends React.Component {
 
         this.state = {
             modalVisivel: false,
-            dataInicio: "01/04/2014",
-            dataFim: "01/03/2018",
+            dataInicio: "",
+            dataFim: "",
 
             // States de validação e mensagens de erro.
             erroCampoVazio: false,
@@ -69,8 +69,8 @@ export default class DetalhesPlano extends React.Component {
             }, () => { console.log(this.state) })
         } else {
             this.setState({
-                dataInicio: "01/04/2014",
-                dataFim: "01/03/2018",
+                dataInicio: "",
+                dataFim: "",
 
                 modalVisivel: !this.state.modalVisivel
             }, () => { console.log(this.state) })
