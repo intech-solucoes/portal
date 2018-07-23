@@ -1,11 +1,12 @@
 import React from 'react';
-import { MensagemService } from "prevsystem-service";
+import { MensagemService, PlanoService } from "prevsystem-service";
 import DataInvalida from './_shared/Data';
 import ListaMensagens from "./_shared/mensagem/ListaMensagens";
 
 var InputMask = require('react-input-mask');
 const config = require("../config.json");
 const mensagemService = new MensagemService(config);
+const planoService = new PlanoService(config);
 
 export default class MensagemNova extends React.Component {
     constructor(props) {
@@ -18,6 +19,7 @@ export default class MensagemNova extends React.Component {
             enviarEmail: false,
             enviarSms: false,
             enviarPortal: false,
+            enviarMobile: false,    // State temporário: o campo e a funcionalidade não irá existir.
             dataExpiracao: "",
             fundacao: "",
             empresa: "",
@@ -54,6 +56,7 @@ export default class MensagemNova extends React.Component {
         this.validarFundacao = this.validarFundacao.bind(this);
         this.renderMensagemErro = this.renderMensagemErro.bind(this);
         this.validarMatricula = this.validarMatricula.bind(this);
+        this.enviarVia = this.enviarVia.bind(this);
     }
 
     componentDidMount() {
@@ -61,6 +64,18 @@ export default class MensagemNova extends React.Component {
             .then((result) => {
                 this.setState({ mensagens: result.data });
             });
+
+        planoService.Listar()
+            .then((result) => { 
+                this.setState({ listaPlano: result.data },
+                    () => console.log(this.state));
+            })
+            .catch((err) => console.error(err))
+
+        // empresaService.BuscarTodas()
+        //     .then((result) => {
+        //         this.setState({ listaEmpresa: result.data });
+        //     }, () => console.log(this.state.listaEmpresa));
     }
 
     onChangeInput(event) {
@@ -111,14 +126,45 @@ export default class MensagemNova extends React.Component {
         var fundacaoVazia = this.validarFundacao();
         var matriculaInvalida = this.validarMatricula();
 
+        var dadosMensagem = {};
+        
         if(!tituloVazio && !conteudoVazio && !checkboxVazia && !dataInvalida && !fundacaoVazia && !matriculaInvalida) {
-            console.log("Enviando mensagem...");
-            // Chamar rota /mensagem/enviar
+            dadosMensagem.TXT_TITULO = this.state.titulo;
+            dadosMensagem.TXT_CORPO = this.state.mensagem;
+            dadosMensagem.DTA_EXPIRACAO = this.state.dataExpiracao;
+            dadosMensagem.CD_FUNDACAO = this.state.fundacao;
+            dadosMensagem.CD_EMPRESA = this.state.empresa;
+            dadosMensagem.CD_PLANO = this.state.plano;
+            dadosMensagem.CD_SIT_PLANO = null;
+            dadosMensagem.NUM_MATRICULA = "035857861";
+            dadosMensagem.IND_MOBILE = this.enviarVia(this.state.enviarMobile);
+            dadosMensagem.IND_PORTAL = this.enviarVia(this.state.enviarPortal);
+            dadosMensagem.IND_EMAIL = this.enviarVia(this.state.enviarEmail);
+            dadosMensagem.IND_SMS = this.enviarVia(this.state.enviarSms);
+            console.log("dadosMensagem", dadosMensagem);
+            
+            mensagemService.EnviarMensagem(dadosMensagem)
+                .then(() => {
+                    alert("Mensagem enviada com sucesso!")
+                })
+                .catch((err) => console.error(err));
+
         } else {
             window.scrollTo(0, 60);
             console.log(this.state);
         }
 
+    }
+
+    /**
+     * @description Método que converte o valor booleano dos campos de "enviar mensagem via" para o valor que a requisição precisa receber. Para true é a string "SIM", para false a string "NAO".
+     * @param {boolean} valorBooleano Valor booleano armazenado no state "enviarVia".
+     */
+    enviarVia(valorBooleano) {
+        if(valorBooleano) 
+            return "SIM";
+        else 
+            return "NAO";
     }
 
     validarVazio(valor, campoErro) {
@@ -259,7 +305,7 @@ export default class MensagemNova extends React.Component {
         
                                     <div className="form-group">
                                         <label htmlFor="dataExpiracao"><b>Data de Expiração:</b></label>
-                                        <input name="dataExpiracao" id="dataExpiracao" className="form-control" onChange={this.onChangeInput} />
+                                        <InputMask mask="99/99/9999" id="dataExpiracao" name="dataExpiracao" id="dataExpiracao" className="form-control" onChange={this.onChangeInput} />
                                         <span className="text text-secondary">Deixe em branco para indicar que a mensagem não terá uma data de expiração</span>
                                         {this.renderMensagemErro(this.state.erroDataInvalida, "Data inválida!")}
                                     </div>
@@ -270,7 +316,7 @@ export default class MensagemNova extends React.Component {
                                         <label htmlFor="fundacao"><b>Fundação:</b></label>
                                         <select name="fundacao" className="form-control" id="fundacao" value={this.state.fundacao} onChange={this.onChangeInput}>
                                             <option value="">Selecione uma fundação</option>
-                                            <option value="1">REGIUS - SOCIEDADE CIVIL DE PREVIDÊNCIA PRIVADA</option>
+                                            <option value="01">REGIUS - SOCIEDADE CIVIL DE PREVIDÊNCIA PRIVADA</option>
                                         </select>
                                         {this.renderMensagemErro(this.state.erroFundacao, "Selecione a fundação!")}
                                     </div>
@@ -278,13 +324,16 @@ export default class MensagemNova extends React.Component {
                                     <div className="form-group">
                                         <label htmlFor="empresa"><b>Empresa:</b></label>
                                         <select name="empresa" className="form-control" id="empresa" value={this.state.empresa} onChange={this.onChangeInput}>
-                                            <option value="0">Todas(os)</option>
-                                            <option value="1">BRB - BANCO DE BRASÍLIA S.A</option>
-                                            <option value="2">REGIUS - SOCIEDADE CIVIL DE PREVIDÊNCIA PRIVADA</option>
-                                            <option value="3">CARTÃO BRB S/A - PATROCINADORA</option>
-                                            <option value="4">BRB - ADMINISTRADORA E CORRETORA DE SEGUROS S.A.</option>
-                                            <option value="5">METRO DF - COMPANHIA DO METROPOLITANO DO DF - PATROCINADORA</option>
-                                            <option value="6">SAÚDE BRB - CAIXA DE ASSISTÊNCIA</option>
+                                            <option value="0000">Todas(os)</option>
+                                            <option value="0001">PODER EXECUTIVO</option>
+                                            <option value="0002">PODER LEGISLATIVO</option>
+                                            <option value="0003">PODER JUDICIARIO</option>
+                                            <option value="0004">MINISTÉRIO PUBLICO</option>
+                                            <option value="0005">TRIBUNAL DE CONTAS DO ESTADO DO ES</option>
+                                            <option value="0006">PREVES</option>
+                                            <option value="0007">PREFEITURA MUNICIPAL DE ANCHIETA</option>
+                                            <option value="0008">PREFEITURA MUNICIPAL DE PANCAS</option>
+                                            <option value="0009">AUTOPATROCINADO</option>
                                         </select>
                                     </div>
         
@@ -292,7 +341,13 @@ export default class MensagemNova extends React.Component {
                                         <label htmlFor="plano"><b>Plano:</b></label>
                                         <select name="plano" className="form-control" id="plano" value={this.state.plano} onChange={this.onChangeInput}>
                                             <option value="0">Todas(os)</option>
-                                            <option value="1">BRB - BANCO DE BRASÍLIA S.A</option>
+                                            {
+                                                this.state.listaPlano.map((plano, index) => {
+                                                    return(
+                                                        <option key={index} value={plano.CD_PLANO}>{plano.DS_PLANO}</option>
+                                                    )
+                                                })
+                                            }
                                         </select>
                                     </div>
         
