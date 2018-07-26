@@ -3,7 +3,7 @@ import { handleFieldChange } from "react-lib";
 import DataInvalida from '../_shared/ValidacaoDataNascimento';
 import  { UsuarioService } from 'prevsystem-service';
 
-var InputMask = require('react-input-mask');
+import InputMask from 'react-input-mask';
 
 var config = require('../../config.json');
 var usuarioService = new UsuarioService(config);
@@ -123,10 +123,10 @@ export default class EsqueciSenha extends React.Component {
                 this.props.history.push('/');
             })
             .catch((err) => { 
+                console.error(err.response.data);
+
                 this.setState({
                     mensagemErro: "Dados inválidos!"
-                }, () => { 
-                    console.error(err);
                 })
             });
     }
