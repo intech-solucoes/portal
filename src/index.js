@@ -8,11 +8,9 @@ var loggedIn = localStorage.getItem("token");
 
 if(loggedIn)
 {
-	console.log('render home');
 	page = <MasterPage />
 }
 else {
-	console.log('render login');
 	page = <MasterPageLogin />
 }
 

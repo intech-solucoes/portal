@@ -266,10 +266,10 @@ export default class DetalhesPlano extends React.Component {
                                 <FormFieldStatic titulo="Situação no Plano" valor={this.state.plano.DS_CATEGORIA} col="6" />
                                 <FormFieldStatic titulo="Data de inscrição" valor={this.state.plano.DT_INSC_PLANO} col="6" />
                             </div>
-                            <div className="form-row">
+                            {/* <div className="form-row">
                                 <FormFieldStatic titulo="Último Salário de Contribuição" valor='' col="6" />
                                 <FormFieldStatic titulo="Percentual de Contribuição Atual" valor='' col="6" />
-                            </div>
+                            </div> */}
                             <div className="form-row btn-toolbar">
                                 <div className="btn-group mr-2">
                                     <button type="button" id="gerarExtrato" className="btn btn-primary btn-md" onClick={() => this.toggleModal() }>Gerar extrato</button>
