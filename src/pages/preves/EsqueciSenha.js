@@ -3,6 +3,8 @@ import { handleFieldChange } from "react-lib";
 import DataInvalida from '../_shared/ValidacaoDataNascimento';
 import  { UsuarioService } from 'prevsystem-service';
 
+var InputMask = require('react-input-mask');
+
 var config = require('../../config.json');
 var usuarioService = new UsuarioService(config);
 
@@ -148,7 +150,7 @@ export default class EsqueciSenha extends React.Component {
                             <input name="cpf" placeholder="CPF (somente números)" maxLength="11" className="form-control" value={this.state.cpf} onChange={(e) => handleFieldChange(this, e)} />
                         </div>
                         <div className="form-group">
-                            <input name="dataNascimento" placeholder="Data de Nascimento" maxLength="10" className="form-control" value={this.state.dataNascimento} onChange={(e) => handleFieldChange(this, e)} />
+                            <InputMask mask="99/99/9999" name="dataNascimento" placeholder="Data de Nascimento" className="form-control" value={this.state.dataNascimento} onChange={(e) => handleFieldChange(this, e)} />
                         </div>
                         {this.state.mensagemErro !== "" &&
                             <div className="text-danger">
