@@ -19,6 +19,25 @@ export default class Modal extends React.Component {
         });
     }
 
+    /**
+     * @description Renderizar uma badge de acordo com os parâmetros recebidos. A badge informa que a mensagem foi enviada por tal via caso esteja renderizada.
+     * @param {string} badgeVisivel No banco, o valor que informa que tal mensagem foi enviada por tal via é "SIM" ou "NAO". A string badgeVisivel informa se a 
+     * mensagem foi enviada por um tipo de meio, por isso, para true ("SIM") a badge é renderizada, caso contrário a badge não é renderizada.
+     * @param {string} tipoBadge String com o valor do tipo (cor) da badge.
+     * @param {string} nomeBadge String com o valor do texto da badge.
+     * @returns Div com a badge com cor e nome recebidos.
+     */
+    renderBadge(badgeVisivel, tipoBadge, nomeBadge) {
+        if(badgeVisivel === "SIM") {
+            return (
+                <div className="btn-group mr-2">
+                    <label className={"badge badge-" + tipoBadge}>{nomeBadge}</label>
+                </div>
+            )
+        } else if(badgeVisivel === "NAO")
+            return <div></div>
+    }
+
     render() {
         if(this.state.visible) {
             return (
@@ -40,25 +59,13 @@ export default class Modal extends React.Component {
                                 <p><b>Matrícula: {this.state.mensagem.NUM_MATRICULA}</b></p>
                                 <div className="btn-toolbar">
                                     {/* Badge do Portal */}
-                                    {this.state.mensagem.IND_PORTAL === "SIM" &&
-                                        <div className="btn-group mr-2">
-                                            <label className="badge badge-success">Portal</label>
-                                        </div>
-                                    }
+                                    {this.renderBadge(this.state.mensagem.IND_PORTAL, "success", "Portal")}
 
                                     {/* Badge de SMS */}
-                                    {this.state.mensagem.IND_PORTAL === "SIM" &&
-                                        <div className="btn-group mr-2">
-                                            <label className="badge badge-info">SMS</label>
-                                        </div>
-                                    }
+                                    {this.renderBadge(this.state.mensagem.IND_SMS, "info", "SMS")}
                                     
                                     {/* Badge de E-mail */}
-                                    {this.state.mensagem.IND_PORTAL === "SIM" &&
-                                        <div className="btn-group mr-2">
-                                            <label className="badge badge-danger">E-mail</label>
-                                        </div>
-                                    }
+                                    {this.renderBadge(this.state.mensagem.IND_EMAIL, "danger", "E-mail")}
                                 </div>
                                 <br/>
                                 

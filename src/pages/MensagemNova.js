@@ -1,5 +1,5 @@
 import React from 'react';
-import { MensagemService, PlanoService } from "prevsystem-service";
+import { MensagemService, PlanoService, EmpresaService, SituacaoPlanoService, FundacaoService } from "prevsystem-service";
 import DataInvalida from './_shared/Data';
 import ListaMensagens from "./_shared/mensagem/ListaMensagens";
 
@@ -7,6 +7,9 @@ var InputMask = require('react-input-mask');
 const config = require("../config.json");
 const mensagemService = new MensagemService(config);
 const planoService = new PlanoService(config);
+const empresaService = new EmpresaService(config);
+const situacaoPlanoService = new SituacaoPlanoService(config);
+const fundacaoService = new FundacaoService(config);
 
 export default class MensagemNova extends React.Component {
     constructor(props) {
@@ -36,7 +39,7 @@ export default class MensagemNova extends React.Component {
             erroFundacao: false,
 
             // States Listas
-            listaFundacao: [],
+            listaFundacao: "",
             listaEmpresa: [],
             listaPlano: [],
             listaSituacaoPlano: [],
@@ -47,7 +50,6 @@ export default class MensagemNova extends React.Component {
         }
 
         this.toggleModal = this.toggleModal.bind(this);
-        this.onChangeInput = this.onChangeInput.bind(this);
         this.onChangeCheckbox = this.onChangeCheckbox.bind(this);
         this.validar = this.validar.bind(this);
         this.validarVazio = this.validarVazio.bind(this);
@@ -59,26 +61,42 @@ export default class MensagemNova extends React.Component {
         this.enviarVia = this.enviarVia.bind(this);
     }
 
+    /**
+     * @description Método de ciclo de vida, chamado ao montar o componente. Busca todas as listagens e armazena em seus respectivos states.
+     */
     componentDidMount() {
         mensagemService.BuscarTodas()
             .then((result) => {
                 this.setState({ mensagens: result.data });
-            });
+            })
+            .catch((err) => console.error(err));
 
         planoService.Listar()
             .then((result) => { 
-                this.setState({ listaPlano: result.data },
-                    () => console.log(this.state));
+                this.setState({ listaPlano: result.data });
             })
-            .catch((err) => console.error(err))
+            .catch((err) => console.error(err));
 
-        // empresaService.BuscarTodas()
-        //     .then((result) => {
-        //         this.setState({ listaEmpresa: result.data });
-        //     }, () => console.log(this.state.listaEmpresa));
+        empresaService.BuscarTodas()
+            .then((result) => {
+                this.setState({ listaEmpresa: result.data });
+            })
+            .catch((err) => console.error(err));
+
+        situacaoPlanoService.BuscarTodas()
+            .then((result) => {
+                this.setState({ listaSituacaoPlano: result.data });
+            })
+            .catch((err) => console.error(err));
+        
+        fundacaoService.BuscarPorCdFundacao('01')   // '01' é o código da fundação PREVES.
+            .then((result) => {
+                this.setState({ listaFundacao: result.data });
+            })
+            .catch((err) => console.error(err));
     }
 
-    onChangeInput(event) {
+    onChangeInput = (event) => {
         var target = event.target;
         var valor = target.value;
         var campo = target.name;
@@ -118,7 +136,7 @@ export default class MensagemNova extends React.Component {
         });
     }
 
-    validar() {
+    async validar() {
         var tituloVazio = this.validarVazio(this.state.titulo, "erroTituloVazio");
         var conteudoVazio = this.validarVazio(this.state.mensagem, "erroMensagemVazia");
         var checkboxVazia = this.validarCheckboxes();
@@ -135,7 +153,7 @@ export default class MensagemNova extends React.Component {
             dadosMensagem.CD_FUNDACAO = this.state.fundacao;
             dadosMensagem.CD_EMPRESA = this.state.empresa;
             dadosMensagem.CD_PLANO = this.state.plano;
-            dadosMensagem.CD_SIT_PLANO = null;
+            dadosMensagem.CD_SIT_PLANO = this.state.situacaoPlano;
             dadosMensagem.NUM_MATRICULA = "035857861";
             dadosMensagem.IND_MOBILE = this.enviarVia(this.state.enviarMobile);
             dadosMensagem.IND_PORTAL = this.enviarVia(this.state.enviarPortal);
@@ -145,7 +163,12 @@ export default class MensagemNova extends React.Component {
             
             mensagemService.EnviarMensagem(dadosMensagem)
                 .then(() => {
-                    alert("Mensagem enviada com sucesso!")
+                    alert("Mensagem enviada com sucesso!");
+                    mensagemService.BuscarTodas()
+                    .then((result) => {
+                        this.setState({ mensagens: result.data });
+                    })
+                    .catch((err) => console.error(err));
                 })
                 .catch((err) => console.error(err));
 
@@ -316,7 +339,7 @@ export default class MensagemNova extends React.Component {
                                         <label htmlFor="fundacao"><b>Fundação:</b></label>
                                         <select name="fundacao" className="form-control" id="fundacao" value={this.state.fundacao} onChange={this.onChangeInput}>
                                             <option value="">Selecione uma fundação</option>
-                                            <option value="01">REGIUS - SOCIEDADE CIVIL DE PREVIDÊNCIA PRIVADA</option>
+                                            <option value={this.state.listaFundacao.CD_FUNDACAO}>{this.state.listaFundacao.NOME_ENTID}</option>
                                         </select>
                                         {this.renderMensagemErro(this.state.erroFundacao, "Selecione a fundação!")}
                                     </div>
@@ -325,15 +348,13 @@ export default class MensagemNova extends React.Component {
                                         <label htmlFor="empresa"><b>Empresa:</b></label>
                                         <select name="empresa" className="form-control" id="empresa" value={this.state.empresa} onChange={this.onChangeInput}>
                                             <option value="0000">Todas(os)</option>
-                                            <option value="0001">PODER EXECUTIVO</option>
-                                            <option value="0002">PODER LEGISLATIVO</option>
-                                            <option value="0003">PODER JUDICIARIO</option>
-                                            <option value="0004">MINISTÉRIO PUBLICO</option>
-                                            <option value="0005">TRIBUNAL DE CONTAS DO ESTADO DO ES</option>
-                                            <option value="0006">PREVES</option>
-                                            <option value="0007">PREFEITURA MUNICIPAL DE ANCHIETA</option>
-                                            <option value="0008">PREFEITURA MUNICIPAL DE PANCAS</option>
-                                            <option value="0009">AUTOPATROCINADO</option>
+                                            {
+                                                this.state.listaEmpresa.map((empresa, index) => {
+                                                    return (
+                                                        <option key={index} value={empresa.CD_EMPRESA}>{empresa.NOME_ENTID}</option>
+                                                    )
+                                                })
+                                            }
                                         </select>
                                     </div>
         
@@ -343,7 +364,7 @@ export default class MensagemNova extends React.Component {
                                             <option value="0">Todas(os)</option>
                                             {
                                                 this.state.listaPlano.map((plano, index) => {
-                                                    return(
+                                                    return (
                                                         <option key={index} value={plano.CD_PLANO}>{plano.DS_PLANO}</option>
                                                     )
                                                 })
@@ -355,7 +376,13 @@ export default class MensagemNova extends React.Component {
                                         <label htmlFor="situacaoPlano"><b>Situação do plano</b></label>
                                         <select name="situacaoPlano" className="form-control" id="situacaoPlano" value={this.state.situacaoPlano} onChange={this.onChangeInput}>
                                             <option value="0">Todas(os)</option>
-                                            <option value="1">BRB - BANCO DE BRASÍLIA S.A</option>
+                                            {
+                                                this.state.listaSituacaoPlano.map((situacaoPlano, index) => {
+                                                    return (
+                                                        <option key={index} value={situacaoPlano.CD_SIT_PLANO}>{situacaoPlano.DS_SIT_PLANO}</option>
+                                                    )
+                                                })
+                                            }
                                         </select>
                                     </div>
         
