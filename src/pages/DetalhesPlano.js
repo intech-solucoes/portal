@@ -25,8 +25,11 @@ export default class DetalhesPlano extends React.Component {
             erroDataFinalSuperior: false,
 
             cdPlano: props.routeProps.match.params.plano,
-            plano: {},
-            extrato: {}
+            plano: {
+                SalarioContribuicao: 0
+            },
+            extrato: {},
+            dependentes: []
         }
 
         this.toggleModal = this.toggleModal.bind(this);

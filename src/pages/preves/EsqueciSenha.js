@@ -8,8 +8,6 @@ var InputMask = require('react-input-mask');
 var config = require('../../config.json');
 var usuarioService = new UsuarioService(config);
 
-console.log(config);
-
 export default class EsqueciSenha extends React.Component {
 
     constructor(props) {

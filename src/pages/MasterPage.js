@@ -23,15 +23,21 @@ export default class MasterPage extends React.Component {
     }
 
     componentWillMount() {
-        usuarioService.VerificarLogin()
-            .then(() => {})
-            .catch((err) => {
-                if(err.message.indexOf("401") > -1)
-                {
-                    localStorage.removeItem("token");
-                    document.location = ".";
-                }
-            });
+        if(localStorage.getItem("token")) {
+            usuarioService.VerificarLogin()
+                .then(() => {})
+                .catch((err) => {
+                    if(err.message.indexOf("401") > -1)
+                    {
+                        localStorage.removeItem("token");
+                        document.location = ".";
+                    }
+                });
+        } else {
+            localStorage.removeItem("token");
+            document.location = ".";
+        }
+        
     }
 
     getRota() {
@@ -93,6 +99,10 @@ export default class MasterPage extends React.Component {
                 <div className="page-wrapper nav-open">
                     <div className="row page-heading">
                         <div className="col-sm-12">
+                            <button className="btn btn-primary btn-menu" onClick={this.toggleMenu}>
+                                <i className="fa fa-list"></i>
+                            </button>
+
                             {this.getTitle()}
                         </div>
                     </div>

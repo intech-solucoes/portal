@@ -2,7 +2,7 @@
   "name": "portalprev",
   "version": "0.0.1",
   "private": true,
-  "homepage": "http://10.10.170.11:5001",
+  "homepage": "http://portal.preves.es.gov.br/",
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^4.0.0",
