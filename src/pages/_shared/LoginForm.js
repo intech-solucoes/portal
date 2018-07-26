@@ -11,7 +11,7 @@ export default class LoginForm extends React.Component {
             erro: null,
             mensagem: null,
             usuario: "01272078132",
-            senha: "123"
+            senha: "843466"
         };
 
         this.onSubmit = this.onSubmit.bind(this);

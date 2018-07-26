@@ -64,12 +64,12 @@ export default class TrocarSenha extends React.Component {
     }
 
     verificarTamanhoSenha() {
-        if(this.state.senhaNova.length < 6) {
-            this.setState({ erroTamanhoMinimo: true }, () => console.log(this.state))
+        if(this.state.senhaNova.length < 4) {
+            this.setState({ erroTamanhoMinimo: true })
             return false;
         }
         else {
-            this.setState({ erroTamanhoMinimo: false }, () => console.log(this.state))
+            this.setState({ erroTamanhoMinimo: false })
             return true;
         }
     }
@@ -112,7 +112,7 @@ export default class TrocarSenha extends React.Component {
                                 </div>
                                 {this.renderizaErro(this.state.erroSenhaAntiga, "Senha antiga incorreta!")}
                                 {this.renderizaErro(this.state.erroConfirmarSenha, "As senhas não coincidem!")}
-                                {this.renderizaErro(this.state.erroTamanhoMinimo, "A nova senha deve possuir ao menos 6 caracteres!")}
+                                {this.renderizaErro(this.state.erroTamanhoMinimo, "A nova senha deve possuir ao menos 4 caracteres!")}
                                 {this.state.mensagemSucesso &&
                                     <div className="text-primary">
                                         <i className="fas fa-check"></i>&nbsp;

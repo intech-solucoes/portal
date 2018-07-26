@@ -3,6 +3,8 @@ import FormFieldStatic from './_shared/FormFieldStatic';
 import DataInvalida from './_shared/Data';
 import { PlanoService } from 'prevsystem-service';
 
+var InputMask = require('react-input-mask');
+
 const config = require("../config.json");
 const planoService = new PlanoService(config);
 
@@ -12,16 +14,22 @@ export default class DetalhesPlano extends React.Component {
 
         this.state = {
             modalVisivel: false,
-            dataInicio: "01/04/2014",
-            dataFim: "01/03/2018",
+            dataInicio: "",
+            dataFim: "",
 
+            // States de validação e mensagens de erro.
             erroCampoVazio: false,
             erroCampoInvalido: false,
             mensagemErro: "",
+            erroDataInicialSuperior: false,
+            erroDataFinalSuperior: false,
 
             cdPlano: props.routeProps.match.params.plano,
-            plano: {},
-            extrato: {}
+            plano: {
+                SalarioContribuicao: 0
+            },
+            extrato: {},
+            dependentes: []
         }
 
         this.toggleModal = this.toggleModal.bind(this);
@@ -30,7 +38,6 @@ export default class DetalhesPlano extends React.Component {
         this.gerarExtrato = this.gerarExtrato.bind(this);
         this.gerarCertificado = this.gerarCertificado.bind(this);
 
-        this.validarCampos = this.validarCampos.bind(this);
         this.validarVazios = this.validarVazios.bind(this);
         this.validarInvalidos = this.validarInvalidos.bind(this);
         this.converteData = this.converteData.bind(this);
@@ -46,6 +53,10 @@ export default class DetalhesPlano extends React.Component {
             });
     }
 
+    /** 
+     * @description Método que altera o state 'modalVisivel' que, consequentemente, deixa a modal visível ou não. Além disso, ao fechar a modal, os states de registros devem 
+     * permanecer vazios e os states de erro devem receber'false'. Ao abrir a modal, os states recebem os valores default. 
+     */ 
     toggleModal() {
         
         if(this.state.modalVisivel === true) {
@@ -61,8 +72,8 @@ export default class DetalhesPlano extends React.Component {
             }, () => { console.log(this.state) })
         } else {
             this.setState({
-                dataInicio: "01/04/2014",
-                dataFim: "01/03/2018",
+                dataInicio: "",
+                dataFim: "",
 
                 modalVisivel: !this.state.modalVisivel
             }, () => { console.log(this.state) })
@@ -86,14 +97,14 @@ export default class DetalhesPlano extends React.Component {
                                     <div className="col-lg-6">
                                         <div className="form-group" align="center">
                                             <label htmlFor="dataInicio"><b>Data de Início:</b></label>
-                                            <input name="dataInicio" maxLength="10" id="dataInicio" type="text" className="form-control" 
+                                            <InputMask mask="99/99/9999" placeholder="Data inicial" name="dataInicio" id="dataInicio" type="text" className="form-control" 
                                                    value={this.state.dataInicio} onChange={this.onChangeInput} />
                                         </div>
                                     </div>
                                     <div className="col-lg-6">
                                         <div className="form-group" align="center">
                                             <label htmlFor="dataFim"><b>Data Final:</b></label>
-                                            <input name="dataFim" maxLength="10" id="dataFim" type="text" className="form-control" 
+                                            <InputMask mask="99/99/9999" placeholder="Data final" name="dataFim" id="dataFim" type="text" className="form-control" 
                                                    value={this.state.dataFim} onChange={this.onChangeInput} />
                                         </div>
                                     </div>
@@ -106,7 +117,7 @@ export default class DetalhesPlano extends React.Component {
                                         {this.state.mensagemErro}
                                     </div>
                                 }&nbsp;
-                                <button type="button" className="btn btn-primary" onClick={this.validarCampos}>Gerar</button>
+                                <button type="button" className="btn btn-primary" onClick={this.validarVazios}>Gerar</button>
                             </div>
                         </div>
                     </div>
@@ -126,10 +137,6 @@ export default class DetalhesPlano extends React.Component {
         this.setState({
             [campo]: valor
         }, () => { console.log(campo, ":", valor) })
-    }
-
-    validarCampos() {
-        this.validarVazios();
     }
 
     /**
@@ -159,6 +166,22 @@ export default class DetalhesPlano extends React.Component {
         // Variável que armazena true caso um dos campos esteja inválido.
         var dataInvalida = dataInicioInvalida || dataFimInvalida;
 
+        if(dataInicioObjeto > dataFimObjeto) {
+            this.setState({ erroDataInicialSuperior: true })
+
+        } else if(dataFimObjeto > new Date()) {
+            this.setState({ 
+                erroDataFinalSuperior: true,
+                erroDataInicialSuperior: false
+            })
+
+        } else {
+            this.setState({
+                erroDataInicialSuperior: false,
+                erroDataFinalSuperior: false
+            })
+        }
+
         this.setState({ 
             erroCampoInvalido: dataInvalida 
         }, () => { this.renderizaMensagemErro() });
@@ -180,14 +203,20 @@ export default class DetalhesPlano extends React.Component {
     renderizaMensagemErro() {
         // Mensagem de campo vazio é renderizada caso um dos dois campos esteja vazio.
         if(this.state.erroCampoVazio) {
-            this.setState({
-                mensagemErro: "Preencha todos os campos!"
-            })
+            this.setState({ mensagemErro: "Preencha todos os campos!" })
+
         // Mensagem de campo inválido é renderizada caso um dos dois campos esteja inválido.
         } else if(this.state.erroCampoInvalido) {
-            this.setState({
-                mensagemErro: "Preencha todos os campos corretamente!"
-            })
+            this.setState({ mensagemErro: "Preencha todos os campos corretamente!" })
+
+        // Mensagem de data inicial superior é renderizada caso a data inicial seja superior que a data final.
+        } else if(this.state.erroDataInicialSuperior) {
+            this.setState({ mensagemErro: "A data inicial é superior à data final!" })
+
+        // Mensagem de data final superior é renderizada caso a data final seja maior que a data atual.
+        } else if(this.state.erroDataFinalSuperior) {
+            this.setState({ mensagemErro: "A data final é superior à data atual!" })
+
         // Nenhuma mensagem de erro é renderizada se os dois campos estão preenchidos corretamente.
         } else {
             this.setState({

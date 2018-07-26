@@ -1,10 +1,15 @@
 import React from 'react';
-import { MensagemService } from "prevsystem-service";
+import { MensagemService, PlanoService, EmpresaService, SituacaoPlanoService, FundacaoService } from "prevsystem-service";
 import DataInvalida from './_shared/Data';
 import ListaMensagens from "./_shared/mensagem/ListaMensagens";
 
+var InputMask = require('react-input-mask');
 const config = require("../config.json");
 const mensagemService = new MensagemService(config);
+const planoService = new PlanoService(config);
+const empresaService = new EmpresaService(config);
+const situacaoPlanoService = new SituacaoPlanoService(config);
+const fundacaoService = new FundacaoService(config);
 
 export default class MensagemNova extends React.Component {
     constructor(props) {
@@ -17,6 +22,7 @@ export default class MensagemNova extends React.Component {
             enviarEmail: false,
             enviarSms: false,
             enviarPortal: false,
+            enviarMobile: false,    // State temporário: o campo e a funcionalidade não irá existir.
             dataExpiracao: "",
             fundacao: "",
             empresa: "",
@@ -30,9 +36,10 @@ export default class MensagemNova extends React.Component {
             erroEnviarVia: false,
             erroDataInvalida: false,
             erroMatriculaInvalida: false,
+            erroFundacao: false,
 
             // States Listas
-            listaFundacao: [],
+            listaFundacao: "",
             listaEmpresa: [],
             listaPlano: [],
             listaSituacaoPlano: [],
@@ -43,22 +50,53 @@ export default class MensagemNova extends React.Component {
         }
 
         this.toggleModal = this.toggleModal.bind(this);
-        this.onChangeInput = this.onChangeInput.bind(this);
         this.onChangeCheckbox = this.onChangeCheckbox.bind(this);
         this.validar = this.validar.bind(this);
         this.validarVazio = this.validarVazio.bind(this);
         this.validarData = this.validarData.bind(this);
         this.validarCheckboxes = this.validarCheckboxes.bind(this);
+        this.validarFundacao = this.validarFundacao.bind(this);
+        this.renderMensagemErro = this.renderMensagemErro.bind(this);
+        this.validarMatricula = this.validarMatricula.bind(this);
+        this.enviarVia = this.enviarVia.bind(this);
     }
 
+    /**
+     * @description Método de ciclo de vida, chamado ao montar o componente. Busca todas as listagens e armazena em seus respectivos states.
+     */
     componentDidMount() {
         mensagemService.BuscarTodas()
             .then((result) => {
                 this.setState({ mensagens: result.data });
-            });
+            })
+            .catch((err) => console.error(err));
+
+        planoService.Listar()
+            .then((result) => { 
+                this.setState({ listaPlano: result.data });
+            })
+            .catch((err) => console.error(err));
+
+        empresaService.BuscarTodas()
+            .then((result) => {
+                this.setState({ listaEmpresa: result.data });
+            })
+            .catch((err) => console.error(err));
+
+        situacaoPlanoService.BuscarTodas()
+            .then((result) => {
+                this.setState({ listaSituacaoPlano: result.data });
+            })
+            .catch((err) => console.error(err));
+        
+        fundacaoService.BuscarPorCdFundacao('01')   // '01' é o código da fundação PREVES.
+            .then((result) => {
+                this.setState({ listaFundacao: result.data });
+            })
+            .catch((err) => console.error(err));
     }
 
-    onChangeInput(event) {
+    onChangeInput = (event) => {
         var target = event.target;
         var valor = target.value;
         var campo = target.name;
@@ -98,15 +136,42 @@ export default class MensagemNova extends React.Component {
         });
     }
 
-    validar() {
+    async validar() {
         var tituloVazio = this.validarVazio(this.state.titulo, "erroTituloVazio");
         var conteudoVazio = this.validarVazio(this.state.mensagem, "erroMensagemVazia");
         var checkboxVazia = this.validarCheckboxes();
         var dataInvalida = this.validarData();
+        var fundacaoVazia = this.validarFundacao();
+        var matriculaInvalida = this.validarMatricula();
 
-        if(!tituloVazio && !conteudoVazio && !checkboxVazia && !dataInvalida) {
-            console.log("Enviando mensagem...");
-            // Chamar rota /mensagem/enviar
+        var dadosMensagem = {};
+        
+        if(!tituloVazio && !conteudoVazio && !checkboxVazia && !dataInvalida && !fundacaoVazia && !matriculaInvalida) {
+            dadosMensagem.TXT_TITULO = this.state.titulo;
+            dadosMensagem.TXT_CORPO = this.state.mensagem;
+            dadosMensagem.DTA_EXPIRACAO = this.state.dataExpiracao;
+            dadosMensagem.CD_FUNDACAO = this.state.fundacao;
+            dadosMensagem.CD_EMPRESA = this.state.empresa;
+            dadosMensagem.CD_PLANO = this.state.plano;
+            dadosMensagem.CD_SIT_PLANO = this.state.situacaoPlano;
+            dadosMensagem.NUM_MATRICULA = "035857861";
+            dadosMensagem.IND_MOBILE = this.enviarVia(this.state.enviarMobile);
+            dadosMensagem.IND_PORTAL = this.enviarVia(this.state.enviarPortal);
+            dadosMensagem.IND_EMAIL = this.enviarVia(this.state.enviarEmail);
+            dadosMensagem.IND_SMS = this.enviarVia(this.state.enviarSms);
+            console.log("dadosMensagem", dadosMensagem);
+            
+            mensagemService.EnviarMensagem(dadosMensagem)
+                .then(() => {
+                    alert("Mensagem enviada com sucesso!");
+                    mensagemService.BuscarTodas()
+                    .then((result) => {
+                        this.setState({ mensagens: result.data });
+                    })
+                    .catch((err) => console.error(err));
+                })
+                .catch((err) => console.error(err));
+
         } else {
             window.scrollTo(0, 60);
             console.log(this.state);
@@ -114,12 +179,21 @@ export default class MensagemNova extends React.Component {
 
     }
 
+    /**
+     * @description Método que converte o valor booleano dos campos de "enviar mensagem via" para o valor que a requisição precisa receber. Para true é a string "SIM", para false a string "NAO".
+     * @param {boolean} valorBooleano Valor booleano armazenado no state "enviarVia".
+     */
+    enviarVia(valorBooleano) {
+        if(valorBooleano) 
+            return "SIM";
+        else 
+            return "NAO";
+    }
+
     validarVazio(valor, campoErro) {
         var campoVazio = (valor === "");
         this.setState({
             [campoErro]: campoVazio
-        }, () => { 
-            console.log(campoErro, ":", campoVazio);
         })
         return campoVazio;
     }
@@ -136,10 +210,17 @@ export default class MensagemNova extends React.Component {
         var dataObjeto = this.converteData(this.state.dataExpiracao);
         var dataInvalida = DataInvalida(dataObjeto, this.state.dataExpiracao);
 
-        this.setState({ 
-            erroDataInvalida: dataInvalida 
-        });
-        return dataInvalida;
+        if(dataObjeto < new Date()) {
+            this.setState({ 
+                erroDataInvalida: true 
+            });
+            return true;
+        } else {
+            this.setState({ 
+                erroDataInvalida: dataInvalida 
+            });
+            return dataInvalida;
+        }
     }
 
     /**
@@ -149,6 +230,53 @@ export default class MensagemNova extends React.Component {
     converteData(dataString) {
         var dataPartes = dataString.split("/");
         return new Date(dataPartes[2], dataPartes[1] - 1, dataPartes[0]);
+    }
+
+    /**
+     * @description Método que valida o campo fundação, que deve ser selecionado com uma opção diferente da opção default.
+     * @returns {boolean} True para fundação inválida (opção default) e false para fundação válida (sem erro).
+     */
+    validarFundacao() {
+        if(this.state.fundacao === "") {
+            this.setState({ erroFundacao: true });
+            return true;
+            
+        } else {
+            this.setState({ erroFundacao: false });
+            return false;
+        }
+    }
+
+    /**
+     * @description Método que valida o campo Matrícula, que deve ser apenas vazio ou ter exatamente 9 caracteres.
+     * @returns {boolean} False para matrícula sem erros, true para matrícula inválida.
+     */
+    validarMatricula() {
+        // O valor da matrícula para validação por tamanho é feita a partir do valor no campo, pois deve-se tratar esse valor removendo os underline (_) da string.
+        var matricula = document.getElementById("matricula").value;
+        matricula = matricula.split('_').join("");
+
+        if(this.state.matricula === "" || matricula.length === 9) {
+            this.setState({ erroMatriculaInvalida: false })
+            return false;
+
+        } else {
+            this.setState({ erroMatriculaInvalida: true });
+            return true;
+        }
+    }
+
+    renderMensagemErro(stateErro, mensagemErro) {
+        if(stateErro) {
+            return(
+                <div className="text-danger mt-2 mb-2">
+                    <i className="fas fa-exclamation-circle"></i>&nbsp;
+                    {mensagemErro}
+                </div>
+            );
+        } else {
+            return(<div></div>);
+        }
     }
 
     render () {
@@ -166,22 +294,12 @@ export default class MensagemNova extends React.Component {
                                     <div className="form-group">
                                         <label htmlFor="titulo"><b>Título</b></label>
                                         <input name="titulo" id="titulo" className="form-control" maxLength="50" value={this.state.titulo} onChange={this.onChangeInput} />
-                                            {this.state.erroTituloVazio &&
-                                                <div className="text-danger mt-2 mb-2">
-                                                    <i className="fas fa-exclamation-circle"></i>&nbsp;
-                                                    Campo Obrigatório!
-                                                </div>
-                                            }
+                                            {this.renderMensagemErro(this.state.erroTituloVazio, "Campo Obrigatório!")}
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="mensagem"><b>Corpo da Mensagem:</b></label>
                                         <textarea name="mensagem" id="mensagem" className="form-control" rows="10" value={this.state.mensagem} onChange={this.onChangeInput}/>
-                                        {this.state.erroMensagemVazia &&
-                                            <div className="text-danger mt-2 mb-2">
-                                                <i className="fas fa-exclamation-circle"></i>&nbsp;
-                                                Campo Obrigatório!
-                                            </div>
-                                        }
+                                        {this.renderMensagemErro(this.state.erroMensagemVazia, "Campo Obrigatório!")}
                                     </div>
         
                                     <div className="form-group">
@@ -199,70 +317,81 @@ export default class MensagemNova extends React.Component {
                                                 <input name="enviarPortal" id="enviarPortal" type="checkbox" value={this.state.enviarPortal} onChange={this.onChangeCheckbox} />&nbsp; 
                                                 <label htmlFor="enviarPortal"><b>Portal</b></label>
                                             </div>
-                                            {this.state.erroEnviarVia &&
-                                            <div className="text-danger col-12 mt-2 mb-2">
-                                                <i className="fas fa-exclamation-circle"></i>&nbsp;
-                                                Marque ao menos uma opção!
-                                            </div>
+                                            {this.state.erroEnviarVia && 
+                                                <div className="text-danger col-12 mt-2 mb-2"> 
+                                                    <i className="fas fa-exclamation-circle"></i>&nbsp; 
+                                                    Selecione ao menos uma opção! 
+                                                </div> 
                                             }
                                         </div>
                                     </div>
         
                                     <div className="form-group">
                                         <label htmlFor="dataExpiracao"><b>Data de Expiração:</b></label>
-                                        <input name="dataExpiracao" id="dataExpiracao" className="form-control" onChange={this.onChangeInput} />
+                                        <InputMask mask="99/99/9999" id="dataExpiracao" name="dataExpiracao" id="dataExpiracao" className="form-control" onChange={this.onChangeInput} />
                                         <span className="text text-secondary">Deixe em branco para indicar que a mensagem não terá uma data de expiração</span>
-                                        {this.state.erroDataInvalida &&
-                                            <div className="text-danger mt-2 mb-2">
-                                                <i className="fas fa-exclamation-circle"></i>&nbsp;
-                                                Data inválida!
-                                            </div>
-                                        }
+                                        {this.renderMensagemErro(this.state.erroDataInvalida, "Data inválida!")}
                                     </div>
                                 </div>
         
                                 <div className="col-lg-6">
                                     <div className="form-group">
-                                        <label htmlFor="fundation"><b>Fundação:</b></label>
-                                        <select className="form-control" id="fundation">
-                                            <option>REGIUS - SOCIEDADE CIVIL DE PREVIDÊNCIA PRIVADA</option>
+                                        <label htmlFor="fundacao"><b>Fundação:</b></label>
+                                        <select name="fundacao" className="form-control" id="fundacao" value={this.state.fundacao} onChange={this.onChangeInput}>
+                                            <option value="">Selecione uma fundação</option>
+                                            <option value={this.state.listaFundacao.CD_FUNDACAO}>{this.state.listaFundacao.NOME_ENTID}</option>
                                         </select>
+                                        {this.renderMensagemErro(this.state.erroFundacao, "Selecione a fundação!")}
                                     </div>
         
                                     <div className="form-group">
                                         <label htmlFor="empresa"><b>Empresa:</b></label>
-                                        <select name="empresa" className="form-control" id="empresa">
-                                            <option>Todas(os)</option>
-                                            <option>BRB - BANCO DE BRASÍLIA S.A</option>
-                                            <option>REGIUS - SOCIEDADE CIVIL DE PREVIDÊNCIA PRIVADA</option>
-                                            <option>CARTÃO BRB S/A - PATROCINADORA</option>
-                                            <option>BRB - ADMINISTRADORA E CORRETORA DE SEGUROS S.A.</option>
-                                            <option>METRO DF - COMPANHIA DO METROPOLITANO DO DF - PATROCINADORA</option>
-                                            <option>SAÚDE BRB - CAIXA DE ASSISTÊNCIA</option>
+                                        <select name="empresa" className="form-control" id="empresa" value={this.state.empresa} onChange={this.onChangeInput}>
+                                            <option value="0000">Todas(os)</option>
+                                            {
+                                                this.state.listaEmpresa.map((empresa, index) => {
+                                                    return (
+                                                        <option key={index} value={empresa.CD_EMPRESA}>{empresa.NOME_ENTID}</option>
+                                                    )
+                                                })
+                                            }
                                         </select>
                                     </div>
         
                                     <div className="form-group">
                                         <label htmlFor="plano"><b>Plano:</b></label>
-                                        <select name="plano" className="form-control" id="plano">
-                                            <option>Todas(os)</option>
+                                        <select name="plano" className="form-control" id="plano" value={this.state.plano} onChange={this.onChangeInput}>
+                                            <option value="0">Todas(os)</option>
+                                            {
+                                                this.state.listaPlano.map((plano, index) => {
+                                                    return (
+                                                        <option key={index} value={plano.CD_PLANO}>{plano.DS_PLANO}</option>
+                                                    )
+                                                })
+                                            }
                                         </select>
                                     </div>
         
                                     <div className="form-group">
                                         <label htmlFor="situacaoPlano"><b>Situação do plano</b></label>
-                                        <select name="situacaoPlano" className="form-control" id="situacaoPlano">
-                                            <option>Todas(os)</option>
+                                        <select name="situacaoPlano" className="form-control" id="situacaoPlano" value={this.state.situacaoPlano} onChange={this.onChangeInput}>
+                                            <option value="0">Todas(os)</option>
+                                            {
+                                                this.state.listaSituacaoPlano.map((situacaoPlano, index) => {
+                                                    return (
+                                                        <option key={index} value={situacaoPlano.CD_SIT_PLANO}>{situacaoPlano.DS_SIT_PLANO}</option>
+                                                    )
+                                                })
+                                            }
                                         </select>
                                     </div>
         
                                     <div className="form-group">
-                                        <label htmlFor="registration"><b>Matrícula</b></label>
-                                        <input id="registration" className="form-control" />
+                                        <label htmlFor="matricula"><b>Matrícula</b></label>
+                                        <InputMask mask="999999999" id="matricula" name="matricula" className="form-control" value={this.state.matricula} onChange={this.onChangeInput} />
                                         <span className="text text-secondary">Deixe em branco para enviar para todas as matrículas dentro dos parâmetros acima</span>
                                     </div>
-        
-        
+                                    {this.renderMensagemErro(this.state.erroMatriculaInvalida, "Matrícula Inválida!")}
                                 </div>
                             </div>
                             <button type="button" className="btn btn-primary" onClick={() => this.validar()}>Enviar</button>
