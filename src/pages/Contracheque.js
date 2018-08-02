@@ -23,7 +23,7 @@ export default class ContraCheque extends React.Component {
     }
 
     buscarDatas(planos) {
-        planos.map((plano, index) => {
+        planos.map((plano) => {
 
             contrachequeService.BuscarDatas(plano.CD_PLANO)
                 .then(result => {

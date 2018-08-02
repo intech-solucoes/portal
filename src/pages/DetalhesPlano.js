@@ -69,14 +69,14 @@ export default class DetalhesPlano extends React.Component {
                 mensagemErro: "",
     
                 modalVisivel: !this.state.modalVisivel
-            }, () => { console.log(this.state) })
+            })
         } else {
             this.setState({
                 dataInicio: "",
                 dataFim: "",
 
                 modalVisivel: !this.state.modalVisivel
-            }, () => { console.log(this.state) })
+            })
         }
     }
 
@@ -136,7 +136,7 @@ export default class DetalhesPlano extends React.Component {
 
         this.setState({
             [campo]: valor
-        }, () => { console.log(campo, ":", valor) })
+        })
     }
 
     /**

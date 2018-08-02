@@ -9,9 +9,6 @@ const config = require("../../config.json");
 const funcionarioService = new FuncionarioService(config);
 
 export default class DadosPessoais extends React.Component {
-    static defaultProps = {
-        title: "123"
-    }
 
     constructor(props) {
         super(props);
@@ -104,8 +101,6 @@ export default class DadosPessoais extends React.Component {
                             <br/>
                         </div>
                     </div>
-
-                    <BoxListaPlanos />
                 </div>
             </div>
         );

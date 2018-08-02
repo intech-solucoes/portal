@@ -1,5 +1,10 @@
 import React from 'react';
 import { handleFieldChange } from "react-lib";
+import { UsuarioService } from "prevsystem-service";
+
+const config = require("../config.json");
+
+const usuarioService = new UsuarioService(config);
 
 export default class TrocarSenha extends React.Component {
     constructor(props) {
@@ -13,43 +18,44 @@ export default class TrocarSenha extends React.Component {
 
             // States de validação
             erroSenhaAntiga: false,
+            mensagemErroSenhaAntiga: "",
             erroConfirmarSenha: false,
-            erroTamanhoMinimo: false,
             mensagemSucesso: false,
         }
 
-        this.trocarSenha = this.trocarSenha.bind(this);
-        this.verificarSenha = this.verificarSenha.bind(this);
-        this.validarSenha = this.validarSenha.bind(this);
-        this.verificarTamanhoSenha = this.verificarTamanhoSenha.bind(this);
-        this.renderizaErro = this.renderizaErro.bind(this);
     }
 
-    trocarSenha() {
-        var senhaAntigaCorreta = this.verificarSenha(this.state.senhaAntiga);
+    trocarSenha = async () => {
         var senhaNovaCoincide = this.validarSenha();
-        var senhaNovaTamanhoCorreto = this.verificarTamanhoSenha();
-        console.log(senhaAntigaCorreta, senhaNovaCoincide, senhaNovaTamanhoCorreto)
-        if(senhaAntigaCorreta && senhaNovaCoincide && senhaNovaTamanhoCorreto) {
-            this.setState({
-                mensagemSucesso: true,
-                senhaAntiga: "",
-                senhaNova: "",
-                confirmarSenha: ""
-            })
+
+        if(senhaNovaCoincide) {
+            await usuarioService.TrocarSenha(this.state.senhaAntiga, this.state.senhaNova)
+                .then((result) => {
+                    this.setState({ 
+                        mensagemSucesso: true,
+                        erroSenhaAntiga: false
+                    }, () => alert(result.data));
+                    
+                })
+                .catch((err) => {
+                    console.error();
+                    this.setState({
+                        mensagemSucesso: false,
+                        erroSenhaAntiga: true,
+                        mensagemErroSenhaAntiga: err.response.data 
+                    })
+                })
+                
+
         } else {
             this.setState({
                 mensagemSucesso: false
             })
-            window.scrollTo(0, 60);
+            window.scrollTo(0, 0);
         }
     }
 
-    verificarSenha(senha) {
-        return true;
-    }
-
-    validarSenha() {
+    validarSenha = () => {
         if(this.state.senhaNova === this.state.confirmarSenha) {
             this.setState({
                 erroConfirmarSenha: false
@@ -63,18 +69,7 @@ export default class TrocarSenha extends React.Component {
         }
     }
 
-    verificarTamanhoSenha() {
-        if(this.state.senhaNova.length < 4) {
-            this.setState({ erroTamanhoMinimo: true })
-            return false;
-        }
-        else {
-            this.setState({ erroTamanhoMinimo: false })
-            return true;
-        }
-    }
-
-    renderizaErro(stateErro, mensagemErro) {
+    renderizaErro = (stateErro, mensagemErro) => {
         if(stateErro) {
             return (    
                 <div className="text-danger">
@@ -110,9 +105,8 @@ export default class TrocarSenha extends React.Component {
                                         <input name="confirmarSenha" id="confirmarSenha" className="form-control" type="password" value={this.state.confirmarSenha} onChange={(e) => handleFieldChange(this, e)} ></input>
                                     </div>
                                 </div>
-                                {this.renderizaErro(this.state.erroSenhaAntiga, "Senha antiga incorreta!")}
                                 {this.renderizaErro(this.state.erroConfirmarSenha, "As senhas não coincidem!")}
-                                {this.renderizaErro(this.state.erroTamanhoMinimo, "A nova senha deve possuir ao menos 4 caracteres!")}
+                                {this.renderizaErro(this.state.erroSenhaAntiga, this.state.mensagemErroSenhaAntiga)}
                                 {this.state.mensagemSucesso &&
                                     <div className="text-primary">
                                         <i className="fas fa-check"></i>&nbsp;
