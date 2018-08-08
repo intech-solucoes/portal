@@ -1,5 +1,5 @@
 import React from 'react';
-import { MensagemService, PlanoService, EmpresaService, SituacaoPlanoService, FundacaoService } from "prevsystem-service";
+import { MensagemService, PlanoService, EmpresaService, SituacaoPlanoService, FundacaoService, ListasService } from "prevsystem-service";
 import DataInvalida from './_shared/Data';
 import ListaMensagens from "./_shared/mensagem/ListaMensagens";
 
@@ -10,6 +10,7 @@ const planoService = new PlanoService(config);
 const empresaService = new EmpresaService(config);
 const situacaoPlanoService = new SituacaoPlanoService(config);
 const fundacaoService = new FundacaoService(config);
+const listasService = new ListasService(config);
 
 export default class MensagemNova extends React.Component {
     constructor(props) {
@@ -39,6 +40,7 @@ export default class MensagemNova extends React.Component {
             erroFundacao: false,
 
             // States Listas
+            listas: [],
             listaFundacao: "",
             listaEmpresa: [],
             listaPlano: [],
@@ -50,7 +52,6 @@ export default class MensagemNova extends React.Component {
         }
 
         this.toggleModal = this.toggleModal.bind(this);
-        this.onChangeCheckbox = this.onChangeCheckbox.bind(this);
         this.validar = this.validar.bind(this);
         this.validarVazio = this.validarVazio.bind(this);
         this.validarData = this.validarData.bind(this);
@@ -59,6 +60,8 @@ export default class MensagemNova extends React.Component {
         this.renderMensagemErro = this.renderMensagemErro.bind(this);
         this.validarMatricula = this.validarMatricula.bind(this);
         this.enviarVia = this.enviarVia.bind(this);
+        this.onChangeEmpresa = this.onChangeEmpresa.bind(this);
+        this.limparStates = this.limparStates.bind(this);
     }
 
     /**
@@ -91,42 +94,41 @@ export default class MensagemNova extends React.Component {
         
         fundacaoService.BuscarPorCdFundacao('01')   // '01' é o código da fundação PREVES.
             .then((result) => {
-                this.setState({ listaFundacao: result.data });
+                this.setState({ listaFundacao: result.data }, () => console.log(this.state.listaFundacao))
             })
             .catch((err) => console.error(err));
+
+        // listasService.ListarFundacaoEmpresaPlano()
+        //     .then((result) => {
+        //         this.setState({ listas: result.data, listaFundacao: result.data.Fundacoes}, () => console.log("Listas", this.state.listas, "Fundacoes:", this.state.listaFundacao))
+        //     })
+        //     .catch((err) => console.error(err))
     }
 
     onChangeInput = (event) => {
+        const target = event.target;
+        const valor = target.type === 'checkbox' ? target.checked : target.value;
+        const campo = target.name;
+
+        this.setState({
+            [campo]: valor
+        }, () => { console.log(campo, valor) });
+
+    }
+
+    async onChangeEmpresa(event) {
+        
         var target = event.target;
         var valor = target.value;
         var campo = target.name;
 
-        this.setState({
-            [campo]: valor
-        }, () => { console.log(this.state) })
+        await this.setState({ [campo]: valor });
 
-    }
-    
-    onChangeCheckbox(event) {
-        var target = event.target;
-        var campo = target.name;
-
-        if(campo === 'enviarEmail') {
-            this.setState({
-                enviarEmail: !this.state.enviarEmail
-            }, () => { console.log(this.state) })
-
-        } else if(campo === 'enviarSms') {
-            this.setState({
-                enviarSms: !this.state.enviarSms
-            }, () => { console.log(this.state) })   
-
-        } else {
-            this.setState({
-                enviarPortal: !this.state.enviarPortal
-            }, () => { console.log(this.state) })
-
-        }
+        planoService.BuscarPorEmpresa(this.state.empresa)
+            .then((result) => {
+                this.setState({ listaPlano: result.data }, () => console.log(this.state.listaPlano))
+            })
+            .catch((err) => console.error(err))
     }
 
     toggleModal(id) {
@@ -164,6 +166,7 @@ export default class MensagemNova extends React.Component {
             mensagemService.EnviarMensagem(dadosMensagem)
                 .then(() => {
                     alert("Mensagem enviada com sucesso!");
+                    this.limparStates();
                     mensagemService.BuscarTodas()
                     .then((result) => {
                         this.setState({ mensagens: result.data });
@@ -266,9 +269,29 @@ export default class MensagemNova extends React.Component {
         }
     }
 
+    /**
+     * @description Método que limpa os states de campo para limpar o formulário de nova mensagem.
+     */
+    limparStates() {
+        this.setState({
+            titulo: "",
+            mensagem: "",
+            enviarEmail: false,
+            enviarSms: false,
+            enviarPortal: false,
+            enviarMobile: false,
+            dataExpiracao: "",
+            fundacao: "",
+            empresa: "",
+            plano: "",
+            situacaoPlano: "",
+            matricula: ""
+        })
+    }
+
     renderMensagemErro(stateErro, mensagemErro) {
         if(stateErro) {
-            return(
+            return (
                 <div className="text-danger mt-2 mb-2">
                     <i className="fas fa-exclamation-circle"></i>&nbsp;
                     {mensagemErro}
@@ -306,15 +329,15 @@ export default class MensagemNova extends React.Component {
                                         <label><b>Enviar via:</b></label>
                                         <div className="row">
                                             <div className="col-lg-2">
-                                                <input name="enviarEmail" id="enviarEmail" type="checkbox" value={this.state.enviarEmail} onChange={this.onChangeCheckbox} />&nbsp;
+                                                <input name="enviarEmail" id="enviarEmail" type="checkbox" checked={this.state.enviarEmail} onChange={this.onChangeInput} />&nbsp;
                                                 <label htmlFor="enviarEmail"><b>E-mail</b></label>
                                             </div>
                                             <div className="col-lg-2">
-                                                <input name="enviarSms" id="enviarSms" type="checkbox" value={this.state.enviarSms} onChange={this.onChangeCheckbox} />&nbsp;
+                                                <input name="enviarSms" id="enviarSms" type="checkbox" checked={this.state.enviarSms} onChange={this.onChangeInput} />&nbsp;
                                                 <label htmlFor="enviarSms"><b>SMS</b></label>
                                             </div>
                                             <div className="col-lg-2">
-                                                <input name="enviarPortal" id="enviarPortal" type="checkbox" value={this.state.enviarPortal} onChange={this.onChangeCheckbox} />&nbsp; 
+                                                <input name="enviarPortal" id="enviarPortal" type="checkbox" checked={this.state.enviarPortal} onChange={this.onChangeInput} />&nbsp; 
                                                 <label htmlFor="enviarPortal"><b>Portal</b></label>
                                             </div>
                                             {this.state.erroEnviarVia && 
@@ -328,7 +351,7 @@ export default class MensagemNova extends React.Component {
         
                                     <div className="form-group">
                                         <label htmlFor="dataExpiracao"><b>Data de Expiração:</b></label>
-                                        <InputMask mask="99/99/9999" id="dataExpiracao" name="dataExpiracao" id="dataExpiracao" className="form-control" onChange={this.onChangeInput} />
+                                        <InputMask mask="99/99/9999" name="dataExpiracao" id="dataExpiracao" value={this.state.dataExpiracao} className="form-control" onChange={this.onChangeInput} />
                                         <span className="text text-secondary">Deixe em branco para indicar que a mensagem não terá uma data de expiração</span>
                                         {this.renderMensagemErro(this.state.erroDataInvalida, "Data inválida!")}
                                     </div>
@@ -346,7 +369,7 @@ export default class MensagemNova extends React.Component {
         
                                     <div className="form-group">
                                         <label htmlFor="empresa"><b>Empresa:</b></label>
-                                        <select name="empresa" className="form-control" id="empresa" value={this.state.empresa} onChange={this.onChangeInput}>
+                                        <select name="empresa" className="form-control" id="empresa" value={this.state.empresa} onChange={this.onChangeEmpresa}>
                                             <option value="0000">Todas(os)</option>
                                             {
                                                 this.state.listaEmpresa.map((empresa, index) => {
