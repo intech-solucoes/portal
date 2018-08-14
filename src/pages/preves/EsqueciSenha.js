@@ -21,7 +21,8 @@ export default class EsqueciSenha extends React.Component {
             erroCampoVazio: false,
             erroCampoInvalido: false,
 
-            mensagemErro: ""
+            mensagemErro: "",
+            enviarSenhaDesabilitado: false
         }
 
         this.validarCampos = this.validarCampos.bind(this);
@@ -117,18 +118,22 @@ export default class EsqueciSenha extends React.Component {
      * Método que chama o service que cria um POST com Cpf e DataNascimento para rota '/usuario/criarAcesso'. Após isso, redireciona para tela de login.
      */
     enviarSenha() {
-        usuarioService.PrimeiroAcesso(this.state.cpf, this.state.dataNascimento)
-            .then((result) => {
-                window.alert(result.data);
-                this.props.history.push('/');
-            })
-            .catch((err) => { 
-                console.error(err.response.data);
-
-                this.setState({
-                    mensagemErro: "Dados inválidos!"
+        this.setState({ enviarSenhaDesabilitado: true }, () => {
+            usuarioService.PrimeiroAcesso(this.state.cpf, this.state.dataNascimento)
+                .then((result) => {
+                    this.setState({ enviarSenhaDesabilitado: true }, () => {
+                        window.alert(result.data);
+                        this.props.history.push('/');
+                    })
                 })
-            });
+                .catch((err) => { 
+                    console.error(err.response.data);
+                    this.setState({
+                        mensagemErro: "Dados inválidos!",
+                        enviarSenhaDesabilitado: false
+                    })
+                });
+        })
     }
 
     render() {
@@ -156,7 +161,7 @@ export default class EsqueciSenha extends React.Component {
                                 {this.state.mensagemErro}
                             </div>
                         }<br/>
-                        <button className="btn btn-primary btn-block" type="button" onClick={this.validarCampos}>Enviar Nova Senha</button>
+                        <button id="enviarSenha" className="btn btn-primary btn-block" type="button" onClick={this.validarCampos} disabled={this.state.enviarSenhaDesabilitado}>Enviar Nova Senha</button>
                     </form>
                 </div>
             </div>
