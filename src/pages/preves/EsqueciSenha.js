@@ -1,7 +1,7 @@
 import React from 'react';
-import { handleFieldChange } from "react-lib";
+import { handleFieldChange } from "@intechprev/react-lib";
 import DataInvalida from '../_shared/ValidacaoDataNascimento';
-import  { UsuarioService } from 'prevsystem-service';
+import  { UsuarioService } from "@intechprev/prevsystem-service";
 
 import InputMask from 'react-input-mask';
 

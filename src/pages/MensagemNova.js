@@ -1,5 +1,5 @@
 import React from 'react';
-import { MensagemService, PlanoService, EmpresaService, SituacaoPlanoService, FundacaoService, ListasService } from "prevsystem-service";
+import { MensagemService, PlanoService, EmpresaService, SituacaoPlanoService, FundacaoService, ListasService } from "@intechprev/prevsystem-service";
 import DataInvalida from './_shared/Data';
 import ListaMensagens from "./_shared/mensagem/ListaMensagens";
 

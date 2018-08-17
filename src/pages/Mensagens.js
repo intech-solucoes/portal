@@ -1,5 +1,5 @@
 import React from 'react';
-import { MensagemService } from "prevsystem-service";
+import { MensagemService } from "@intechprev/prevsystem-service";
 
 import ListaMensagens from "./_shared/mensagem/ListaMensagens";
 

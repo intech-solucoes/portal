@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route} from "react-router-dom";
 
-import { UsuarioService } from  "prevsystem-service";
+import { UsuarioService } from  "@intechprev/prevsystem-service";
 
 import GetRotas from './preves/Rotas';
          

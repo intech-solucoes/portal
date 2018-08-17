@@ -1,7 +1,7 @@
 import React from 'react';
 import FormFieldStatic from './_shared/FormFieldStatic';
 import DataInvalida from './_shared/Data';
-import { PlanoService } from 'prevsystem-service';
+import { PlanoService } from "@intechprev/prevsystem-service";
 
 var InputMask = require('react-input-mask');
 

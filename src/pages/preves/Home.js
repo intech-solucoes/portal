@@ -1,5 +1,5 @@
 import React from "react";
-import { FuncionarioService } from "prevsystem-service";
+import { FuncionarioService } from "@intechprev/prevsystem-service";
 
 const config = require("../../config.json");
 const funcionarioService = new FuncionarioService(config);

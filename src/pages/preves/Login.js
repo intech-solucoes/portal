@@ -1,7 +1,7 @@
 import React from "react";
 import LoginForm from "../_shared/LoginForm";
 
-import { UsuarioService, FuncionarioService } from "prevsystem-service";
+import { UsuarioService, FuncionarioService } from "@intechprev/prevsystem-service";
 const config = require("../../config.json");
 
 const usuarioService = new UsuarioService(config);
@@ -36,7 +36,6 @@ export default class Login extends React.Component {
     }
 
     render() {
-        console.log('login preves');
         return (
             <div>
                 <div className="logo">

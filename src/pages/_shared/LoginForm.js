@@ -1,5 +1,5 @@
 import React from 'react';
-import { handleFieldChange } from "react-lib";
+import { handleFieldChange } from "@intechprev/react-lib";
 
 import Alert from "./Alert";
 

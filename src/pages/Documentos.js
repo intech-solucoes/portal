@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
-import { handleFieldChange } from "react-lib";
-import { PlanoService, DocumentoService } from "prevsystem-service";
+import { handleFieldChange } from "@intechprev/react-lib";
+import { PlanoService, DocumentoService } from "@intechprev/prevsystem-service";
 
 const config = require("../config.json");
 

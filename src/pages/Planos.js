@@ -1,5 +1,5 @@
 import React from "react";
-import { PlanoService } from "prevsystem-service";
+import { PlanoService } from "@intechprev/prevsystem-service";
 
 const config = require("../config.json");
 const planoService = new PlanoService(config);

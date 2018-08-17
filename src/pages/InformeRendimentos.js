@@ -1,5 +1,5 @@
 import React from 'react';
-import { InfoRendService } from "prevsystem-service";
+import { InfoRendService } from "@intechprev/prevsystem-service";
 
 var config = require("../config.json");
 var infoRendService = new InfoRendService(config);

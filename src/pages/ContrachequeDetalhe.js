@@ -1,5 +1,5 @@
 import React from 'react';
-import { ContrachequeService, PlanoService } from "prevsystem-service";
+import { ContrachequeService, PlanoService } from "@intechprev/prevsystem-service";
 
 var config = require("../config.json");
 var contrachequeService = new ContrachequeService(config);

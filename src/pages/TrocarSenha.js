@@ -1,6 +1,6 @@
 import React from 'react';
-import { handleFieldChange } from "react-lib";
-import { UsuarioService } from "prevsystem-service";
+import { handleFieldChange } from "@intechprev/react-lib";
+import { UsuarioService } from "@intechprev/prevsystem-service";
 
 const config = require("../config.json");
 
