@@ -1,4 +1,4 @@
 {
     "cliente": "preves",
-    "apiUrl": "http://10.10.170.235/PrevesAPI/api"
+    "apiUrl": "http://api-portal.preves.es.gov.br/api"
 }
