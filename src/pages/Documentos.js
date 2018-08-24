@@ -30,7 +30,7 @@ export default class Documentos extends React.Component {
     }
 
     componentDidMount() {
-        planoService.Listar()
+        planoService.BuscarTodos()
             .then((result) => {
                 this.setState({ planos: result.data });
             });

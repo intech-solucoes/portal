@@ -18,7 +18,7 @@ export default class Home extends React.Component {
 
     componentWillMount() {
         var self = this;
-        funcionarioService.BuscarDados()
+        funcionarioService.Buscar()
             .then((result) => {
                 self.setState({
                     dados: result.data
