@@ -23,7 +23,7 @@ export default class DadosPessoais extends React.Component {
 
     componentWillMount() {
         var self = this;
-        funcionarioService.BuscarDados()
+        funcionarioService.Buscar()
             .then((result) => {
 
                 self.setState({
@@ -79,7 +79,7 @@ export default class DadosPessoais extends React.Component {
                                 <FormFieldStatic titulo="Nome da Mãe" valor={this.state.dados.dadosPessoais.NOME_MAE} />
                             </div>
                             <div className="form-row">
-                                <FormFieldStatic titulo="Contrato Único" valor={"Não Assinado"} link="Baixar" />
+                                <FormFieldStatic titulo="Contrato Único" valor={"Não Assinado"} />
                                 <FormFieldStatic titulo="E-mail" valor={this.state.dados.dadosPessoais.EMAIL_AUX} col="6" />
                             </div>
 

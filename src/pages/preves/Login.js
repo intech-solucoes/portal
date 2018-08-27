@@ -22,7 +22,7 @@ export default class Login extends React.Component {
             .then((result) => {
                 localStorage.setItem("token", result.data.AccessToken);
                 
-                funcionarioService.BuscarDados()
+                funcionarioService.Buscar()
                     .then((result) => {
                         localStorage.setItem("fundacao", result.data.funcionario.CD_FUNDACAO);
                         localStorage.setItem("empresa", result.data.funcionario.CD_EMPRESA);
@@ -31,6 +31,7 @@ export default class Login extends React.Component {
                     });
             })
             .catch((err) => {
+                console.error("erro", err);
                 this.loginForm.current.mostrarErro(err.response.data);
             });
     }

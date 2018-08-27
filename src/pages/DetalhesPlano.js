@@ -44,13 +44,13 @@ export default class DetalhesPlano extends React.Component {
         this.renderizaMensagemErro = this.renderizaMensagemErro.bind(this);
     }
 
-    componentWillMount() {
-        planoService.BuscarPorFundacaoEmpresaPlano(this.state.cdPlano)
-            .then((result) => {
-                this.setState({
-                    plano: result.data
-                })
-            });
+    async componentDidMount() {
+        try { 
+            var result = await planoService.BuscarPorCodigo(this.state.cdPlano);
+            await this.setState({ plano: result.data });
+        } catch(err) {
+            console.error(err);
+        }
     }
 
     /** 
