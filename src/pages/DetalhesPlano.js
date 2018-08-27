@@ -45,7 +45,6 @@ export default class DetalhesPlano extends React.Component {
     }
 
     async componentDidMount() {
-        console.log(this.state.plano);
         try { 
             var result = await planoService.BuscarPorCodigo(this.state.cdPlano);
             await this.setState({ plano: result.data });
