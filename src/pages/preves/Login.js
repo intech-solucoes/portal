@@ -21,6 +21,7 @@ export default class Login extends React.Component {
         usuarioService.Login(cpf, senha)
             .then((result) => {
                 localStorage.setItem("token", result.data.AccessToken);
+                localStorage.setItem("admin", result.data.Admin);
                 
                 funcionarioService.Buscar()
                     .then((result) => {
