@@ -17,9 +17,9 @@ export default class ContraCheque extends React.Component {
         this.buscarDatas = this.buscarDatas.bind(this);
     }
 
-    componentDidMount() {
-        planoService.Buscar()
-            .then(result => this.buscarDatas(result.data));
+    async componentDidMount() {
+        var resultPlanos = await planoService.Buscar()
+        await this.buscarDatas(resultPlanos.data);
     }
 
     buscarDatas(planos) {
