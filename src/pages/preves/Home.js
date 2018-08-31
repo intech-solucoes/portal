@@ -22,7 +22,7 @@ export default class Home extends React.Component {
             .then((result) => {
                 self.setState({
                     dados: result.data
-                }, () => console.log(this.state));
+                });
             });
     }
 

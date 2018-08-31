@@ -150,7 +150,7 @@ export default class Documentos extends React.Component {
                 <div className="col-lg-8">
                     <div className="box">
                         <div className="box-content">
-                            {this.state.pastas.length > 0 || this.state.documentos.length > 0 &&
+                            {(this.state.pastas.length > 0 || this.state.documentos.length > 0) &&
                                 <div>
                                     <Tabelas itens={this.state.pastas} campoTexto={"NOM_PASTA"} icone={"fa-folder-open text-warning"} />
                                     <Tabelas itens={this.state.documentos} campoTexto={"TXT_TITULO"} icone={"fa-file text-info"} />
