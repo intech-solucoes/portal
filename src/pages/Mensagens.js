@@ -1,10 +1,11 @@
 import React from 'react';
-import { MensagemService } from "@intechprev/prevsystem-service";
+import { MensagemService, PlanoService } from "@intechprev/prevsystem-service";
 
 import ListaMensagens from "./_shared/mensagem/ListaMensagens";
 
 const config = require("../config.json");
 const mensagemService = new MensagemService(config);
+const planoService = new PlanoService(config);
 
 export default class Mensagens extends React.Component {
 
@@ -12,53 +13,71 @@ export default class Mensagens extends React.Component {
         super(props);
 
         this.state = {
-            mensagens: []
+            mensagens: [],
+            planos: []
         }
     }
 
-    componentDidMount() {
-        mensagemService.BuscarPorFundacaoEmpresaPlano('0001')
-            .then((result) => {
-                this.setState({ mensagens: result.data });
+    async componentDidMount() {
+
+        try {
+            var planoResult = await planoService.Buscar();
+
+            planoResult.data.map(async (plano) => {
+
+                var resultMensagens = await mensagemService.BuscarPorFundacaoEmpresaPlano(plano.CD_PLANO);
+                plano.mensagens = resultMensagens.data;
+                await this.setState({
+                    planos: [...this.state.planos, plano]
+                });
+
             });
+
+        } catch(err) {
+            console.error(err);
+        }
+            
     }
 
     handleClick = () => {
-        this.props.history.push('/mensagens/nova');
+        this.props.routeProps.history.push('/mensagem/nova');
     }
-    
+
     render() {
         return (
             <div className="row">
-                <div className="col-lg-12">
-                    <div className="box">
-                        <div className="box-title">
-                            MENSAGENS
-                        </div>
+                {
+                    this.state.planos.map((plano, index) => {
+                        return (
+                            <div className="col" key={index}>
+                                <div key={index} className="box">
+                                    <div className="box-title">
+                                        Mensagens
+                                        <small>{plano.DS_PLANO}</small>
+                                    </div>
+                                    <div className="box-content">
+                                        { localStorage.getItem("admin") === "S" &&
+                                            <div>
+                                                <button type="button" className="btn btn-primary" onClick={this.handleClick}>
+                                                    <i className="fas fa-envelope"></i>&nbsp;
+                                                    Nova Mensagem
+                                                </button>
+                                                <br/>
+                                                <br/>
+                                            </div>
+                                        }
 
-                        <div className="box-content">
-                            {localStorage.getItem("admin") === "S" &&
-                                <div>
-                                <a href="/mensagem/nova" className="btn-link">
-                                    <button className="btn btn-primary">
-                                        <i className="fas fa-envelope"></i>&nbsp;
-                                        Nova Mensagem
-                                    </button>
-                                </a>
-                                <br/>
-                                <br/>
+                                        {plano.mensagens.length > 0 &&
+                                            <ListaMensagens mensagens={plano.mensagens} />}
+
+                                        {plano.mensagens.length === 0 &&
+                                            <div className="alert alert-danger">Nenhuma mensagem enviada.</div>}
+                                    </div>
                                 </div>
-                            }
-
-                            {this.state.mensagens.length > 0 &&
-                                <ListaMensagens mensagens={this.state.mensagens} />}
-
-                            {this.state.mensagens.length === 0 &&
-                                <label id="sem-mensagem">Nenhuma mensagem enviada.</label>}
-                            
-                        </div>
-                    </div>
-                </div>
+                            </div>
+                        )
+                    })
+                }
             </div>
         );
     }
