@@ -1,9 +1,6 @@
 import React from 'react';
 import { InfoRendService } from "@intechprev/prevsystem-service";
 
-var config = require("../config.json");
-var infoRendService = new InfoRendService(config);
-
 export default class InformeRendimentos extends React.Component {
     constructor(props) {
         super(props);
@@ -21,7 +18,7 @@ export default class InformeRendimentos extends React.Component {
     }
 
     componentDidMount() {
-        infoRendService.BuscarReferencias()
+        InfoRendService.BuscarReferencias()
             .then(result => {
                 this.setState({
                     datas: result.data
@@ -34,7 +31,7 @@ export default class InformeRendimentos extends React.Component {
             dataSelecionada: ano
         }, () => {
 
-            infoRendService.BuscarPorReferencia(ano)
+            InfoRendService.BuscarPorReferencia(ano)
                 .then(result => {
                     this.setState({
                         informe: result.data
@@ -45,7 +42,7 @@ export default class InformeRendimentos extends React.Component {
     }
 
     gerarRelatorio() {
-        infoRendService.Relatorio(this.state.dataSelecionada)
+        InfoRendService.Relatorio(this.state.dataSelecionada)
             .then((result) => {
                 const url = window.URL.createObjectURL(new Blob([result.data]));
                 const link = document.createElement('a');

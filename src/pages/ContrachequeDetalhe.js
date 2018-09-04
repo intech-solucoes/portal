@@ -1,10 +1,6 @@
 import React from 'react';
 import { ContrachequeService, PlanoService } from "@intechprev/prevsystem-service";
 
-var config = require("../config.json");
-var contrachequeService = new ContrachequeService(config);
-var planoService = new PlanoService(config);
-
 var erro = false;
 export default class ContrachequeDetalhe extends React.Component {
 
@@ -26,20 +22,16 @@ export default class ContrachequeDetalhe extends React.Component {
         this.gerarRelatorio = this.gerarRelatorio.bind(this);
     }
 
-    componentDidMount() {
-        planoService.BuscarPorFundacaoEmpresaPlano(this.state.cdPlano)
-            .then(result => {
-                this.setState({ plano: result.data });
-            });
+    async componentDidMount() {
+        var result = await PlanoService.BuscarPorCodigo(this.state.cdPlano);
+        await this.setState({ plano: result.data });
 
-        contrachequeService.BuscarPorPlanoReferenciaTipoFolha(this.state.cdPlano, this.state.dataReferencia)
-            .then(result => {
-                this.setState({ contracheque: result.data });
-            });
+        result = await ContrachequeService.BuscarPorPlanoReferenciaTipoFolha(this.state.cdPlano, this.state.dataReferencia);
+        await this.setState({ contracheque: result.data });
     }
 
     gerarRelatorio() {
-        contrachequeService.Relatorio(this.state.cdPlano, this.state.dataReferencia)
+        ContrachequeService.Relatorio(this.state.cdPlano, this.state.dataReferencia)
             .then((result) => {
                 const url = window.URL.createObjectURL(new Blob([result.data]));
                 const link = document.createElement('a');

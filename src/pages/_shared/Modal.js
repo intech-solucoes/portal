@@ -53,16 +53,13 @@ export default class Modal extends React.Component {
                             <div className="modal-body">
                                 <p><b>Data de Criação: {this.state.mensagem.DTA_MENSAGEM}</b></p>
                                 <p><b>Fundação: {this.state.mensagem.NOM_FUNDACAO}</b></p>
-                                <p><b>Empresa: {this.state.mensagem.NOM_EMPRESA}</b></p>
-                                <p><b>Plano: {this.state.mensagem.DS_PLANO}</b></p>
-                                <p><b>Situação Plano: {this.state.mensagem.DS_SIT_PLANO}</b></p>
-                                <p><b>Matrícula: {this.state.mensagem.NUM_MATRICULA}</b></p>
+                                <p><b>Empresa: {this.state.mensagem.NOM_EMPRESA ? this.state.mensagem.NOM_EMPRESA : "Todas"}</b></p>
+                                <p><b>Plano: {this.state.mensagem.DS_PLANO ? this.state.mensagem.DS_PLANO : "Todos"}</b></p>
+                                <p><b>Situação Plano: {this.state.mensagem.DS_SIT_PLANO ? this.state.mensagem.DS_SIT_PLANO : "Todas"}</b></p>
+                                <p><b>Matrícula: {this.state.mensagem.NUM_MATRICULA ? this.state.mensagem.NUM_MATRICULA : "Todas"}</b></p>
                                 <div className="btn-toolbar">
                                     {/* Badge do Portal */}
                                     {this.renderBadge(this.state.mensagem.IND_PORTAL, "success", "Portal")}
-
-                                    {/* Badge de SMS */}
-                                    {this.renderBadge(this.state.mensagem.IND_SMS, "info", "SMS")}
                                     
                                     {/* Badge de E-mail */}
                                     {this.renderBadge(this.state.mensagem.IND_EMAIL, "danger", "E-mail")}

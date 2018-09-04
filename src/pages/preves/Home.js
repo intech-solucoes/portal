@@ -1,9 +1,6 @@
 import React from "react";
 import { FuncionarioService } from "@intechprev/prevsystem-service";
 
-const config = require("../../config.json");
-const funcionarioService = new FuncionarioService(config);
-
 export default class Home extends React.Component {
     constructor(props) {
         super(props);
@@ -18,11 +15,11 @@ export default class Home extends React.Component {
 
     componentWillMount() {
         var self = this;
-        funcionarioService.Buscar()
+        FuncionarioService.Buscar()
             .then((result) => {
                 self.setState({
                     dados: result.data
-                }, () => console.log(this.state));
+                });
             });
     }
 
@@ -92,7 +89,7 @@ export default class Home extends React.Component {
                                 <br/>
                                 <div className="box-footer">
                                     <h5>
-                                        <p className="text-justify">O Portal do Participante foi desenvolvido com o objetivo de facilitar a comunicação entre a PREVES e seus participantes. Caso tenha alguma sugestão ou duvida quanto as informações
+                                        <p className="text-justify">O Portal do Participante foi desenvolvido com o objetivo de facilitar a comunicação entre a PREVES e seus participantes. Caso tenha alguma sugestão ou dúvida quanto as informações
                                         aqui disponibilizadas, entre em contato com a Fundação pelo e-mail <a href="mailto:contato@preves.es.gov.br">contato@preves.es.gov.br</a>.
                                         </p>
                                     </h5>

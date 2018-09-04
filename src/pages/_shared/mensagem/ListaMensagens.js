@@ -55,7 +55,6 @@ export default class ListaMensagens extends React.Component {
                                         <td className="align-middle">
                                             <div>
                                                 {this.renderBadge(mensagem.IND_PORTAL, "success", "Portal")}
-                                                {this.renderBadge(mensagem.IND_SMS, "info", "SMS")}
                                                 {this.renderBadge(mensagem.IND_EMAIL, "danger", "E-mail")}
                                             </div>
 

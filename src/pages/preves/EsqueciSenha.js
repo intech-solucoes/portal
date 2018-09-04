@@ -5,9 +5,6 @@ import  { UsuarioService } from "@intechprev/prevsystem-service";
 
 import InputMask from 'react-input-mask';
 
-var config = require('../../config.json');
-var usuarioService = new UsuarioService(config);
-
 export default class EsqueciSenha extends React.Component {
 
     constructor(props) {
@@ -119,7 +116,7 @@ export default class EsqueciSenha extends React.Component {
      */
     enviarSenha() {
         this.setState({ enviarSenhaDesabilitado: true }, () => {
-            usuarioService.PrimeiroAcesso(this.state.cpf, this.state.dataNascimento)
+            UsuarioService.PrimeiroAcesso(this.state.cpf, this.state.dataNascimento)
                 .then((result) => {
                     this.setState({ enviarSenhaDesabilitado: true }, () => {
                         window.alert(result.data);

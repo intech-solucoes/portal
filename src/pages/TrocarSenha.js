@@ -2,10 +2,6 @@ import React from 'react';
 import { handleFieldChange } from "@intechprev/react-lib";
 import { UsuarioService } from "@intechprev/prevsystem-service";
 
-const config = require("../config.json");
-
-const usuarioService = new UsuarioService(config);
-
 export default class TrocarSenha extends React.Component {
     constructor(props) {
         super(props);
@@ -29,7 +25,7 @@ export default class TrocarSenha extends React.Component {
         var senhaNovaCoincide = this.validarSenha();
 
         if(senhaNovaCoincide) {
-            await usuarioService.TrocarSenha(this.state.senhaAntiga, this.state.senhaNova)
+            await UsuarioService.TrocarSenha(this.state.senhaAntiga, this.state.senhaNova)
                 .then((result) => {
                     this.setState({ 
                         mensagemSucesso: true,

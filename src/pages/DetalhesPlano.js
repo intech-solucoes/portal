@@ -5,9 +5,6 @@ import { PlanoService } from "@intechprev/prevsystem-service";
 
 var InputMask = require('react-input-mask');
 
-const config = require("../config.json");
-const planoService = new PlanoService(config);
-
 export default class DetalhesPlano extends React.Component {
     constructor(props) {
         super(props);
@@ -31,22 +28,12 @@ export default class DetalhesPlano extends React.Component {
             extrato: {},
             dependentes: []
         }
-
-        this.toggleModal = this.toggleModal.bind(this);
-        this.renderModal = this.renderModal.bind(this);
-        this.onChangeInput = this.onChangeInput.bind(this);
-        this.gerarExtrato = this.gerarExtrato.bind(this);
-        this.gerarCertificado = this.gerarCertificado.bind(this);
-
-        this.validarVazios = this.validarVazios.bind(this);
-        this.validarInvalidos = this.validarInvalidos.bind(this);
-        this.converteData = this.converteData.bind(this);
-        this.renderizaMensagemErro = this.renderizaMensagemErro.bind(this);
+        
     }
 
     async componentDidMount() {
         try { 
-            var result = await planoService.BuscarPorCodigo(this.state.cdPlano);
+            var result = await PlanoService.BuscarPorCodigo(this.state.cdPlano);
             await this.setState({ plano: result.data });
         } catch(err) {
             console.error(err);
@@ -57,7 +44,7 @@ export default class DetalhesPlano extends React.Component {
      * @description Método que altera o state 'modalVisivel' que, consequentemente, deixa a modal visível ou não. Além disso, ao fechar a modal, os states de registros devem 
      * permanecer vazios e os states de erro devem receber'false'. Ao abrir a modal, os states recebem os valores default. 
      */ 
-    toggleModal() {
+    toggleModal = () => {
         
         if(this.state.modalVisivel === true) {
             this.setState({
@@ -80,7 +67,7 @@ export default class DetalhesPlano extends React.Component {
         }
     }
 
-    renderModal() {
+    renderModal = () => {
         if (this.state.modalVisivel) {
             return (
                 <div className="modal" role="dialog">
@@ -129,7 +116,7 @@ export default class DetalhesPlano extends React.Component {
 
     }
 
-    onChangeInput(event) {
+    onChangeInput = (event) => {
         var target = event.target;
         var valor = target.value;
         var campo = target.name;
@@ -142,7 +129,7 @@ export default class DetalhesPlano extends React.Component {
     /**
      * Método que checa se os campos estão vazios e atualiza o state que contém essa informação. Após isso faz uma chamada de validarInvalidos().
      */
-    validarVazios() {
+    validarVazios = () => {
         // Variável que armazena true caso um dos campos esteja vazio.
         var campoVazio = (this.state.dataInicio === "" || this.state.dataFim === "")
 
@@ -156,7 +143,7 @@ export default class DetalhesPlano extends React.Component {
      * Método que valida os campos dataInicio e dataFim. Para validação das datas é utilizado uma função que valida a data para não aceitar datas 
      * futuras e estar dentro dos limites de dias e meses. Os states são atualizados e faz-se uma chamada ao renderizaMensagemErro().
      */
-    validarInvalidos() {
+    validarInvalidos = () => {
         var dataInicioObjeto = this.converteData(this.state.dataInicio);
         var dataInicioInvalida = DataInvalida(dataInicioObjeto, this.state.dataInicio);
 
@@ -192,7 +179,7 @@ export default class DetalhesPlano extends React.Component {
      * @param {string} dataString Data a ser convertida para Date().
      * @description Método responsável por converter a data recebida (no formato 'dd/mm/aaaa') para date (Objeto).
      */
-    converteData(dataString) {
+    converteData = (dataString) => {
         var dataPartes = dataString.split("/");
         return new Date(dataPartes[2], dataPartes[1] - 1, dataPartes[0]);
     }
@@ -200,7 +187,7 @@ export default class DetalhesPlano extends React.Component {
     /**
      * Método que altera o state 'mensagemErro' para o tipo de mensagem que deve ser mostrada para o usuário. Após isso faz uma chamada de gerarExtrato.
      */
-    renderizaMensagemErro() {
+    renderizaMensagemErro = () => {
         // Mensagem de campo vazio é renderizada caso um dos dois campos esteja vazio.
         if(this.state.erroCampoVazio) {
             this.setState({ mensagemErro: "Preencha todos os campos!" })
@@ -226,11 +213,11 @@ export default class DetalhesPlano extends React.Component {
 
     }
 
-    gerarExtrato() {
+    gerarExtrato = () => {
         var dataInicio = this.state.dataInicio.replace(new RegExp('/', 'g'), '.');
         var dataFim = this.state.dataFim.replace(new RegExp('/', 'g'), '.');
         
-        planoService.RelatorioExtratoPorPlanoReferencia(this.state.cdPlano, dataInicio, dataFim)
+        PlanoService.RelatorioExtratoPorPlanoReferencia(this.state.cdPlano, dataInicio, dataFim)
             .then((result) => {
                 const url = window.URL.createObjectURL(new Blob([result.data]));
                 const link = document.createElement('a');
@@ -241,8 +228,8 @@ export default class DetalhesPlano extends React.Component {
             });
     }
 
-    gerarCertificado() {
-        planoService.RelatorioCertificado(this.state.cdPlano)
+    gerarCertificado = () => {
+        PlanoService.RelatorioCertificado(this.state.cdPlano)
             .then((result) => {
                 const url = window.URL.createObjectURL(new Blob([result.data]));
                 const link = document.createElement('a');
