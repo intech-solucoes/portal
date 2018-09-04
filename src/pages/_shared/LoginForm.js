@@ -11,14 +11,9 @@ export default class LoginForm extends React.Component {
             erro: null,
             mensagem: null,
             usuario: "",
-            senha: ""
+            senha: "",
+            carregando: false
         };
-
-        this.onSubmit = this.onSubmit.bind(this);
-        this.mostrarErro = this.mostrarErro.bind(this);
-        this.limparErro = this.limparErro.bind(this);
-        this.mostrarMensagem = this.mostrarErro.bind(this);
-        this.limparMensagem = this.limparErro.bind(this);
     }
 
     mostrarErro = (erro) => this.setState({ erro: erro });
@@ -27,9 +22,12 @@ export default class LoginForm extends React.Component {
     mostrarMensagem = (mensagem) => this.setState({ mensagem: mensagem });
     limparMensagem = () => this.setState({ mensagem: null });
 
-    onSubmit(e) {
+    onSubmit = async (e) => {
         e.preventDefault();
-        this.props.onSubmit(this.state.usuario, this.state.senha);
+        
+        await this.setState({ carregando: true });
+        await this.props.onSubmit(this.state.usuario, this.state.senha);
+        await this.setState({ carregando: false });
     }
 
     render() {
@@ -47,8 +45,12 @@ export default class LoginForm extends React.Component {
                 {this.state.erro && <Alert tipo={"danger"} mensagem={this.state.erro} />}
 
                 <div className="form-group">
-                    <button type="submit" className="btn btn-block btn-primary" onClick={this.onSubmit}>
-                        Entrar
+                    <button type="submit" className="btn btn-block btn-primary" onClick={this.onSubmit} disabled={this.state.carregando}>
+                        {!this.state.carregando && 
+                            <span>Entrar</span>}
+
+                        {this.state.carregando &&
+                            <i className="fas fa-spinner fa-pulse"></i>}
                     </button>
                 </div>
 

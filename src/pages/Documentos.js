@@ -3,10 +3,7 @@ import axios from "axios";
 import { handleFieldChange } from "@intechprev/react-lib";
 import { PlanoService, DocumentoService } from "@intechprev/prevsystem-service";
 
-const config = require("../config.json");
-
-const planoService = new PlanoService(config);
-const documentoService = new DocumentoService(config);
+const apiUrl = process.env.API_URL;
 
 export default class Documentos extends React.Component {
     constructor(props) {
@@ -30,7 +27,7 @@ export default class Documentos extends React.Component {
     }
 
     componentDidMount() {
-        planoService.BuscarTodos()
+        PlanoService.BuscarTodos()
             .then((result) => {
                 this.setState({ planos: result.data });
             });
@@ -39,7 +36,7 @@ export default class Documentos extends React.Component {
     }
 
     buscarLista() {
-        documentoService.BuscarPorPasta()
+        DocumentoService.BuscarPorPasta()
             .then((result) => {
                 this.setState({ 
                     documentos: result.data.documentos,
@@ -51,7 +48,7 @@ export default class Documentos extends React.Component {
     salvarPasta(e) {
         e.preventDefault();
 
-        documentoService.CriarPasta(this.state.nomePasta)
+        DocumentoService.CriarPasta(this.state.nomePasta)
             .then((result) => {
                 this.setState({
                     nomePasta: ""
@@ -64,7 +61,7 @@ export default class Documentos extends React.Component {
     salvarDocumento(e) {
         e.preventDefault();
 
-        documentoService.Criar(this.state.oidArquivoUpload, this.state.nomeDocumento, "SIM", 1)
+        DocumentoService.Criar(this.state.oidArquivoUpload, this.state.nomeDocumento, "SIM", 1)
             .then((result) => {
                 this.setState({
                     nomeDocumento: "",
@@ -82,7 +79,7 @@ export default class Documentos extends React.Component {
 
         formData.append("File", arquivoUpload, arquivoUpload.name)
 
-        axios.post(config.apiUrl + '/upload', formData, {
+        axios.post(apiUrl + '/upload', formData, {
             headers: {'Content-Type': 'multipart/form-data'},
             onUploadProgress: progressEvent => {
             },

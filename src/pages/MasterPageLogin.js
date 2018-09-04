@@ -7,7 +7,7 @@ export default class MasterPageLogin extends React.Component {
 	render() {
 		return (
 			<div className="panel-login middle-box">
-				<Router>
+				<Router basename={process.env.PUBLIC_URL}>
 					<div>
 						<Route exact path="/" component={Login} />
 						<Route path="/esqueciSenha" component={EsqueciSenha} />

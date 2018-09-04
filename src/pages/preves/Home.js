@@ -1,9 +1,6 @@
 import React from "react";
 import { FuncionarioService } from "@intechprev/prevsystem-service";
 
-const config = require("../../config.json");
-const funcionarioService = new FuncionarioService(config);
-
 export default class Home extends React.Component {
     constructor(props) {
         super(props);
@@ -18,7 +15,7 @@ export default class Home extends React.Component {
 
     componentWillMount() {
         var self = this;
-        funcionarioService.Buscar()
+        FuncionarioService.Buscar()
             .then((result) => {
                 self.setState({
                     dados: result.data

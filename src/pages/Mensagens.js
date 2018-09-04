@@ -3,10 +3,6 @@ import { MensagemService, PlanoService } from "@intechprev/prevsystem-service";
 
 import ListaMensagens from "./_shared/mensagem/ListaMensagens";
 
-const config = require("../config.json");
-const mensagemService = new MensagemService(config);
-const planoService = new PlanoService(config);
-
 export default class Mensagens extends React.Component {
 
     constructor(props) {
@@ -21,11 +17,11 @@ export default class Mensagens extends React.Component {
     async componentDidMount() {
 
         try {
-            var planoResult = await planoService.Buscar();
+            var planoResult = await PlanoService.Buscar();
 
             planoResult.data.map(async (plano) => {
 
-                var resultMensagens = await mensagemService.BuscarPorFundacaoEmpresaPlano(plano.CD_PLANO);
+                var resultMensagens = await MensagemService.BuscarPorFundacaoEmpresaPlano(plano.CD_PLANO);
                 plano.mensagens = resultMensagens.data;
                 await this.setState({
                     planos: [...this.state.planos, plano]

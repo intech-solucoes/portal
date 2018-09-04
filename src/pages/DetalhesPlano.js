@@ -5,9 +5,6 @@ import { PlanoService } from "@intechprev/prevsystem-service";
 
 var InputMask = require('react-input-mask');
 
-const config = require("../config.json");
-const planoService = new PlanoService(config);
-
 export default class DetalhesPlano extends React.Component {
     constructor(props) {
         super(props);
@@ -36,7 +33,7 @@ export default class DetalhesPlano extends React.Component {
 
     async componentDidMount() {
         try { 
-            var result = await planoService.BuscarPorCodigo(this.state.cdPlano);
+            var result = await PlanoService.BuscarPorCodigo(this.state.cdPlano);
             await this.setState({ plano: result.data });
         } catch(err) {
             console.error(err);
@@ -220,7 +217,7 @@ export default class DetalhesPlano extends React.Component {
         var dataInicio = this.state.dataInicio.replace(new RegExp('/', 'g'), '.');
         var dataFim = this.state.dataFim.replace(new RegExp('/', 'g'), '.');
         
-        planoService.RelatorioExtratoPorPlanoReferencia(this.state.cdPlano, dataInicio, dataFim)
+        PlanoService.RelatorioExtratoPorPlanoReferencia(this.state.cdPlano, dataInicio, dataFim)
             .then((result) => {
                 const url = window.URL.createObjectURL(new Blob([result.data]));
                 const link = document.createElement('a');
@@ -232,7 +229,7 @@ export default class DetalhesPlano extends React.Component {
     }
 
     gerarCertificado = () => {
-        planoService.RelatorioCertificado(this.state.cdPlano)
+        PlanoService.RelatorioCertificado(this.state.cdPlano)
             .then((result) => {
                 const url = window.URL.createObjectURL(new Blob([result.data]));
                 const link = document.createElement('a');

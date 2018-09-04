@@ -1,10 +1,6 @@
 import React from 'react';
 import { ContrachequeService, PlanoService } from "@intechprev/prevsystem-service";
 
-var config = require("../config.json");
-var contrachequeService = new ContrachequeService(config);
-var planoService = new PlanoService(config);
-
 export default class ContraCheque extends React.Component {
 
     constructor(props) {
@@ -18,13 +14,13 @@ export default class ContraCheque extends React.Component {
     }
 
     async componentDidMount() {
-        var resultPlanos = await planoService.Buscar()
+        var resultPlanos = await PlanoService.Buscar()
         await this.buscarDatas(resultPlanos.data);
     }
 
     buscarDatas(planos) {
         planos.map((plano) => {
-            contrachequeService.BuscarDatas(plano.CD_PLANO)
+            ContrachequeService.BuscarDatas(plano.CD_PLANO)
                 .then(result => {
                     plano.contracheque = result.data;
 

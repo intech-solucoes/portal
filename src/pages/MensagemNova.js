@@ -4,9 +4,6 @@ import DataInvalida from './_shared/Data';
 import ListaMensagens from "./_shared/mensagem/ListaMensagens";
 
 var InputMask = require('react-input-mask');
-const config = require("../config.json");
-const mensagemService = new MensagemService(config);
-const listasService = new ListasService(config);
 
 export default class MensagemNova extends React.Component {
     constructor(props) {
@@ -54,14 +51,14 @@ export default class MensagemNova extends React.Component {
     async componentDidMount() {
 
         try {
-            var resultMensagem = await mensagemService.BuscarTodas();
+            var resultMensagem = await MensagemService.BuscarTodas();
             await this.setState({ mensagens: resultMensagem.data })
         } catch(err) {
             console.error(err);
         }
 
         try {
-            var listasResult = await listasService.ListarFundacaoEmpresaPlano();
+            var listasResult = await ListasService.ListarFundacaoEmpresaPlano();
             await this.setState({
                 listas: listasResult.data, 
                 listaFundacao: listasResult.data.Fundacoes,
@@ -154,11 +151,11 @@ export default class MensagemNova extends React.Component {
             dadosMensagem.IND_EMAIL = this.enviarVia(this.state.enviarEmail);
             dadosMensagem.IND_SMS = this.enviarVia(this.state.enviarSms);
             
-            mensagemService.EnviarMensagem(dadosMensagem)
+            MensagemService.EnviarMensagem(dadosMensagem)
                 .then(() => {
                     alert("Mensagem enviada com sucesso!");
                     this.limparStates();
-                    mensagemService.BuscarTodas()
+                    MensagemService.BuscarTodas()
                     .then((result) => {
                         this.setState({ mensagens: result.data });
                     })

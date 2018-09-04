@@ -4,10 +4,6 @@ import { BrowserRouter as Router, Route} from "react-router-dom";
 import { UsuarioService } from  "@intechprev/prevsystem-service";
 
 import GetRotas from './preves/Rotas';
-         
-const config = require("../config.json");
-
-const usuarioService = new UsuarioService(config);
 
 const rotas = GetRotas();
 
@@ -24,18 +20,18 @@ export default class MasterPage extends React.Component {
 
     componentWillMount() {
         if(localStorage.getItem("token")) {
-            usuarioService.VerificarLogin()
+            UsuarioService.VerificarLogin()
                 .then(() => {})
                 .catch((err) => {
                     if(err.message.indexOf("401") > -1)
                     {
                         localStorage.removeItem("token");
-                        document.location = ".";
+                        document.location = "/";
                     }
                 });
         } else {
             localStorage.removeItem("token");
-            document.location = ".";
+            document.location = "/";
         }
         
     }
@@ -50,7 +46,7 @@ export default class MasterPage extends React.Component {
 
     logout() {
         localStorage.removeItem("token");
-        window.location.reload();
+        document.location = "/";
     }
 
     render() {
@@ -84,7 +80,7 @@ export default class MasterPage extends React.Component {
         );
 
         const Rotas = () => (
-            <Router>
+            <Router basename={process.env.PUBLIC_URL}>
                 <div id="route">
                     { rotas.map((rota, index) => <Route key={index} exact={rota.exact} path={rota.caminho} component={rota.componente} />) }
                 </div>

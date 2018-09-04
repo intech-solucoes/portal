@@ -4,10 +4,6 @@ import packageJson from '../../../package.json';
 import LoginForm from "../_shared/LoginForm";
 
 import { UsuarioService, FuncionarioService } from "@intechprev/prevsystem-service";
-const config = require("../../config.json");
-
-const usuarioService = new UsuarioService(config);
-const funcionarioService = new FuncionarioService(config);
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -17,26 +13,27 @@ export default class Login extends React.Component {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
-    onSubmit(cpf, senha) {
-        this.loginForm.current.limparErro();
+    onSubmit = async (cpf, senha) => {
+        try {
+            this.loginForm.current.limparErro();
+            
+            var loginResult = await UsuarioService.Login(cpf, senha);    
+            await localStorage.setItem("token", loginResult.data.AccessToken);
+            await localStorage.setItem("admin", loginResult.data.Admin);
+                    
+            var funcionarioResult = await FuncionarioService.Buscar();
 
-        usuarioService.Login(cpf, senha)
-            .then((result) => {
-                localStorage.setItem("token", result.data.AccessToken);
-                localStorage.setItem("admin", result.data.Admin);
-                
-                funcionarioService.Buscar()
-                    .then((result) => {
-                        localStorage.setItem("fundacao", result.data.funcionario.CD_FUNDACAO);
-                        localStorage.setItem("empresa", result.data.funcionario.CD_EMPRESA);
+            await localStorage.setItem("fundacao", funcionarioResult.data.funcionario.CD_FUNDACAO);
+            await localStorage.setItem("empresa", funcionarioResult.data.funcionario.CD_EMPRESA);
 
-                        document.location = ".";
-                    });
-            })
-            .catch((err) => {
-                console.error("erro", err);
-                this.loginForm.current.mostrarErro(err.response.data);
-            });
+            document.location = ".";
+        } catch(erro) {
+            if(erro.response) {
+                this.loginForm.current.mostrarErro(erro.response.data);
+            } else {
+                this.loginForm.current.mostrarErro(erro);
+            }
+        }
     }
 
     render() {
@@ -56,7 +53,9 @@ export default class Login extends React.Component {
 
                 <LoginForm ref={this.loginForm} mostrarPrimeiroAcesso={true} onSubmit={this.onSubmit} usuarioPlaceholder={"CPF"} />
                 
-                <div className="alert alert-primary text-center">
+                <br/>
+                <br/>
+                <div className="text-center">
                     Versão {packageJson.version}
                 </div>
             </div>

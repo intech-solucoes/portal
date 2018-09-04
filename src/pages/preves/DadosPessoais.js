@@ -3,10 +3,6 @@ import { FuncionarioService } from "@intechprev/prevsystem-service";
 
 import FormFieldStatic from "../_shared/FormFieldStatic";
 
-const config = require("../../config.json");
-
-const funcionarioService = new FuncionarioService(config);
-
 export default class DadosPessoais extends React.Component {
 
     constructor(props) {
@@ -22,7 +18,7 @@ export default class DadosPessoais extends React.Component {
 
     componentWillMount() {
         var self = this;
-        funcionarioService.Buscar()
+        FuncionarioService.Buscar()
             .then((result) => {
 
                 self.setState({
