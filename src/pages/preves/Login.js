@@ -1,4 +1,6 @@
 import React from "react";
+import packageJson from '../../../package.json';
+
 import LoginForm from "../_shared/LoginForm";
 
 import { UsuarioService, FuncionarioService } from "@intechprev/prevsystem-service";
@@ -53,6 +55,10 @@ export default class Login extends React.Component {
                 </h5>
 
                 <LoginForm ref={this.loginForm} mostrarPrimeiroAcesso={true} onSubmit={this.onSubmit} usuarioPlaceholder={"CPF"} />
+                
+                <div className="alert alert-primary text-center">
+                    Versão {packageJson.version}
+                </div>
             </div>
         );
     }

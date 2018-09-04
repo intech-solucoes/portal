@@ -26,16 +26,12 @@ export default class ContrachequeDetalhe extends React.Component {
         this.gerarRelatorio = this.gerarRelatorio.bind(this);
     }
 
-    componentDidMount() {
-        planoService.BuscarPorFundacaoEmpresaPlano(this.state.cdPlano)
-            .then(result => {
-                this.setState({ plano: result.data });
-            });
+    async componentDidMount() {
+        var result = await planoService.BuscarPorCodigo(this.state.cdPlano);
+        await this.setState({ plano: result.data });
 
-        contrachequeService.BuscarPorPlanoReferenciaTipoFolha(this.state.cdPlano, this.state.dataReferencia)
-            .then(result => {
-                this.setState({ contracheque: result.data });
-            });
+        result = await contrachequeService.BuscarPorPlanoReferenciaTipoFolha(this.state.cdPlano, this.state.dataReferencia);
+        await this.setState({ contracheque: result.data });
     }
 
     gerarRelatorio() {

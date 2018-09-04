@@ -1,6 +1,6 @@
 {
   "name": "portalprev",
-  "version": "0.0.1",
+  "version": "1.6.0",
   "private": true,
   "homepage": "http://portal.preves.es.gov.br/",
   "dependencies": {
