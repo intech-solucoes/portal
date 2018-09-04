@@ -17,13 +17,9 @@ export default class Documentos extends React.Component {
             nomeDocumento: "",
             arquivoUpload: "",
             podeCriarDocumento: false,
-            oidArquivoUpload: 0
+            oidArquivoUpload: 0,
+            oidPasta: props.routeProps.match.params.pasta
         }
-
-        this.salvarPasta = this.salvarPasta.bind(this);
-        this.salvarDocumento = this.salvarDocumento.bind(this);
-        this.buscarLista = this.buscarLista.bind(this);
-        this.uploadFile = this.uploadFile.bind(this);
     }
 
     componentDidMount() {
@@ -35,45 +31,41 @@ export default class Documentos extends React.Component {
         this.buscarLista();
     }
 
-    buscarLista() {
-        DocumentoService.BuscarPorPasta()
-            .then((result) => {
-                this.setState({ 
-                    documentos: result.data.documentos,
-                    pastas: result.data.pastas
-                });
-            });
+    buscarLista = async () => {
+        var resultDocumentos = await DocumentoService.BuscarPorPasta(this.state.oidPasta);
+
+        await this.setState({ 
+            documentos: resultDocumentos.data.documentos,
+            pastas: resultDocumentos.data.pastas
+        });
     }
 
-    salvarPasta(e) {
+    salvarPasta = async (e) => {
         e.preventDefault();
 
-        DocumentoService.CriarPasta(this.state.nomePasta)
-            .then((result) => {
-                this.setState({
-                    nomePasta: ""
-                });
+        var resultDocumentos = await DocumentoService.CriarPasta(this.state.nomePasta, this.state.oidPasta);
+        await this.setState({
+            nomePasta: ""
+        });
 
-                this.buscarLista();
-            });
+        await this.buscarLista();
     }
 
-    salvarDocumento(e) {
+    salvarDocumento = async (e) => {
         e.preventDefault();
 
-        DocumentoService.Criar(this.state.oidArquivoUpload, this.state.nomeDocumento, "SIM", 1)
-            .then((result) => {
-                this.setState({
-                    nomeDocumento: "",
-                    arquivoUpload: "",
-                    oidArquivoUpload: 0
-                });
+        var resultDocumento = await DocumentoService.Criar(this.state.oidArquivoUpload, this.state.nomeDocumento, "SIM", 1, this.state.oidPasta);
+        
+        await this.setState({
+            nomeDocumento: "",
+            arquivoUpload: "",
+            oidArquivoUpload: 0
+        });
 
-                this.buscarLista();
-            });
+        await this.buscarLista();
     }
 
-    uploadFile(e) {
+    uploadFile = (e) => {
         const formData = new FormData()
         var arquivoUpload = e.target.files[0];
 
@@ -148,8 +140,8 @@ export default class Documentos extends React.Component {
                         <div className="box-content">
                             {(this.state.pastas.length > 0 || this.state.documentos.length > 0) &&
                                 <div>
-                                    <Tabelas itens={this.state.pastas} campoTexto={"NOM_PASTA"} icone={"fa-folder-open text-warning"} />
-                                    <Tabelas itens={this.state.documentos} campoTexto={"TXT_TITULO"} icone={"fa-file text-info"} />
+                                    <Tabelas itens={this.state.pastas} campoTexto={"NOM_PASTA"} icone={"fa-folder-open text-warning"} tipo={"pasta"} />
+                                    <Tabelas itens={this.state.documentos} campoTexto={"TXT_TITULO"} icone={"fa-file text-info"} tipo={"documento"} />
                                 </div>
                             }
 
@@ -165,24 +157,43 @@ export default class Documentos extends React.Component {
 }
 
 class Tabelas extends React.Component {
+
+    deletarDocumento = async (oidDocumento) => {
+        await DocumentoService.Deletar(oidDocumento);
+        document.location.reload();
+    }
+
+    deletarPasta = async (oidDocumentPasta) => {
+        await DocumentoService.DeletarPasta(oidDocumentPasta);
+        document.location.reload();
+    }
+
     render() {
         return (
             <div>
             {
-                this.props.itens.map((pasta, index) => {
+                this.props.itens.map((item, index) => {
                     return (
                         <div key={index} className="row m-3">
                             <div className="col-1">
                                 <i className={"fa fa-2x " + this.props.icone}></i>
                             </div>
                             <div className="col mt-1">
-                                <a id={"abrir-pasta-"} href="">{pasta[this.props.campoTexto]}</a>
+                                <a href={process.env.PUBLIC_URL + `/documentos/${item.OID_DOCUMENTO_PASTA}`}>{item[this.props.campoTexto]}</a>
                             </div>
-                            <div className="col-1">
-                                <button id={"deletar-pasta-"} className="btn btn-sm btn-danger">
-                                    <i className="fa fa-trash"></i>
-                                </button>
-                            </div>
+                            
+                            {localStorage.getItem("admin") === "S" &&
+                                <div className="col-1">
+                                    <button className="btn btn-sm btn-danger" 
+                                        onClick={async () => {
+                                            if(this.props.tipo === "pasta")
+                                                await this.deletarPasta(item.OID_DOCUMENTO_PASTA);
+                                            else
+                                                await this.deletarDocumento(item.OID_DOCUMENTO);
+                                        }}>
+                                        <i className="fa fa-trash"></i>
+                                    </button>
+                                </div>}
                         </div>
                     );
                 })

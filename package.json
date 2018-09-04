@@ -1,10 +1,10 @@
 {
   "name": "portalprev",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "private": true,
   "homepage": "http://portal.preves.es.gov.br/",
   "dependencies": {
-    "@intechprev/prevsystem-service": "^0.0.6",
+    "@intechprev/prevsystem-service": "^0.0.9",
     "@intechprev/react-lib": "^0.0.3",
     "autoprefixer": "7.1.6",
     "axios": "^0.18.0",
@@ -128,5 +128,6 @@
   },
   "eslintConfig": {
     "extends": "react-app"
-  }
+  },
+  "workspaces": ["../lib/react-lib", "../prevsystem-service"]
 }

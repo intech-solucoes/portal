@@ -57,10 +57,12 @@ export default class MasterPage extends React.Component {
                 </li>
                 {
                     rotas.map((rota, index) => {
+                        var link = rota.caminhoLink ? rota.caminhoLink : rota.caminho;
+
                         if(rota.mostrarMenu) {
                             return (
                                 <li key={index}>
-                                    <a href={rota.caminho}>
+                                    <a href={link}>
                                         <i className={rota.icone}></i>
                                         {rota.titulo}
                                     </a>

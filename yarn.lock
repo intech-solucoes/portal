@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@intechprev/prevsystem-service@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@intechprev/prevsystem-service/-/prevsystem-service-0.0.6.tgz#004e7fe5976d2a785d0c807d44eecca9cc1f34f3"
+"@intechprev/prevsystem-service@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@intechprev/prevsystem-service/-/prevsystem-service-0.0.9.tgz#1f7ec88661df5d31a1743f9f1de32823649a9010"
 
 "@intechprev/react-lib@^0.0.3":
   version "0.0.3"
