@@ -88,7 +88,6 @@ export default class Documentos extends React.Component {
             },
         })
         .then((result) => {
-            console.log(result.data);
             this.setState({
                 podeCriarDocumento: true,
                 oidArquivoUpload: result.data
