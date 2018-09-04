@@ -12,7 +12,7 @@ export default function GetRotas() {
         { titulo: "Inf. Rendimentos",       icone: "fas fa-chart-pie",          caminho: "/infoRend",                  componente: () => <InformeRendimentos />,                            mostrarMenu: true,     exact: true },
         { titulo: "Contracheque Detalhe",   icone: "fas fa-closed-captioning",  caminho: "/contracheque/:plano/:data", componente: (routeProps) => <ContrachequeDetalhe routeProps={routeProps} /> },
         { titulo: "Documentos",             icone: "fas fa-file",               caminho: "/documentos",                componente: () => <Documentos />,                                    mostrarMenu: true },
-        { titulo: "Mensagens",              icone: "fas fa-envelope",           caminho: "/mensagens",                 componente: () => <Mensagens />,                                     mostrarMenu: true,     exact: true },
+        { titulo: "Mensagens",              icone: "fas fa-envelope",           caminho: "/mensagens",                 componente: (routeProps) => <Mensagens routeProps={routeProps} />,                                     mostrarMenu: true,     exact: true },
         { titulo: "Trocar senha",           icone: "fas fa-lock",               caminho: "/trocarSenha",               componente: () => <TrocarSenha />,                                   mostrarMenu: true },
         //{ titulo: "Painel de Controle",     icone: "fas fa-cogs",               caminho: "/controleFuncionalidades",   componente: () => <ControleFuncionalidades />,                       mostrarMenu: true },
         { titulo: "Detalhes do Plano",      icone: "",                          caminho: "/planos/:plano",             componente: (routeProps) => <DetalhesPlano routeProps={routeProps}        />},

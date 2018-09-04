@@ -50,6 +50,7 @@ export default class MasterPage extends React.Component {
 
     logout() {
         localStorage.removeItem("token");
+        window.location.reload();
     }
 
     render() {
