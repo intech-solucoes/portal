@@ -73,7 +73,7 @@ export default class MasterPage extends React.Component {
                     })
                 }
                 <li>
-                    <a href="." onClick={this.logout}>
+                    <a href="/" onClick={this.logout}>
                         <i className="fas fa-sign-out-alt"></i>
                         Sair
                     </a>
