@@ -12,45 +12,43 @@ export default class InformeRendimentos extends React.Component {
                 Grupos: []
             }
         }
-
-        this.selecionarAno = this.selecionarAno.bind(this);
-        this.gerarRelatorio = this.gerarRelatorio.bind(this);
     }
 
-    componentDidMount() {
-        InfoRendService.BuscarReferencias()
-            .then(result => {
-                this.setState({
-                    datas: result.data
-                }, () => this.selecionarAno(this.state.datas[0]));
-            });
+    async componentDidMount() {
+        try {
+            var result = await InfoRendService.BuscarReferencias();
+            await this.setState({ datas: result.data });
+
+            if(this.state.datas[0])
+                this.selecionarAno(this.state.datas[0]);
+        } catch(err) {
+            console.error(err);
+        }
     }
 
-    selecionarAno(ano) {
-        this.setState({
-            dataSelecionada: ano
-        }, () => {
-
-            InfoRendService.BuscarPorReferencia(ano)
-                .then(result => {
-                    this.setState({
-                        informe: result.data
-                    });
-                });
-
-        });
+    selecionarAno = async (ano) => {
+        try {
+            await this.setState({ dataSelecionada: ano });
+            var result = await InfoRendService.BuscarPorReferencia(ano);
+            this.setState({ informe: result.data });
+        } catch(err) {
+            console.error(err);
+        }
     }
 
-    gerarRelatorio() {
-        InfoRendService.Relatorio(this.state.dataSelecionada)
-            .then((result) => {
-                const url = window.URL.createObjectURL(new Blob([result.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', 'informe de rendimentos.pdf');
-                document.body.appendChild(link);
-                link.click();
-            });
+    gerarRelatorio = async () => {
+        try { 
+            var result = await InfoRendService.Relatorio(this.state.dataSelecionada);
+            const url = window.URL.createObjectURL(new Blob([result.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'informe de rendimentos.pdf');
+            document.body.appendChild(link);
+            link.click();
+
+        } catch(err) {
+            console.error(err);
+        }
     }
 
     render() {

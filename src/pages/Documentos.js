@@ -43,7 +43,7 @@ export default class Documentos extends React.Component {
     salvarPasta = async (e) => {
         e.preventDefault();
 
-        var resultDocumentos = await DocumentoService.CriarPasta(this.state.nomePasta, this.state.oidPasta);
+        await DocumentoService.CriarPasta(this.state.nomePasta, this.state.oidPasta);
         await this.setState({
             nomePasta: ""
         });
@@ -54,7 +54,7 @@ export default class Documentos extends React.Component {
     salvarDocumento = async (e) => {
         e.preventDefault();
 
-        var resultDocumento = await DocumentoService.Criar(this.state.oidArquivoUpload, this.state.nomeDocumento, "SIM", 1, this.state.oidPasta);
+        await DocumentoService.Criar(this.state.oidArquivoUpload, this.state.nomeDocumento, "SIM", 1, this.state.oidPasta);
         
         await this.setState({
             nomeDocumento: "",
