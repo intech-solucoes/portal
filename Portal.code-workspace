@@ -4,13 +4,13 @@
 			"path": "."
 		},
 		{
-			"path": "C:\\git\\prevsystem"
+			"path": "..\\prevsystem"
 		},
 		{
-			"path": "C:\\git\\lib\\react-lib"
+			"path": "..\\lib\\react-lib"
 		},
 		{
-			"path": "C:\\git\\prevsystem-service"
+			"path": "..\\prevsystem-service"
 		}
 	],
 	"settings": {}
