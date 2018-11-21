@@ -2,13 +2,13 @@
 # yarn lockfile v1
 
 
-"@intechprev/prevsystem-service@^0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@intechprev/prevsystem-service/-/prevsystem-service-0.0.9.tgz#1f7ec88661df5d31a1743f9f1de32823649a9010"
+"@intechprev/prevsystem-service@^0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@intechprev/prevsystem-service/-/prevsystem-service-0.0.10.tgz#ed60a129003868cfe2a3b1cbb4261ff4e5eab73e"
 
-"@intechprev/react-lib@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@intechprev/react-lib/-/react-lib-0.0.3.tgz#2ecd674fba75f0aedfcd2f280fff327adfffadde"
+"@intechprev/react-lib@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@intechprev/react-lib/-/react-lib-0.0.4.tgz#d29b8fea130c899c2871042c3921625378d037bd"
   dependencies:
     axios "^0.18.0"
 

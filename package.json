@@ -4,8 +4,8 @@
   "private": true,
   "homepage": "http://portal.preves.es.gov.br/",
   "dependencies": {
-    "@intechprev/prevsystem-service": "^0.0.9",
-    "@intechprev/react-lib": "^0.0.3",
+    "@intechprev/prevsystem-service": "^0.0.10",
+    "@intechprev/react-lib": "^0.0.4",
     "autoprefixer": "7.1.6",
     "axios": "^0.18.0",
     "babel-core": "6.26.0",
@@ -64,20 +64,27 @@
     "build-css": "sass -t compressed ./src/styles/main.scss ./public/css/main.css",
     "watch-css": "sass -t compressed --watch ./src/styles/main.scss:./public/css/main.css",
     "clean": "node ./node_modules/rimraf/bin.js ./public/css && node ./node_modules/mkdirp/ ./public/css",
+    
     "start": "yarn build && node scripts/start.js",
     "start:preves": "yarn build:config-preves && yarn start",
     "start:preves-rony": "yarn build:config-preves-rony && yarn start",
     "start:regius": "./node_modules/.bin/cpy src/configs/config.regius.dev.json src --rename=config.json && yarn start",
+    "start:saofrancisco": "yarn build:config-saofrancisco && yarn start",
+
     "build": "yarn clean && yarn copy && yarn build-css",
+
     "build:config-preves": "./node_modules/.bin/cpy src/configs/config.preves.dev.json src --rename=config.json",
     "build:config-preves-test": "./node_modules/.bin/cpy src/configs/config.preves.test.json src --rename=config.json",
     "build:config-preves-rony": "./node_modules/.bin/cpy src/configs/config.preves.rony.json src --rename=config.json",
     "build:config-preves-prod": "./node_modules/.bin/cpy src/configs/config.preves.prod.json src --rename=config.json",
     "build:config-regius": "./node_modules/.bin/cpy src/configs/config.regius.dev.json src --rename=config.json",
     "build:config-regius-test": "./node_modules/.bin/cpy src/configs/config.regius.dev.json src --rename=config.json",
+    "build:config-saofrancisco": "./node_modules/.bin/cpy src/configs/config.saofrancisco.dev.json src --rename=config.json",
+
     "build:prod": "node scripts/build.js",
     "build:preves-test": "yarn build:config-preves-test && yarn build:prod && ./node_modules/.bin/cpy **/* Z:/PortalPrevesTeste --parents --cwd=build",
     "build:preves-prod": "yarn build:config-preves-prod && yarn build:prod && ./node_modules/.bin/cpy **/* Z:/PortalPreves --parents --cwd=build",
+    
     "test": "node scripts/test.js --env=jsdom"
   },
   "devDependencies": {
@@ -128,6 +135,5 @@
   },
   "eslintConfig": {
     "extends": "react-app"
-  },
-  "workspaces": ["../lib/react-lib", "../prevsystem-service"]
+  }
 }
