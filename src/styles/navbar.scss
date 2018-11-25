@@ -22,7 +22,8 @@
             display: block;
 
             &.navbar-header {
-                padding: 33px 40px;
+                //padding: 33px 40px;
+                padding: 33px 0px;
                 float: none;
 
                 img {
@@ -46,7 +47,7 @@
                 .fas {
                     width: 20px;
                     text-align: center;
-                    margin-right: 8px;
+                    margin-right: 8px;    
                 }
             }
         }

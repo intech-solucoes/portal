@@ -53,7 +53,7 @@ export default class MasterPage extends React.Component {
         const Menu = () => (
             <ul>
                 <li className="navbar-header">
-                    <img src="/imagens/preves/logo.png" alt="Preves" />
+                    <img src="/imagens/saofrancisco/logo.png" alt="Preves" />
                 </li>
                 {
                     rotas.map((rota, index) => {
