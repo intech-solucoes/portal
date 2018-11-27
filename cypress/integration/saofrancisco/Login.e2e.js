@@ -5,6 +5,13 @@ describe('Login', () => {
         cy.visit('http://localhost:3000/');
     });
 
+    it("Navega para tela de primeiro acesso", () => { 
+        cy.get("#forgotPassword")
+            .click();
+
+        cy.location('pathname').should('eq', '/esqueciSenha');
+    });
+
     it("Valida credenciais inválidas", () => {
         doLogin("asd", "123");
 

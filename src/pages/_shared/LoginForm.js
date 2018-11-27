@@ -55,7 +55,7 @@ export default class LoginForm extends React.Component {
                 </div>
 
                 <div className="form-group">
-                    <a className="btn btn-link" href="esqueciSenha">Esqueci Minha Senha / Primeiro Acesso</a>
+                    <a className="btn btn-link" id="forgotPassword" href="esqueciSenha">Esqueci Minha Senha / Primeiro Acesso</a>
                 </div>
             </form>
         );
