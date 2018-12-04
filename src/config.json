@@ -1,4 +1,4 @@
 {
-    "cliente": "saofrancisco",
-    "apiUrl": "http://localhost:5000/api"
+    "cliente": "regius",
+    "apiUrl": "http://localhost/RegiusAPI/api"
 }
