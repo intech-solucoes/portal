@@ -137,10 +137,10 @@ export default class EsqueciSenha extends React.Component {
         return (
             <div className="box">
                 <div className="logo">
-                    <img src="./imagens/preves/logo.png" alt="Preves" />
+                    <img src="./imagens/saofrancisco/logo.png" alt="São Francisco" />
                 </div>
 
-                <h4>Bem vindo ao portal da Preves</h4>
+                <h4>Bem vindo ao portal da Fundação São Francisco</h4>
 
                 <div className="box-content">
                     <p align="middle"><b>Esqueci minha senha / Primeiro Acesso</b></p>
