@@ -16,26 +16,26 @@ describe('Login', () => {
         doLogin("asd", "123");
 
         cy.get(".alert")
-            .should("have.text", "E-mail ou senha incorretos!");
+            .should("have.text", "Matrícula ou senha incorretos!");
     });
 
     it("Faz login com sucesso", () => {
-        doLogin("", "123");
+        doLogin("15243362115", "123");
 
         cy.get(".page-title")
             .should("have.text", "Home");
     });
 });
 
-function doLogin(email, password) {
-    cy.get("#email")
+function doLogin(cpf, senha) {
+    cy.get("#cpf")
         .clear()
-        .type(email);
+        .type(cpf);
 
-    cy.get("#password")
+    cy.get("#senha")
         .clear()
-        .type(password);
+        .type(senha);
 
-    cy.get("#submit")
+    cy.get("#entrar")
         .click();
 }

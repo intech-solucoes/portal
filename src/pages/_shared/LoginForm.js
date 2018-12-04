@@ -10,7 +10,7 @@ export default class LoginForm extends React.Component {
         this.state = {
             erro: null,
             mensagem: null,
-            usuario: "",
+            cpf: "",
             senha: "",
             carregando: false
         };
@@ -26,7 +26,7 @@ export default class LoginForm extends React.Component {
         e.preventDefault();
         
         await this.setState({ carregando: true });
-        await this.props.onSubmit(this.state.usuario, this.state.senha);
+        await this.props.onSubmit(this.state.cpf, this.state.senha);
         await this.setState({ carregando: false });
     }
 
@@ -34,18 +34,18 @@ export default class LoginForm extends React.Component {
         return (
             <form>
                 <div className="form-group">
-                    <input name="usuario" placeholder="CPF (somente números)" className="form-control" value={this.state.usuario} onChange={(e) => handleFieldChange(this, e)} />
+                    <input name="cpf" id="cpf" placeholder="CPF (somente números)" className="form-control" value={this.state.cpf} onChange={(e) => handleFieldChange(this, e)} />
                 </div>
 
                 <div className="form-group">
-                    <input name="senha" placeholder="Senha" type="password" className="form-control" value={this.state.senha} onChange={(e) => handleFieldChange(this, e)} />
+                    <input name="senha" id="senha" placeholder="Senha" type="password" className="form-control" value={this.state.senha} onChange={(e) => handleFieldChange(this, e)} />
                 </div>
 
                 {this.state.mensagem && <Alert tipo={"info"} mensagem={this.state.mensagem} />}
                 {this.state.erro && <Alert tipo={"danger"} mensagem={this.state.erro} />}
 
                 <div className="form-group">
-                    <button type="submit" className="btn btn-block btn-primary" onClick={this.onSubmit} disabled={this.state.carregando}>
+                    <button type="submit" id="entrar" className="btn btn-block btn-primary" onClick={this.onSubmit} disabled={this.state.carregando}>
                         {!this.state.carregando && 
                             <span>Entrar</span>}
 

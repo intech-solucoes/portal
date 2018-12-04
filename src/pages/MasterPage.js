@@ -13,7 +13,7 @@ export default class MasterPage extends React.Component {
         
         for(var i = 0; i < rotas.length; i++) {
             if(rota === rotas[i].caminho) {
-                return(<h2>{rotas[i].titulo}</h2>);
+                return(<h2 className="page-title">{rotas[i].titulo}</h2>);
             }
         }
     }
