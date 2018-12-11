@@ -26,7 +26,8 @@ export default class DetalhesPlano extends React.Component {
                 SalarioContribuicao: 0
             },
             extrato: {},
-            dependentes: []
+            dependentes: [],
+            possuiSeguro: false
         }
         
     }
@@ -34,7 +35,9 @@ export default class DetalhesPlano extends React.Component {
     async componentDidMount() {
         try { 
             var result = await PlanoService.BuscarPorCodigo(this.state.cdPlano);
-            await this.setState({ plano: result.data });
+            var resultSeguro = await PlanoService.PossuiCertificadoSeguro();
+
+            await this.setState({ plano: result.data, possuiSeguro: resultSeguro.data });
         } catch(err) {
             console.error(err);
         }
@@ -222,7 +225,7 @@ export default class DetalhesPlano extends React.Component {
                 const url = window.URL.createObjectURL(new Blob([result.data]));
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', 'extrato.pdf');
+                link.setAttribute('download', 'Extrato.pdf');
                 document.body.appendChild(link);
                 link.click();
             });
@@ -234,7 +237,19 @@ export default class DetalhesPlano extends React.Component {
                 const url = window.URL.createObjectURL(new Blob([result.data]));
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', 'certificado.pdf');
+                link.setAttribute('download', 'Certificado de Participação.pdf');
+                document.body.appendChild(link);
+                link.click();
+            });
+    }
+
+    gerarCertificadoSeguro = () => {
+        PlanoService.RelatorioCertificadoSeguro(this.state.cdPlano)
+            .then((result) => {
+                const url = window.URL.createObjectURL(new Blob([result.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'Certificado de Seguro.pdf');
                 document.body.appendChild(link);
                 link.click();
             });
@@ -261,10 +276,19 @@ export default class DetalhesPlano extends React.Component {
                                 <div className="btn-group mr-2">
                                     <button type="button" id="gerarExtrato" className="btn btn-primary btn-md" onClick={() => this.toggleModal() }>Gerar extrato</button>
                                 </div>
+
                                 {this.renderModal()}
+
                                 <div className="btn-group mr-2">
                                     <button type="button" id="gerarCertificado" className="btn btn-primary btn-md" onClick={this.gerarCertificado}>Gerar Certificado de Participação</button>
                                 </div>
+                                
+                                {this.state.possuiSeguro && 
+                                    <div className="btn-group mr-2">
+                                        <button type="button" id="gerarCertificadoSeguro" className="btn btn-primary btn-md" onClick={this.gerarCertificadoSeguro}>Gerar Certificado de Seguro</button>
+                                    </div>
+                                }
+
                             </div>
                         </div>
                     </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import { handleFieldChange } from "@intechprev/react-lib";
 
 import Alert from "./Alert";
@@ -55,7 +56,7 @@ export default class LoginForm extends React.Component {
                 </div>
 
                 <div className="form-group">
-                    <a className="btn btn-link" id="forgotPassword" href="esqueciSenha">Esqueci Minha Senha / Primeiro Acesso</a>
+                    <Link className="btn btn-link" id="forgotPassword" to="/esqueciSenha">Esqueci Minha Senha / Primeiro Acesso</Link>
                 </div>
             </form>
         );

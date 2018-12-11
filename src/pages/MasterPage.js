@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route} from "react-router-dom";
+import { HashRouter, Route, Switch } from "react-router-dom";
 
 import { UsuarioService } from  "@intechprev/prevsystem-service";
 
@@ -82,11 +82,11 @@ export default class MasterPage extends React.Component {
         );
 
         const Rotas = () => (
-            <Router basename={process.env.PUBLIC_URL}>
-                <div id="route">
+            <HashRouter basename={process.env.PUBLIC_URL}>
+                <Switch id="route">
                     { rotas.map((rota, index) => <Route key={index} exact={rota.exact} path={rota.caminho} component={rota.componente} />) }
-                </div>
-    		</Router>
+                </Switch>
+    		</HashRouter>
         );
 
         return (

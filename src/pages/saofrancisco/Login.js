@@ -26,7 +26,7 @@ export default class Login extends React.Component {
             await localStorage.setItem("fundacao", funcionarioResult.data.funcionario.CD_FUNDACAO);
             await localStorage.setItem("empresa", funcionarioResult.data.funcionario.CD_EMPRESA);
 
-            document.location = ".";
+            this.props.history.push("/");
         } catch(erro) {
             if(erro.response) {
                 this.loginForm.current.mostrarErro(erro.response.data);
