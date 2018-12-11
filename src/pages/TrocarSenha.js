@@ -1,6 +1,7 @@
 import React from 'react';
 import { handleFieldChange } from "@intechprev/react-lib";
 import { UsuarioService } from "@intechprev/prevsystem-service";
+import { Page } from ".";
 
 export default class TrocarSenha extends React.Component {
     constructor(props) {
@@ -19,6 +20,7 @@ export default class TrocarSenha extends React.Component {
             mensagemSucesso: false,
         }
 
+        this.page = React.createRef();
     }
 
     trocarSenha = async () => {
@@ -78,44 +80,46 @@ export default class TrocarSenha extends React.Component {
 
     render() {
         return (
-            <div className="row">
-                <div className="col-lg-12">
-                    <div className="box">
-                        <div className="box-content">
-                            <form className="validatedForm">
-                                <div className="form-group row">
-                                    <label htmlFor="senhaAntiga" className="col-sm-2 col-form-label"><b>Senha antiga:</b></label>
-                                    <div className="col-sm-10">
-                                        <input name="senhaAntiga" id="senhaAntiga" className="form-control" type="password" value={this.state.senhaAntiga} onChange={(e) => handleFieldChange(this, e)}></input>
+            <Page {...this.props} ref={this.page}>
+                <div className="row">
+                    <div className="col-lg-12">
+                        <div className="box">
+                            <div className="box-content">
+                                <form className="validatedForm">
+                                    <div className="form-group row">
+                                        <label htmlFor="senhaAntiga" className="col-sm-2 col-form-label"><b>Senha antiga:</b></label>
+                                        <div className="col-sm-10">
+                                            <input name="senhaAntiga" id="senhaAntiga" className="form-control" type="password" value={this.state.senhaAntiga} onChange={(e) => handleFieldChange(this, e)}></input>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="form-group row">
-                                    <label htmlFor="senhaNova" className="col-sm-2  col-form-label"><b>Nova senha:</b></label>
-                                    <div className="col-sm-10">
-                                        <input name="senhaNova" id="senhaNova" className="form-control" type="password" value={this.state.senhaNova} onChange={(e) => handleFieldChange(this, e)} ></input>
+                                    <div className="form-group row">
+                                        <label htmlFor="senhaNova" className="col-sm-2  col-form-label"><b>Nova senha:</b></label>
+                                        <div className="col-sm-10">
+                                            <input name="senhaNova" id="senhaNova" className="form-control" type="password" value={this.state.senhaNova} onChange={(e) => handleFieldChange(this, e)} ></input>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="form-group row">
-                                    <label htmlFor="confirmarSenha" className="col-sm-2  col-form-label"><b>Confirme nova senha:</b></label>
-                                    <div className="col-sm-10">
-                                        <input name="confirmarSenha" id="confirmarSenha" className="form-control" type="password" value={this.state.confirmarSenha} onChange={(e) => handleFieldChange(this, e)} ></input>
+                                    <div className="form-group row">
+                                        <label htmlFor="confirmarSenha" className="col-sm-2  col-form-label"><b>Confirme nova senha:</b></label>
+                                        <div className="col-sm-10">
+                                            <input name="confirmarSenha" id="confirmarSenha" className="form-control" type="password" value={this.state.confirmarSenha} onChange={(e) => handleFieldChange(this, e)} ></input>
+                                        </div>
                                     </div>
-                                </div>
-                                {this.renderizaErro(this.state.erroConfirmarSenha, "As senhas não coincidem!")}
-                                {this.renderizaErro(this.state.erroSenhaAntiga, this.state.mensagemErroSenhaAntiga)}
-                                {this.state.mensagemSucesso &&
-                                    <div className="text-primary">
-                                        <i className="fas fa-check"></i>&nbsp;
-                                        Senha alterada com sucesso!
-                                    </div>
-                                }
-                                <hr />
-                                <button type="button" id="trocar-senha" className="btn btn-primary" onClick={() => this.trocarSenha()}>Trocar Senha</button>
-                            </form>
+                                    {this.renderizaErro(this.state.erroConfirmarSenha, "As senhas não coincidem!")}
+                                    {this.renderizaErro(this.state.erroSenhaAntiga, this.state.mensagemErroSenhaAntiga)}
+                                    {this.state.mensagemSucesso &&
+                                        <div className="text-primary">
+                                            <i className="fas fa-check"></i>&nbsp;
+                                            Senha alterada com sucesso!
+                                        </div>
+                                    }
+                                    <hr />
+                                    <button type="button" id="trocar-senha" className="btn btn-primary" onClick={() => this.trocarSenha()}>Trocar Senha</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </Page>
         );
     }
 }

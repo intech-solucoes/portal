@@ -1,9 +1,19 @@
-import React from "react";
+import React, { Component } from "react";
+import { Page } from "../";
 
-const Home = () => (
-    <div>
-        <h1>Home São Francisco</h1>
-    </div>
-);
+export default class Home extends Component {
 
-export default Home;
+    constructor(props) {
+        super(props);
+
+        this.page = React.createRef();
+    }
+
+    render() {
+        return (
+            <Page {...this.props} ref={this.page}>
+                <h1>Home São Francisco</h1>
+            </Page>
+        );
+    }
+}

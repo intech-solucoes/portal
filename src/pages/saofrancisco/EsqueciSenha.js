@@ -2,6 +2,7 @@ import React from 'react';
 import { handleFieldChange } from "@intechprev/react-lib";
 import DataInvalida from '../_shared/ValidacaoDataNascimento';
 import  { UsuarioService } from "@intechprev/prevsystem-service";
+import { PageClean } from "../";
 
 import InputMask from 'react-input-mask';
 
@@ -114,54 +115,50 @@ export default class EsqueciSenha extends React.Component {
     /**
      * Método que chama o service que cria um POST com Cpf e DataNascimento para rota '/usuario/criarAcesso'. Após isso, redireciona para tela de login.
      */
-    enviarSenha() {
-        this.setState({ enviarSenhaDesabilitado: true }, () => {
-            UsuarioService.PrimeiroAcesso(this.state.cpf, this.state.dataNascimento)
-                .then((result) => {
-                    this.setState({ enviarSenhaDesabilitado: true }, () => {
-                        window.alert(result.data);
-                        this.props.history.push('/');
-                    })
-                })
-                .catch((err) => { 
-                    console.error(err.response.data);
-                    this.setState({
-                        mensagemErro: "Dados inválidos!",
-                        enviarSenhaDesabilitado: false
-                    })
-                });
-        })
+    async enviarSenha() {
+        try {
+            await this.setState({ enviarSenhaDesabilitado: true });
+            var result = await UsuarioService.PrimeiroAcesso(this.state.cpf, this.state.dataNascimento);
+
+            await this.setState({ enviarSenhaDesabilitado: true });
+            window.alert(result.data);
+            this.props.history.push('/');
+        
+        } catch(err) { 
+            console.error(err.response.data);
+            await this.setState({
+                mensagemErro: "Dados inválidos!",
+                enviarSenhaDesabilitado: false
+            });
+        }
     }
 
     render() {
         return (
-            <div className="box">
-                <div className="logo">
-                    <img src="./imagens/saofrancisco/logo.png" alt="São Francisco" />
-                </div>
-
-                <h4>Bem vindo ao portal da Fundação São Francisco</h4>
-
-                <div className="box-content">
-                    <p align="middle"><b>Esqueci minha senha / Primeiro Acesso</b></p>
-                    <p align="middle">Preencha as informações para que possamos gerar uma senha que será enviada para seu email cadastrado.</p>
-                    <form>
-                        <div className="form-group">
-                            <input name="cpf" id="cpf" placeholder="CPF (somente números)" maxLength="11" className="form-control" value={this.state.cpf} onChange={(e) => handleFieldChange(this, e)} />
+			<PageClean {...this.props}>
+                <h4>Bem vindo ao portal da São Francisco</h4>
+                
+                <h5>
+                    <b>Esqueci minha senha / Primeiro Acesso</b><br />
+                    <br/>
+                    <small>Preencha as informações para que possamos gerar uma senha que será enviada para seu email cadastrado.</small>
+                </h5>
+                <form>
+                    <div className="form-group">
+                        <input name="cpf" id="cpf" placeholder="CPF (somente números)" maxLength="11" className="form-control" value={this.state.cpf} onChange={(e) => handleFieldChange(this, e)} />
+                    </div>
+                    <div className="form-group">
+                        <InputMask mask="99/99/9999" name="dataNascimento" id="dataNascimento" placeholder="Data de Nascimento" className="form-control" value={this.state.dataNascimento} onChange={(e) => handleFieldChange(this, e)} />
+                    </div>
+                    {this.state.mensagemErro !== "" &&
+                        <div className="text-danger">
+                            <i className="fas fa-exclamation-circle"></i>&nbsp;
+                            {this.state.mensagemErro}
                         </div>
-                        <div className="form-group">
-                            <InputMask mask="99/99/9999" name="dataNascimento" id="dataNascimento" placeholder="Data de Nascimento" className="form-control" value={this.state.dataNascimento} onChange={(e) => handleFieldChange(this, e)} />
-                        </div>
-                        {this.state.mensagemErro !== "" &&
-                            <div className="text-danger">
-                                <i className="fas fa-exclamation-circle"></i>&nbsp;
-                                {this.state.mensagemErro}
-                            </div>
-                        }<br/>
-                        <button id="enviarSenha" className="btn btn-primary btn-block" type="button" onClick={this.validarCampos} disabled={this.state.enviarSenhaDesabilitado}>Enviar Nova Senha</button>
-                    </form>
-                </div>
-            </div>
+                    }<br/>
+                    <button id="enviarSenha" className="btn btn-primary btn-block" type="button" onClick={this.validarCampos} disabled={this.state.enviarSenhaDesabilitado}>Enviar Nova Senha</button>
+                </form>
+            </PageClean>
         )
     }
 

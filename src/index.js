@@ -1,17 +1,18 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import { HashRouter, Switch, Route } from "react-router-dom";
+import Rotas from './pages/saofrancisco/Rotas';
 
-import { MasterPage, MasterPageLogin } from "./pages";
-
-var page;
-var loggedIn = localStorage.getItem("token");
-
-if(loggedIn)
-{
-	page = <MasterPage />
+class MainRender extends Component {
+	render() {
+		return (
+			<HashRouter basename={process.env.PUBLIC_URL}>
+				<Switch>
+					{ Rotas.map((rota, index) => <Route key={index} exact={rota.exact} path={rota.caminho} component={rota.componente} />) }
+				</Switch>
+			</HashRouter>
+		);
+	}
 }
-else {
-	page = <MasterPageLogin />
-}
 
-ReactDOM.render(page, document.getElementById("root"));
+ReactDOM.render(<MainRender />, document.getElementById("root"));

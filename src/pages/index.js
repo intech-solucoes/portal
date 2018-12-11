@@ -1,5 +1,5 @@
-import MasterPage from "./MasterPage";
-import MasterPageLogin from "./MasterPageLogin";
+import Page from "./Page";
+import PageClean from "./PageClean";
 
 const config = require("../config.json");
 
@@ -31,5 +31,5 @@ export const DetalhesPlano = getPage("DetalhesPlano");
 export const DadosPessoais = getPage("DadosPessoais");
 
 export {
-    MasterPage, MasterPageLogin
+    Page, PageClean
 };

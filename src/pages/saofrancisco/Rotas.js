@@ -1,17 +1,17 @@
 import React from 'react';
 
 import {
-    Home, DadosPessoais, Planos, Documentos, Mensagens, TrocarSenha, ControleFuncionalidades, DetalhesPlano, MensagemNova,
-    Contracheque, ContrachequeDetalhe, InformeRendimentos
+    Home, DadosPessoais, Planos, Mensagens, TrocarSenha, DetalhesPlano, MensagemNova,
+    Login, EsqueciSenha, ListarParticipantes
 } from "../";
 
-export default function GetRotas() {
+function GetRotas() {
     const rotas = [
         {
             titulo: "Home",
             icone: "fas fa-home",
             caminho: "/",
-            componente: () => <Home />,
+            componente: (routeProps) => <Home {...routeProps} />,
             mostrarMenu: true,
             exact: true
         },
@@ -19,82 +19,62 @@ export default function GetRotas() {
             titulo: "Dados Pessoais",
             icone: "fas fa-user",
             caminho: "/dados",
-            componente: () => <DadosPessoais />,
+            componente: (routeProps) => <DadosPessoais {...routeProps} />,
             mostrarMenu: true
         },
         {
             titulo: "Planos",
             icone: "fas fa-list",
             caminho: "/planos",
-            componente: () => <Planos />, 
+            componente: (routeProps) => <Planos {...routeProps} />, 
             mostrarMenu: true, 
             exact: true
         },
-        // {
-        //     titulo: "Contracheque",
-        //     icone: "fas fa-closed-captioning",
-        //     caminho: "/contracheque",
-        //     componente: () => <Contracheque />,
-        //     mostrarMenu: true,
-        //     exact: true
-        // },
-        // {
-        //     titulo: "Inf. Rendimentos",
-        //     icone: "fas fa-chart-pie",
-        //     caminho: "/infoRend",
-        //     componente: () => <InformeRendimentos />,
-        //     mostrarMenu: true,
-        //     exact: true
-        // },
-        // {
-        //     titulo: "Contracheque Detalhe",
-        //     icone: "fas fa-closed-captioning",
-        //     caminho: "/contracheque/:plano/:data",
-        //     componente: (routeProps) => <ContrachequeDetalhe routeProps={routeProps} />
-        // },
-        // {
-        //     titulo: "Documentos",
-        //     icone: "fas fa-file",
-        //     caminho: "/documentos/:pasta?",
-        //     caminhoLink: "/documentos",
-        //     componente: (routeProps) => <Documentos routeProps={routeProps} />,
-        //     mostrarMenu: true
-        // },
         {
             titulo: "Mensagens",
             icone: "fas fa-envelope",
             caminho: "/mensagens",
-            componente: (routeProps) => <Mensagens routeProps={routeProps} />,
+            componente: (routeProps) => <Mensagens {...routeProps} />,
             mostrarMenu: true
         },
         {
             titulo: "Trocar senha",
             icone: "fas fa-lock",
             caminho: "/trocarSenha",
-            componente: () => <TrocarSenha />,
+            componente: (routeProps) => <TrocarSenha {...routeProps} />,
             mostrarMenu: true
-        },
-        // {
-        //     titulo: "Painel de Controle",
-        //     icone: "fas fa-cogs",
-        //     caminho: "/controleFuncionalidades",
-        //     componente: () => <ControleFuncionalidades />,
-        //     mostrarMenu: true
-        // },
-        {
-            titulo: "Detalhes do Plano",
-            icone: "",
-            caminho: "/planos/:plano",
-            componente: (routeProps) => <DetalhesPlano routeProps={routeProps} />
         },
         {
             titulo: "Nova Mensagem",
             icone: "",
             caminho: "/mensagem/nova",
-            componente: (routeProps) => <MensagemNova routeProps={routeProps} />,
+            componente: (routeProps) => <MensagemNova {...routeProps} />,
             exact: true
+        },
+        {
+            titulo: "Login",
+            caminho: "/login",
+            componente: (routeProps) => <Login {...routeProps} />,
+            mostrarMenu: false,
+            exact: false
+        },
+        {
+            titulo: "Esqueci Minha Senha",
+            caminho: "/esqueciSenha",
+            componente: (routeProps) => <EsqueciSenha {...routeProps} />,
+            mostrarMenu: false,
+            exact: false
+        },
+        {
+            titulo: "Listar Participantes",
+            caminho: "/listarParticipantes",
+            componente: (routeProps) => <ListarParticipantes {...routeProps} />,
+            mostrarMenu: false,
+            exact: false
         }
     ];
 
     return rotas;
 } 
+
+export default GetRotas();

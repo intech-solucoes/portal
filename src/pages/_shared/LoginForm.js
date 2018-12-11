@@ -42,9 +42,6 @@ export default class LoginForm extends React.Component {
                     <input name="senha" id="senha" placeholder="Senha" type="password" className="form-control" value={this.state.senha} onChange={(e) => handleFieldChange(this, e)} />
                 </div>
 
-                {this.state.mensagem && <Alert tipo={"info"} mensagem={this.state.mensagem} />}
-                {this.state.erro && <Alert tipo={"danger"} mensagem={this.state.erro} />}
-
                 <div className="form-group">
                     <button type="submit" id="entrar" className="btn btn-block btn-primary" onClick={this.onSubmit} disabled={this.state.carregando}>
                         {!this.state.carregando && 
@@ -54,6 +51,9 @@ export default class LoginForm extends React.Component {
                             <i className="fas fa-spinner fa-pulse"></i>}
                     </button>
                 </div>
+
+                {this.state.mensagem && <Alert tipo={"info"} mensagem={this.state.mensagem} />}
+                {this.state.erro && <Alert tipo={"danger"} mensagem={this.state.erro} />}
 
                 <div className="form-group">
                     <Link className="btn btn-link" id="forgotPassword" to="/esqueciSenha">Esqueci Minha Senha / Primeiro Acesso</Link>

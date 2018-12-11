@@ -2,7 +2,7 @@
   "name": "portalprev",
   "version": "1.7.0",
   "private": true,
-  "homepage": "http://10.10.170.11/SaoFranciscoAPI/",
+  "homepage": ".",
   "dependencies": {
     "@intechprev/prevsystem-service": "^0.0.11",
     "@intechprev/react-lib": "^0.0.4",
