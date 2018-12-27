@@ -9,6 +9,7 @@ import Rotas from './saofrancisco/Rotas';
 export default class Page extends React.Component {
 
     async componentWillMount() {
+        console.log(process.env.PUBLIC_URL);
         try {
             var token = await localStorage.getItem("token");
             if(token) {
@@ -48,7 +49,7 @@ export default class Page extends React.Component {
             var titulo = "";
 
             for(var i = 0; i < Rotas.length; i++) {
-                if(rota === process.env.PUBLIC_URL + Rotas[i].caminho) {
+                if(rota === Rotas[i].caminho) {
                     titulo = <h2>{Rotas[i].titulo}</h2>;
                 }
             }
@@ -61,7 +62,7 @@ export default class Page extends React.Component {
                 <nav className="navbar-default nav-open">
                     <ul>
                         <li className="navbar-header">
-                            <img src="/imagens/saofrancisco/logo.png" alt="Preves" />
+                            <img src="imagens/logo.png" alt="logo" />
                         </li>
                         {
                             Rotas.map((rota, index) => {

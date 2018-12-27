@@ -1,7 +1,10 @@
 import React from 'react';
+import { PlanoService } from "@intechprev/prevsystem-service";
+
 import FormFieldStatic from './_shared/FormFieldStatic';
 import DataInvalida from './_shared/Data';
-import { PlanoService } from "@intechprev/prevsystem-service";
+import { Page } from ".";
+import { Box } from "../components";
 
 var InputMask = require('react-input-mask');
 
@@ -21,7 +24,7 @@ export default class DetalhesPlano extends React.Component {
             erroDataInicialSuperior: false,
             erroDataFinalSuperior: false,
 
-            cdPlano: props.routeProps.match.params.plano,
+            cdPlano: props.match.params.plano,
             plano: {
                 SalarioContribuicao: 0
             },
@@ -32,12 +35,12 @@ export default class DetalhesPlano extends React.Component {
         
     }
 
-    async componentDidMount() {
-        try { 
-            var result = await PlanoService.BuscarPorCodigo(this.state.cdPlano);
-            var resultSeguro = await PlanoService.PossuiCertificadoSeguro();
+    componentDidMount = async () => {
+        try {
+            var { data: plano } = await PlanoService.BuscarPorCodigo(this.state.cdPlano);
+            var { data: possuiSeguro } = await PlanoService.PossuiCertificadoSeguro();
 
-            await this.setState({ plano: result.data, possuiSeguro: resultSeguro.data });
+            await this.setState({ plano, possuiSeguro });
         } catch(err) {
             console.error(err);
         }
@@ -244,57 +247,69 @@ export default class DetalhesPlano extends React.Component {
     }
 
     gerarCertificadoSeguro = () => {
-        PlanoService.RelatorioCertificadoSeguro(this.state.cdPlano)
+        PlanoService.RelatorioCertificadoSeguro()
             .then((result) => {
-                const url = window.URL.createObjectURL(new Blob([result.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', 'Certificado de Seguro.pdf');
-                document.body.appendChild(link);
-                link.click();
+                var blob = new Blob([result.data], { type: 'application/octet-stream' });
+                if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                    // IE workaround for "HTML7007: One or more blob URLs were 
+                    // revoked by closing the blob for which they were created. 
+                    // These URLs will no longer resolve as the data backing 
+                    // the URL has been freed."
+                    window.navigator.msSaveBlob(blob, 'Certificado de Seguro.zip');
+                }
+                else {
+                    const blobURL = window.URL.createObjectURL(blob);
+                    const tempLink = document.createElement('a');
+                    tempLink.style.display = 'none';
+                    tempLink.href = blobURL;
+                    tempLink.setAttribute('download', 'Certificado de Seguro.zip');
+
+                    if (typeof tempLink.download === 'undefined') {
+                        tempLink.setAttribute('target', '_blank');
+                    }
+
+                    document.body.appendChild(tempLink);
+                    tempLink.click();
+                    document.body.removeChild(tempLink);
+                    window.URL.revokeObjectURL(blobURL);
+                }
             });
     }
 
     render() {
         return(
-            <div>
-                <div className="row-12">
-                    <div className="box">
-                        <div className="box-content">
-                            <div className="form-row">
-                                <FormFieldStatic titulo="Plano" valor={this.state.plano.DS_PLANO} />
-                            </div>
-                            <div className="form-row">
-                                <FormFieldStatic titulo="Situação no Plano" valor={this.state.plano.DS_CATEGORIA} col="6" />
-                                <FormFieldStatic titulo="Data de inscrição" valor={this.state.plano.DT_INSC_PLANO} col="6" />
-                            </div>
-                            {/* <div className="form-row">
-                                <FormFieldStatic titulo="Último Salário de Contribuição" valor='' col="6" />
-                                <FormFieldStatic titulo="Percentual de Contribuição Atual" valor='' col="6" />
-                            </div> */}
-                            <div className="form-row btn-toolbar">
-                                <div className="btn-group mr-2">
-                                    <button type="button" id="gerarExtrato" className="btn btn-primary btn-md" onClick={() => this.toggleModal() }>Gerar extrato</button>
-                                </div>
-
-                                {this.renderModal()}
-
-                                <div className="btn-group mr-2">
-                                    <button type="button" id="gerarCertificado" className="btn btn-primary btn-md" onClick={this.gerarCertificado}>Gerar Certificado de Participação</button>
-                                </div>
-                                
-                                {this.state.possuiSeguro && 
-                                    <div className="btn-group mr-2">
-                                        <button type="button" id="gerarCertificadoSeguro" className="btn btn-primary btn-md" onClick={this.gerarCertificadoSeguro}>Gerar Certificado de Seguro</button>
-                                    </div>
-                                }
-
-                            </div>
-                        </div>
+            <Page {...this.props}>
+                <Box>
+                    <div className="form-row">
+                        <FormFieldStatic titulo="Plano" valor={this.state.plano.DS_PLANO} />
                     </div>
-                </div>
-            </div>
-        )
+                    
+                    <div className="form-row">
+                        <FormFieldStatic titulo="Situação no Plano" valor={this.state.plano.DS_CATEGORIA} col="6" />
+                        <FormFieldStatic titulo="Data de inscrição" valor={this.state.plano.DT_INSC_PLANO} col="6" />
+                    </div>
+                    
+                    <div className="form-row btn-toolbar">
+                        <div className="btn-group mr-2">
+                            <button type="button" id="gerarExtrato" className="btn btn-primary btn-md" onClick={() => this.toggleModal() }>Gerar extrato</button>
+                        </div>
+
+                        {this.renderModal()}
+
+                        <div className="btn-group mr-2">
+                            <button type="button" id="gerarCertificado" className="btn btn-primary btn-md" onClick={this.gerarCertificado}>Gerar Certificado de Participação</button>
+                        </div>
+                        
+                        {this.state.possuiSeguro && 
+                            <div className="btn-group mr-2">
+                                <button type="button" id="gerarCertificadoSeguro" className="btn btn-primary btn-md" onClick={this.gerarCertificadoSeguro}>Gerar Certificado de Seguro</button>
+                            </div>
+                        }
+
+                    </div>
+                </Box>
+            </Page>
+        );
     }
 
 }

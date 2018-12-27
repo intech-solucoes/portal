@@ -2,6 +2,7 @@ import React from "react";
 import packageJson from '../../../package.json';
 
 import LoginForm from "../_shared/LoginForm";
+import { PageClean } from "../";
 
 import { UsuarioService, FuncionarioService } from "@intechprev/prevsystem-service";
 
@@ -38,19 +39,15 @@ export default class Login extends React.Component {
 
     render() {
         return (
-            <div>
-                <div className="logo">
-                    <img src="./imagens/preves/logo.png" alt="Preves" />
-                </div>
-
+            <PageClean>
                 <h4>Bem vindo ao portal da Preves</h4>
 
                 <h5>
                     <b>Área de Acesso Restrito</b><br />
-                    Para informações, entre em contato com a <a href="http://www.preves.es.gov.br/contato.html;">Preves</a><br />
+                    Para informações, entre em contato com a <a href="http://www.preves.es.gov.br/contato.html">Preves</a><br />
                     <br />
                 </h5>
-
+                
                 <LoginForm ref={this.loginForm} mostrarPrimeiroAcesso={true} onSubmit={this.onSubmit} usuarioPlaceholder={"CPF"} />
                 
                 <br/>
@@ -58,7 +55,7 @@ export default class Login extends React.Component {
                 <div className="text-center">
                     Versão {packageJson.version}
                 </div>
-            </div>
+            </PageClean>
         );
     }
 }

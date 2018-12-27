@@ -1,54 +1,96 @@
-const { print, filesystem, prompt, system, strings } = require('gluegun');
-const execa = require("execa");
+const { print, filesystem, prompt, system, colors } = require('gluegun');
 
 const { spin } = print;
 
 (async () => {
 
-    const { client } = await prompt.ask(
-        {
-            type: 'list',
-            name: 'client',
-            message: 'Selecione um cliente:',
-            choices: [
-                "regius",
-                "preves",
-                "saofrancisco"
-            ]
-        }
-    );
-    
-    const configs = await filesystem.listAsync("./scripts/configs");
+    // Busca os clientes
+    var clientFolders = await filesystem.listAsync("./scripts/configs");
+    var clients = [];
+    clientFolders.forEach((client) => {
+        clients.push(client);
+    });
+
+    const { client } = await prompt.ask({
+        type: 'list',
+        name: 'client',
+        message: 'Selecione um cliente:',
+        choices: [ ...clients ]
+    });
+
+    const configs = await filesystem.listAsync(`./scripts/configs/${client}`);
     var envList = [];
 
-    configs.forEach((config) => {
-        var splitConfigName = config.split(".");
-
-        if(splitConfigName[1] == client)
-            envList.push(splitConfigName[2]);
-    });
+    configs
+        .filter((config) => config.indexOf("config") > -1)
+        .forEach((config) => {
+            var splitConfigName = config.split(".");
+            envList.push(splitConfigName[1]);
+        });
     
-    const { env } = await prompt.ask(
-        {
-            type: 'list',
-            name: 'env',
-            message: 'Selecione um ambiente:',
-            choices: envList
-        }
-    );
+    const { env } = await prompt.ask({
+        type: 'list',
+        name: 'env',
+        message: 'Selecione um ambiente:',
+        choices: envList
+    });
 
-    const spinner = spin({ 
+    var configFile = await filesystem.readAsync(`./scripts/configs/${client}/config.${env}.json`);
+    configFile = JSON.parse(configFile);
+    console.log('\n');
+    console.log('O sistema irá apontar para a API publicada em '.green + `${configFile.apiUrl}`.blue);
+
+    if(!await prompt.confirm("Confirmar?"))
+        return;
+
+    console.log('\n');
+
+    var spinner = spin({ 
         color: "cyan",
-        text: "1/2 Building styles..."
+        text: "1/6 Realizando build de estilos..."
     });
 
     await filesystem.copy(`./src/styles/clientes/variables-${client}.scss`, "./src/styles/variables-cliente.scss", { overwrite: true });
+    await filesystem.copy(`./imagens/${client}`, './public/imagens', { overwrite: true });
 
     await system.run("sass -t compressed ./src/styles/main.scss ./public/css/main.css");
 
-    spinner.text = "2/2 Building config...";
+    spinner.text = "2/6 Copiando configurações...";
 
-    await filesystem.copy(`./scripts/configs/config.${client}.${env}.json`, "./src/config.json", { overwrite: true });
+    await filesystem.copy(`./scripts/configs/${client}/config.${env}.json`, "./src/config.json", { overwrite: true });
+
+    spinner.stop();
+
+    if(await prompt.confirm("Deseja publicar esta versão?"))
+    {
+        var appFile = await filesystem.readAsync(`./scripts/configs/${client}/app.json`);
+        appFile = JSON.parse(appFile);
+
+        const { destino } = await prompt.ask({
+            type: 'list',
+            name: 'destino',
+            message: 'Selecione um destino:',
+            choices: Object.keys(appFile.publish)
+        });
+
+        spinner = spin({ 
+            color: "cyan",
+            text: "3/6 Realizando build..."
+        });
+
+        await system.run("node scripts/build.js");
+
+        await filesystem.removeAsync(`${appFile.publish[destino]}\\static`);
+
+        spinner.text = "4/6 Limpando pasta css...";
+        await filesystem.removeAsync(`${appFile.publish[destino]}\\css`);
+
+        spinner.text = "5/6 Limpando pasta imagens...";
+        await filesystem.removeAsync(`${appFile.publish[destino]}\\imagens`);
+
+        spinner.text = "6/6 Copiando arquivos para" + `${appFile.publish[destino]}`.blue + "...";
+        await filesystem.copy(`./build`, appFile.publish[destino], { overwrite: true });
+    }
 
     spinner.stop();
 })();

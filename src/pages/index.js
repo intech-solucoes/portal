@@ -27,7 +27,7 @@ export const ControleFuncionalidades = getPage("ControleFuncionalidades");
 export const MensagemNova = getPage("MensagemNova");
 export const ListarParticipantes = getPage("ListarParticipantes");
 export const EsqueciSenha = getPage("EsqueciSenha");
-export const DetalhesPlano = getPage("DetalhesPlano");
+export const PlanoDetalhes = getPage("PlanoDetalhes");
 export const DadosPessoais = getPage("DadosPessoais");
 
 export {

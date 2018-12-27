@@ -1,5 +1,7 @@
 import React from 'react';
 import { handleFieldChange } from "@intechprev/react-lib";
+
+import { PageClean } from "../";
 import DataInvalida from '../_shared/ValidacaoDataNascimento';
 import  { UsuarioService } from "@intechprev/prevsystem-service";
 
@@ -135,11 +137,7 @@ export default class EsqueciSenha extends React.Component {
 
     render() {
         return (
-            <div className="box">
-                <div className="logo">
-                    <img src="./imagens/preves/logo.png" alt="Preves" />
-                </div>
-
+            <PageClean>
                 <h4>Bem vindo ao portal da Preves</h4>
 
                 <div className="box-content">
@@ -161,7 +159,7 @@ export default class EsqueciSenha extends React.Component {
                         <button id="enviarSenha" className="btn btn-primary btn-block" type="button" onClick={this.validarCampos} disabled={this.state.enviarSenhaDesabilitado}>Enviar Nova Senha</button>
                     </form>
                 </div>
-            </div>
+            </PageClean>
         )
     }
 
