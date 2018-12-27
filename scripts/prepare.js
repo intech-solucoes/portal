@@ -4,6 +4,17 @@ const { spin } = print;
 
 (async () => {
 
+    var dev = false;
+    var prod = false;
+
+    // Processa parâmetros passados a CLI
+    process.argv
+        .filter((arg) => arg.indexOf("--") > -1)
+        .forEach((arg) => {
+            if(arg === "--dev") dev = true;
+            if(arg === "--prod") prod = true;
+        });
+
     // Busca os clientes
     var clientFolders = await filesystem.listAsync("./scripts/configs");
     var clients = [];
@@ -61,7 +72,7 @@ const { spin } = print;
 
     spinner.stop();
 
-    if(await prompt.confirm("Deseja publicar esta versão?"))
+    if(prod || (!dev && await prompt.confirm("Deseja publicar esta versão?")))
     {
         var appFile = await filesystem.readAsync(`./scripts/configs/${client}/app.json`);
         appFile = JSON.parse(appFile);
