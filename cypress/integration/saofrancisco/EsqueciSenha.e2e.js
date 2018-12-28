@@ -1,8 +1,10 @@
 /// <reference types="Cypress" />
 
-describe('Login', () => {
+describe('EsqueciSenha', () => {
     beforeEach(() => {
-        cy.visit('/esqueciSenha');
+        cy.visit('/');
+        cy.get('#esqueciSenha')
+            .click();
     });
 
     it("Valida CPF e data de nascimento inválidos", () => { 
@@ -19,15 +21,11 @@ describe('Login', () => {
             .contains("Preencha todos os campos!");
     });
 
-    // it("Faz requisição de nova senha com sucesso", () => { 
-    //     enviarNovaSenha("", "");
-
-    //     cy.get('#enviarSenha')
-    //         .click();
-
-    //     // Fazer algo para checar o alert.
+    // it("Faz requisição de nova senha com sucesso", async () => { 
+    //     await enviarNovaSenha("15243362115", "01/03/1957");
 
     //     cy.location('pathname').should('eq', '/');
+    //     console.log("FOI");
     // });
 
 });
