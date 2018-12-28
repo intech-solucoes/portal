@@ -1,7 +1,7 @@
 import React from "react";
 
 const Alert = (props) => (
-    <div className={"alert alert-" + props.tipo}>
+    <div id="alert" className={"alert alert-" + props.tipo}>
         {props.mensagem}
     </div>
 );

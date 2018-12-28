@@ -50,7 +50,7 @@ export default class Page extends React.Component {
 
             for(var i = 0; i < Rotas.length; i++) {
                 if(rota === Rotas[i].caminho) {
-                    titulo = <h2>{Rotas[i].titulo}</h2>;
+                    titulo = <h2 id="titulo">{Rotas[i].titulo}</h2>;
                 }
             }
 
@@ -70,7 +70,7 @@ export default class Page extends React.Component {
 
                                 if(rota.mostrarMenu) {
                                     return (
-                                        <li key={index}>
+                                        <li key={index} id={rota.id}>
                                             <Link to={link}>
                                                 <i className={rota.icone}></i>
                                                 {rota.titulo}

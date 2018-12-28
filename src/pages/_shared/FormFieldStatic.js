@@ -11,7 +11,7 @@ var FormFieldStatic = (props) => (
 
     <div className={"form-group " + col(props.col)}>
         <label className="text-primary">{props.titulo}</label>
-        <label className="form-control-plaintext">{props.valor}</label>
+        <label id={props.id} className="form-control-plaintext">{props.valor}</label>
         <a href="">{props.link}</a>
     </div>
 );

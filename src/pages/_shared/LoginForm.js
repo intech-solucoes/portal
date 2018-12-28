@@ -56,7 +56,7 @@ export default class LoginForm extends React.Component {
                 {this.state.erro && <Alert tipo={"danger"} mensagem={this.state.erro} />}
 
                 <div className="form-group">
-                    <Link className="btn btn-link" id="forgotPassword" to="/esqueciSenha">Esqueci Minha Senha / Primeiro Acesso</Link>
+                    <Link className="btn btn-link" id="esqueciSenha" to="/esqueciSenha">Esqueci Minha Senha / Primeiro Acesso</Link>
                 </div>
             </form>
         );
