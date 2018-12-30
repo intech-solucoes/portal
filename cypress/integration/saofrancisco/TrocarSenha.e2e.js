@@ -1,19 +1,11 @@
 describe('Validações de troca de senha', () => { 
     beforeEach(() => {
-        cy.visit('/');
+        cy.login('http://localhost:5000/api/usuario/login', {
+            "Cpf": "15243362115", 
+            "Senha": "123"
+        });
 
-        cy.get("#cpf")
-            .clear()
-            .type('15243362115');
- 
-        cy.get("#senha")
-            .clear()
-            .type('123');
-
-        cy.get("#entrar")
-            .click();
-
-        cy.wait(3000);
+        cy.visit('/#/')
 
         cy.get('#trocarSenha')
             .click();
@@ -22,22 +14,30 @@ describe('Validações de troca de senha', () => {
             .should('have.text', 'Trocar senha');
     });
 
-    // it('Deve testar a validação de campos incorretos', () => {
-    //     trocarSenha('asd', '1', '1');
+    it('Deve testar a validação de campos incorretos', () => {
+        trocarSenha('asd', '1', '1');
 
-    //     cy.get('.text-danger')
-    //         .should('contain', 'Senha antiga incorreta!');
-    // });
+        cy.get('#mensagem-erro')
+            .should('have.text', 'Senha antiga incorreta!')
+    });
 
-    // it('Deve testar a validação de senhas não correspondentes', () => {
-    //     trocarSenha('asd', '123', 'asd');
+    it('Deve testar a validação de senhas não correspondentes', () => {
+        trocarSenha('asd', '123', 'asd');
 
-    //     cy.get('.text-danger')
-    //         .should('contain', 'As senhas não coincidem!');
-    // })
+        cy.get('#mensagem-erro')
+            .should('have.text', 'As senhas não coincidem!');
+    });
 
-    it('Deve redefinir a senha com sucesso', () => { 
+    it('Deve redefinir a senha com sucesso (e trocar para a senha antiga, para não quebrar os testes)', () => { 
+        trocarSenha('123', '1234', '1234');
 
+        cy.get('#mensagem-sucesso')
+            .should('have.text', 'Senha alterada com sucesso!');
+
+        trocarSenha('1234', '123', '123');
+
+        cy.get('#mensagem-sucesso')
+            .should('have.text', 'Senha alterada com sucesso!');
     });
 })
 

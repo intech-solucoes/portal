@@ -2,25 +2,17 @@
 
 describe('Dados Pessoais', () => {
     beforeEach(() => {
-        cy.visit('/');
+        cy.login('http://localhost:5000/api/usuario/login', {
+            "Cpf": "15243362115", 
+            "Senha": "123"
+        });
 
-        cy.get("#cpf")
-            .clear()
-            .type('15243362115');
- 
-        cy.get("#senha")
-            .clear()
-            .type('123');
-
-        cy.get("#entrar")
-            .click();
-
-        cy.wait(3000);
+        cy.visit('/#/');
 
         cy.get('#dadosPessoais')
             .click();
 
-        cy.wait(3000)
+        cy.wait(3000);
     });
 
     it('Deve navegar para a tela e checar se há dados', () => {

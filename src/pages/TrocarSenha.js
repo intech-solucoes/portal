@@ -72,7 +72,9 @@ export default class TrocarSenha extends React.Component {
             return (    
                 <div className="text-danger">
                     <i className="fas fa-exclamation-circle"></i>&nbsp;
-                    {mensagemErro}
+                    <label id='mensagem-erro'>
+                        {mensagemErro}
+                    </label>
                 </div>
             )
         }
@@ -109,7 +111,9 @@ export default class TrocarSenha extends React.Component {
                                     {this.state.mensagemSucesso &&
                                         <div className="text-primary">
                                             <i className="fas fa-check"></i>&nbsp;
-                                            Senha alterada com sucesso!
+                                            <label id="mensagem-sucesso">
+                                                Senha alterada com sucesso!
+                                            </label>
                                         </div>
                                     }
                                     <hr />
