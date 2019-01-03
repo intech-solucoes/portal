@@ -2,26 +2,26 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import { handleFieldChange } from "@intechprev/react-lib";
 
-import Alert from "./Alert";
+import { Alert } from "../../components";
 
 export default class LoginForm extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            erro: null,
-            mensagem: null,
+            erro: "",
+            mensagem: "",
             cpf: "",
             senha: "",
             carregando: false
         };
     }
 
-    mostrarErro = (erro) => this.setState({ erro: erro });
-    limparErro = () => this.setState({ erro: null });
+    mostrarErro = async (erro) => await this.setState({ erro: erro });
+    limparErro = async () => await this.setState({ erro: "" });
 
-    mostrarMensagem = (mensagem) => this.setState({ mensagem: mensagem });
-    limparMensagem = () => this.setState({ mensagem: null });
+    mostrarMensagem = async (mensagem) => await this.setState({ mensagem: mensagem });
+    limparMensagem = () => this.setState({ mensagem: "" });
 
     onSubmit = async (e) => {
         e.preventDefault();
@@ -52,8 +52,8 @@ export default class LoginForm extends React.Component {
                     </button>
                 </div>
 
-                {this.state.mensagem && <Alert tipo={"info"} mensagem={this.state.mensagem} />}
-                {this.state.erro && <Alert tipo={"danger"} mensagem={this.state.erro} />}
+                {this.state.mensagem !== "" && <Alert tipo={"info"} mensagem={this.state.mensagem} />}
+                {this.state.erro !== "" && <Alert tipo={"danger"} mensagem={this.state.erro} />}
 
                 <div className="form-group">
                     <Link className="btn btn-link" id="esqueciSenha" to="/esqueciSenha">Esqueci Minha Senha / Primeiro Acesso</Link>

@@ -11,7 +11,6 @@ export default class Login extends React.Component {
         super(props);
         
         this.loginForm = React.createRef();
-        this.onSubmit = this.onSubmit.bind(this);
     }
 
     onSubmit = async (cpf, senha) => {
@@ -30,16 +29,16 @@ export default class Login extends React.Component {
             document.location = ".";
         } catch(erro) {
             if(erro.response) {
-                this.loginForm.current.mostrarErro(erro.response.data);
+                await this.loginForm.current.mostrarErro(erro.response.data);
             } else {
-                this.loginForm.current.mostrarErro(erro);
+                await this.loginForm.current.mostrarErro(erro);
             }
         }
     }
 
     render() {
         return (
-            <PageClean>
+            <PageClean {...this.props}>
                 <h4>Bem vindo ao portal da Preves</h4>
 
                 <h5>

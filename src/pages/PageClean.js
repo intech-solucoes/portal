@@ -9,9 +9,6 @@ export default class PageClean extends Component {
                 </div>
 
 				{this.props.children}
-
-				<br/>
-				<br/>
 			</div>
 		)
 	}

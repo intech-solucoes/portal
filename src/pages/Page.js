@@ -1,24 +1,38 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { UsuarioService } from  "@intechprev/prevsystem-service";
+import { FuncionarioService } from  "@intechprev/prevsystem-service";
 
 import { Row, Col } from "../components";
 import Rotas from './saofrancisco/Rotas';
 
 export default class Page extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            nomeUsuario: "Teste"
+        }
+    }
+
     async componentWillMount() {
-        console.log(process.env.PUBLIC_URL);
         try {
             var token = await localStorage.getItem("token");
+
             if(token) {
-                await UsuarioService.VerificarLogin();
+                var { data: dados } = await FuncionarioService.Buscar();
+                var nomeUsuario = dados.funcionario.NOME_ENTID;
+                var admin = dados.usuario.IND_ADMINISTRADOR === "S";
+
+                await this.setState({
+                    nomeUsuario,
+                    admin
+                });
             } else {
                 localStorage.removeItem("token");
                 this.props.history.push("/login");
             }
-            
         } catch(err) {
             if(err.message.indexOf("401") > -1)
             {
@@ -98,6 +112,25 @@ export default class Page extends React.Component {
                             </button>
 
                             <Title />
+                        </Col>
+                        
+                        <Col tamanho={"sm-4"} className={"text-right user-icon"}>
+                            <Row>
+                                <Col className={"nome-usuario"}>
+                                    {this.state.nomeUsuario}
+                                </Col>
+
+                                {this.state.admin &&
+                                    <Col tamanho={"4"}>
+                                        <Link to={"/listarParticipantes"} className={"icon"}>
+                                            <i className={"fas fa-user-friends"}></i>
+                                        </Link>&nbsp;
+                                        <Link to={"/admin/login"} className={"icon"}>
+                                            <i className={"fas fa-lock"}></i>
+                                        </Link>
+                                    </Col>
+                                }
+                            </Row>
                         </Col>
                     </Row>
 

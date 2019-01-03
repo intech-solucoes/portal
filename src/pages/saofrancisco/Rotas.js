@@ -1,8 +1,9 @@
 import React from 'react';
 
 import {
-    Home, DadosPessoais, Planos, Mensagens, TrocarSenha, DetalhesPlano, MensagemNova,
-    Login, EsqueciSenha, ListarParticipantes
+    Home, DadosPessoais, Planos, Mensagens, TrocarSenha, MensagemNova,
+    Login, EsqueciSenha, 
+    LoginAdmin, ListarParticipantes
 } from "../";
 
 function GetRotas() {
@@ -78,8 +79,16 @@ function GetRotas() {
             caminho: "/listarParticipantes",
             componente: (routeProps) => <ListarParticipantes {...routeProps} />,
             mostrarMenu: false,
-            exact: false,
             id: "listarParticipantes"
+            exact: false
+        },
+        {
+            titulo: "Login",
+            caminho: "/admin/login",
+            componente: (routeProps) => <LoginAdmin {...routeProps} />,
+            mostrarMenu: false,
+            mostrarMenuAdmin: true,
+            exact: true
         }
     ];
 

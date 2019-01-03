@@ -62,6 +62,7 @@ const { spin } = print;
     });
 
     await filesystem.copy(`./src/styles/clientes/variables-${client}.scss`, "./src/styles/variables-cliente.scss", { overwrite: true });
+    await filesystem.removeAsync('./public/imagens');
     await filesystem.copy(`./imagens/${client}`, './public/imagens', { overwrite: true });
 
     await system.run("sass -t compressed ./src/styles/main.scss ./public/css/main.css");

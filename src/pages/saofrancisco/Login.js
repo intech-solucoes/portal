@@ -11,7 +11,6 @@ export default class Login extends React.Component {
         super(props);
         
         this.loginForm = React.createRef();
-        this.onSubmit = this.onSubmit.bind(this);
     }
 
     onSubmit = async (cpf, senha) => {
@@ -20,19 +19,18 @@ export default class Login extends React.Component {
             
             var loginResult = await UsuarioService.Login(cpf, senha);    
             await localStorage.setItem("token", loginResult.data.AccessToken);
-            await localStorage.setItem("admin", loginResult.data.Admin);
                     
-            var funcionarioResult = await FuncionarioService.Buscar();
+            var { data: dados } = await FuncionarioService.Buscar();
 
-            await localStorage.setItem("fundacao", funcionarioResult.data.funcionario.CD_FUNDACAO);
-            await localStorage.setItem("empresa", funcionarioResult.data.funcionario.CD_EMPRESA);
+            await localStorage.setItem("fundacao", dados.funcionario.CD_FUNDACAO);
+            await localStorage.setItem("empresa", dados.funcionario.CD_EMPRESA);
 
-            this.props.history.push("/");
+            document.location = ".";
         } catch(erro) {
             if(erro.response) {
-                this.loginForm.current.mostrarErro(erro.response.data);
+                await this.loginForm.current.mostrarErro(erro.response.data);
             } else {
-                this.loginForm.current.mostrarErro(erro);
+                alert("Ocorreu um erro ao processar sua requisição!");
             }
         }
     }
@@ -44,8 +42,7 @@ export default class Login extends React.Component {
 
                 <h5>
                     <b>Área de Acesso Restrito</b><br />
-                    <br/>
-                    <small>Para informações, entre em contato com a <a href="http://www.franweb.com.br/contact.html;">São Francisco</a></small><br />
+                    <small>Para informações, entre em contato com a <a href="http://www.franweb.com.br/contact.html">São Francisco</a></small><br />
                     <br />
                 </h5>
 

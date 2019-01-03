@@ -2,15 +2,37 @@
     min-height: 711px;
 
     .page-heading {
-        background: $color-page-header-bg; 
+        background: $color-page-header-bg;
         border-bottom: none !important;
         border-top: 0;
-        padding: 20px 10px 10px;
+        padding: 15px 10px 10px;
         box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 0.34), 0 0 6px 0 rgba(0, 0, 0, 0.14);
 
         h2 {
-            font-size: 24px;
+            font-size: 18px;
             color: $color-page-header-text;
+        }
+
+        .user-icon {
+            font-size: 10pt;
+            color: #FFF;
+
+            .nome-usuario {
+                margin-top: 3px;
+            }
+
+            .icon {
+                font-size: 12pt;
+                color: #FFF;
+                border: 1px solid #CCC;
+                border-radius: 5px;
+                padding: 7px;
+
+                &:hover {
+                    background-color: #FFF;
+                    color: $color-primary;
+                }
+            }
         }
     }
 }
@@ -44,33 +66,33 @@
 
 .wrapper-content {
     padding: 30px 20px 40px;
+}
 
-    .box {
-        background: #FFF;
-        clear: both;
-        margin-bottom: 25px;
-        padding: 0;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+.box {
+    background: #FFF;
+    clear: both;
+    margin-bottom: 25px;
+    padding: 0;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 
-        .box-title {
-            padding: 14px 15px 7px;
-            min-height: 48px;
-            font-size: 16px;
-            font-weight: bold;
+    .box-title {
+        padding: 14px 15px 7px;
+        min-height: 48px;
+        font-size: 16px;
+        font-weight: bold;
 
-            small {
-                margin-left: 10px;
-                font-size: 75%;
-                color: $color-secondary;
-            }
+        small {
+            margin-left: 10px;
+            font-size: 75%;
+            color: $color-secondary;
         }
+    }
 
-        .box-commands {
-            padding: 0px 15px;
-        }
+    .box-commands {
+        padding: 0px 15px;
+    }
 
-        .box-content {
-            padding: 15px;
-        }
+    .box-content {
+        padding: 15px;
     }
 }

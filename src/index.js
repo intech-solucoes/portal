@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter, Switch, Route } from "react-router-dom";
-import Rotas from './pages/preves/Rotas';
+
+const config = require("./config.json");
+
+const Rotas = require(`./pages/${config.cliente}/Rotas`).default;
 
 class MainRender extends Component {
 	render() {

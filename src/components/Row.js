@@ -1,14 +1,16 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
 
 export default class Row extends Component {
-    render() {
-        var className = "row";
+    static propTypes = {
+        formGroup: PropTypes.bool
+    }
 
-        if(this.props.className)
-            className += " " + this.props.className;
+    render() {
+        var formGroup = this.props.formGroup ? "form-group" : "";
 
         return (
-            <div className={className}>
+            <div className={this.props.className + " row " + formGroup}>
                 {this.props.children}
             </div>
         )
