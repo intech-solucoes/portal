@@ -79,8 +79,8 @@ function GetRotas() {
             caminho: "/listarParticipantes",
             componente: (routeProps) => <ListarParticipantes {...routeProps} />,
             mostrarMenu: false,
+            exact: false,
             id: "listarParticipantes"
-            exact: false
         },
         {
             titulo: "Login",
