@@ -1,10 +1,12 @@
-import React from "react";
+import React, { lazy } from "react";
 import { Link } from "react-router-dom";
 
 import { FuncionarioService } from  "@intechprev/prevsystem-service";
 
 import { Row, Col } from "../components";
-import Rotas from './saofrancisco/Rotas';
+
+const config = require("../config.json");
+var Rotas = [];
 
 export default class Page extends React.Component {
 
@@ -18,6 +20,9 @@ export default class Page extends React.Component {
 
     async componentWillMount() {
         try {
+            // Carrega as rotas aqui pq fora tava dando problema NÃO FAÇO A MINIMA IDEIA DO PQ
+            Rotas = (await import(`./${config.cliente}/Rotas`)).default;
+            
             var token = await localStorage.getItem("token");
 
             if(token) {
