@@ -277,12 +277,12 @@ export default class MensagemNova extends React.Component {
         })
     }
 
-    renderMensagemErro = (stateErro, mensagemErro) => {
+    renderMensagemErro = (stateErro, mensagemErro, id) => {
         if(stateErro) {
             return (
                 <div className="text-danger mt-2 mb-2">
                     <i className="fas fa-exclamation-circle"></i>&nbsp;
-                    {mensagemErro}
+                    <label id={id}>{mensagemErro}</label>
                 </div>
             );
         } else {
@@ -304,16 +304,16 @@ export default class MensagemNova extends React.Component {
                                 <div className="row">
                                     <div className="col-lg-6">
                                         <div className="form-group">
-                                            <label htmlFor="titulo"><b>Título</b></label>
-                                            <input name="titulo" id="titulo" className="form-control" maxLength="50" value={this.state.titulo} onChange={this.onChangeInput} />
-                                                {this.renderMensagemErro(this.state.erroTituloVazio, "Campo Obrigatório!")}
+                                            <label htmlFor="tituloMensagem"><b>Título</b></label>
+                                            <input name="titulo" id="tituloMensagem" className="form-control" maxLength="50" value={this.state.titulo} onChange={this.onChangeInput} />
+                                                {this.renderMensagemErro(this.state.erroTituloVazio, "Campo Obrigatório!", "tituloVazio")}
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="mensagem"><b>Corpo da Mensagem:</b></label>
                                             <textarea name="mensagem" id="mensagem" className="form-control" rows="10" value={this.state.mensagem} onChange={this.onChangeInput}/>
-                                            {this.renderMensagemErro(this.state.erroMensagemVazia, "Campo Obrigatório!")}
+                                            {this.renderMensagemErro(this.state.erroMensagemVazia, "Campo Obrigatório!", "mensagemVazia")}
                                         </div>
-            
+
                                         <div className="form-group">
                                             <label><b>Enviar via:</b></label>
                                             <div className="row">
@@ -328,7 +328,7 @@ export default class MensagemNova extends React.Component {
                                                 {this.state.erroEnviarVia && 
                                                     <div className="text-danger col-12 mt-2 mb-2"> 
                                                         <i className="fas fa-exclamation-circle"></i>&nbsp; 
-                                                        Selecione ao menos uma opção! 
+                                                        <label id="enviarViaVazio">Selecione ao menos uma opção!</label>
                                                     </div> 
                                                 }
                                             </div>
@@ -338,7 +338,7 @@ export default class MensagemNova extends React.Component {
                                             <label htmlFor="dataExpiracao"><b>Data de Expiração:</b></label>
                                             <InputMask mask="99/99/9999" name="dataExpiracao" id="dataExpiracao" value={this.state.dataExpiracao} className="form-control" onChange={this.onChangeInput} />
                                             <span className="text text-secondary">Deixe em branco para indicar que a mensagem não terá uma data de expiração</span>
-                                            {this.renderMensagemErro(this.state.erroDataInvalida, "Data inválida!")}
+                                            {this.renderMensagemErro(this.state.erroDataInvalida, "Data inválida!", "dataExpiracaoInvalida")}
                                         </div>
                                     </div>
             
@@ -355,7 +355,7 @@ export default class MensagemNova extends React.Component {
                                                     })
                                                 }
                                             </select>
-                                            {this.renderMensagemErro(this.state.erroFundacao, "Selecione a fundação!")}
+                                            {this.renderMensagemErro(this.state.erroFundacao, "Selecione a fundação!", "fundacaoVazia")}
                                         </div>
             
                                         <div className="form-group">
@@ -405,10 +405,10 @@ export default class MensagemNova extends React.Component {
                                             <InputMask mask="999999999" id="matricula" name="matricula" className="form-control" value={this.state.matricula} onChange={this.onChangeInput} />
                                             <span className="text text-secondary">Deixe em branco para enviar para todas as matrículas dentro dos parâmetros acima</span>
                                         </div>
-                                        {this.renderMensagemErro(this.state.erroMatriculaInvalida, "Matrícula Inválida!")}
+                                        {this.renderMensagemErro(this.state.erroMatriculaInvalida, "Matrícula Inválida!", "matriculaInvalida")}
                                     </div>
                                 </div>
-                                <button type="button" className="btn btn-primary" onClick={() => this.validar()}>Enviar</button>
+                                <button id="enviar" type="button" className="btn btn-primary" onClick={() => this.validar()}>Enviar</button>
                             </div>
                         </div>
 

@@ -31,7 +31,7 @@ export default class Modal extends React.Component {
         if(badgeVisivel === "SIM") {
             return (
                 <div className="btn-group mr-2">
-                    <label className={"badge badge-" + tipoBadge}>{nomeBadge}</label>
+                    <label id={`badge${nomeBadge}`} className={"badge badge-" + tipoBadge}>{nomeBadge}</label>
                 </div>
             )
         } else if(badgeVisivel === "NAO")
@@ -45,18 +45,18 @@ export default class Modal extends React.Component {
                     <div className="modal-dialog modal-lg" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title" id="basicPercentModalTitle">{this.state.mensagem.TXT_TITULO}</h5>
+                                <h5 className="modal-title" id="tituloModal">{this.state.mensagem.TXT_TITULO}</h5>
                                 <button type="button" className="close" onClick={() => this.toggleModal()}>
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div className="modal-body">
-                                <p><b>Data de Criação: {this.state.mensagem.DTA_MENSAGEM}</b></p>
-                                <p><b>Fundação: {this.state.mensagem.NOM_FUNDACAO}</b></p>
-                                <p><b>Empresa: {this.state.mensagem.NOM_EMPRESA ? this.state.mensagem.NOM_EMPRESA : "Todas"}</b></p>
-                                <p><b>Plano: {this.state.mensagem.DS_PLANO ? this.state.mensagem.DS_PLANO : "Todos"}</b></p>
-                                <p><b>Situação Plano: {this.state.mensagem.DS_SIT_PLANO ? this.state.mensagem.DS_SIT_PLANO : "Todas"}</b></p>
-                                <p><b>Matrícula: {this.state.mensagem.NUM_MATRICULA ? this.state.mensagem.NUM_MATRICULA : "Todas"}</b></p>
+                                <p><b>Data de Criação: <label id="dataCriacaoModal">{this.state.mensagem.DTA_MENSAGEM}</label></b></p>
+                                <p><b>Fundação: <label id="fundacaoModal">{this.state.mensagem.NOM_FUNDACAO}</label></b></p>
+                                <p><b>Empresa: <label id="empresaModal">{this.state.mensagem.NOM_EMPRESA ? this.state.mensagem.NOM_EMPRESA : "Todas"}</label></b></p>
+                                <p><b>Plano: <label id="planoModal">{this.state.mensagem.DS_PLANO ? this.state.mensagem.DS_PLANO : "Todos"}</label></b></p>
+                                <p><b>Situação Plano: <label id="situacaoPlanoModal">{this.state.mensagem.DS_SIT_PLANO ? this.state.mensagem.DS_SIT_PLANO : "Todas"}</label></b></p>
+                                <p><b>Matrícula: <label id="matriculaModal">{this.state.mensagem.NUM_MATRICULA ? this.state.mensagem.NUM_MATRICULA : "Todas"}</label></b></p>
                                 <div className="btn-toolbar">
                                     {/* Badge do Portal */}
                                     {this.renderBadge(this.state.mensagem.IND_PORTAL, "success", "Portal")}
@@ -66,10 +66,10 @@ export default class Modal extends React.Component {
                                 </div>
                                 <br/>
                                 
-                                <p>{this.state.mensagem.TXT_CORPO}</p>
+                                <p id="mensagemModal">{this.state.mensagem.TXT_CORPO}</p>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-default" onClick={() => this.toggleModal()}>Fechar</button>
+                                <button id="botaoFecharModal" type="button" className="btn btn-default" onClick={() => this.toggleModal()}>Fechar</button>
                             </div>
                         </div>
                     </div>

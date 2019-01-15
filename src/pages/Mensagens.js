@@ -58,7 +58,7 @@ export default class Mensagens extends React.Component {
                                         <div className="box-content">
                                             { localStorage.getItem("admin") === "S" &&
                                                 <div>
-                                                    <button type="button" className="btn btn-primary" onClick={this.handleClick}>
+                                                    <button id="novaMensagem" type="button" className="btn btn-primary" onClick={this.handleClick}>
                                                         <i className="fas fa-envelope"></i>&nbsp;
                                                         Nova Mensagem
                                                     </button>
@@ -71,7 +71,7 @@ export default class Mensagens extends React.Component {
                                                 <ListaMensagens mensagens={plano.mensagens} />}
 
                                             {plano.mensagens.length === 0 &&
-                                                <div className="alert alert-danger">Nenhuma mensagem enviada.</div>}
+                                                <div id="alertMensagem" className="alert alert-danger">Nenhuma mensagem enviada.</div>}
                                         </div>
                                     </div>
                                 </div>
