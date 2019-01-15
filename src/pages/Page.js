@@ -22,9 +22,9 @@ export default class Page extends React.Component {
 
             if(token) {
                 var { data: dados } = await FuncionarioService.Buscar();
-                var nomeUsuario = dados.funcionario.NOME_ENTID;
-                var admin = dados.usuario.IND_ADMINISTRADOR === "S";
-
+                var nomeUsuario = dados.Funcionario.NOME_ENTID;
+                var admin = dados.Usuario.IND_ADMINISTRADOR === "S";
+                
                 await this.setState({
                     nomeUsuario,
                     admin

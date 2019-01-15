@@ -22,9 +22,9 @@ export default class Login extends React.Component {
             await localStorage.setItem("admin", loginResult.data.Admin);
                     
             var funcionarioResult = await FuncionarioService.Buscar();
-
-            await localStorage.setItem("fundacao", funcionarioResult.data.funcionario.CD_FUNDACAO);
-            await localStorage.setItem("empresa", funcionarioResult.data.funcionario.CD_EMPRESA);
+            
+            await localStorage.setItem("fundacao", funcionarioResult.data.Funcionario.CD_FUNDACAO);
+            await localStorage.setItem("empresa", funcionarioResult.data.Funcionario.CD_EMPRESA);
 
             document.location = ".";
         } catch(erro) {
