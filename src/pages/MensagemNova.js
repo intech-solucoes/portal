@@ -66,7 +66,7 @@ export default class MensagemNova extends React.Component {
                 listas: listasResult.data, 
                 listaFundacao: listasResult.data.Fundacoes,
                 listaSituacaoPlano: listasResult.data.SitPlanos
-            })
+            });
         } catch(err) {
             console.error(err);
         }
@@ -101,7 +101,7 @@ export default class MensagemNova extends React.Component {
                 listaPlano: [],
                 empresa: "",
                 plano: ""
-            })
+            });
             console.error(err);
         }
     }

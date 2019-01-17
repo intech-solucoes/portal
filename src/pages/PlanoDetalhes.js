@@ -222,8 +222,9 @@ export default class DetalhesPlano extends React.Component {
     gerarExtrato = () => {
         var dataInicio = this.state.dataInicio.replace(new RegExp('/', 'g'), '.');
         var dataFim = this.state.dataFim.replace(new RegExp('/', 'g'), '.');
-        
-        PlanoService.RelatorioExtratoPorPlanoReferencia(this.state.cdPlano, dataInicio, dataFim)
+        var empresa = localStorage.getItem("empresa");
+
+        PlanoService.RelatorioExtratoPorPlanoEmpresaReferencia(this.state.cdPlano, empresa, dataInicio, dataFim)
             .then((result) => {
                 const url = window.URL.createObjectURL(new Blob([result.data]));
                 const link = document.createElement('a');
@@ -235,7 +236,8 @@ export default class DetalhesPlano extends React.Component {
     }
 
     gerarCertificado = () => {
-        PlanoService.RelatorioCertificado(this.state.cdPlano)
+        var empresa = localStorage.getItem("empresa");
+        PlanoService.RelatorioCertificado(this.state.cdPlano, empresa)
             .then((result) => {
                 const url = window.URL.createObjectURL(new Blob([result.data]));
                 const link = document.createElement('a');

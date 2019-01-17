@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "http://10.10.170.11/PortalPreves/",
   "dependencies": {
-    "@intechprev/prevsystem-service": "^0.0.15",
+    "@intechprev/prevsystem-service": "^0.0.17",
     "@intechprev/react-lib": "^0.0.5",
     "autoprefixer": "7.1.6",
     "axios": "^0.18.0",

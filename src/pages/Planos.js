@@ -43,7 +43,7 @@ export default class Planos extends React.Component {
                                             <td><h5><span className="badge badge-primary">{plano.DS_CATEGORIA}</span></h5></td>
                                             <td>{plano.DT_INSC_PLANO}</td>
                                             <td>
-                                                <Link to={`/planos/${plano.CD_PLANO}`}>Detalhes do plano</Link>
+                                                <Link onClick={() => localStorage.setItem("empresa", plano.CD_EMPRESA)} to={`/planos/${plano.CD_PLANO}`}>Detalhes do plano</Link>
                                             </td>
                                         </tr>
                                     );
