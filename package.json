@@ -2,7 +2,7 @@
   "name": "portalprev",
   "version": "1.7.0",
   "private": true,
-  "homepage": "http://10.10.170.11/PortalPreves/",
+  "homepage": ".",
   "dependencies": {
     "@intechprev/prevsystem-service": "^0.0.17",
     "@intechprev/react-lib": "^0.0.5",
@@ -64,6 +64,7 @@
     "watch:css": "sass -t compressed --watch ./src/styles/main.scss:./public/css/main.css",
     "clean": "node ./node_modules/rimraf/bin.js ./public/css && node ./node_modules/mkdirp/ ./public/css",
     "start": "node scripts/prepare.js --dev && node scripts/start.js",
+    "build": "node scripts/prepare.js",
     "build:prod": "node scripts/prepare.js --prod",
     "prep": "node scripts/prepare.js",
     "test": "cypress run",

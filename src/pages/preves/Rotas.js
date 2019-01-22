@@ -36,7 +36,7 @@ function GetRotas() {
             icone: "fas fa-list",
             caminho: "/planos/:plano",
             componente: (routeProps) => <PlanoDetalhes {...routeProps} />,
-            mostrarMenu: true, 
+            mostrarMenu: false, 
             exact: true
         },
         {

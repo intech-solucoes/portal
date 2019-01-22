@@ -1,12 +1,14 @@
-import React, { lazy } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 import { FuncionarioService } from  "@intechprev/prevsystem-service";
 
 import { Row, Col } from "../components";
 
+import Rotas from "./preves/Rotas";
+
 const config = require("../config.json");
-var Rotas = [];
+//var Rotas = [];
 
 export default class Page extends React.Component {
 
@@ -21,7 +23,7 @@ export default class Page extends React.Component {
     async componentWillMount() {
         try {
             // Carrega as rotas aqui pq fora tava dando problema NÃO FAÇO A MINIMA IDEIA DO PQ
-            Rotas = (await import(`./${config.cliente}/Rotas`)).default;
+            //Rotas = (await import(`./${config.cliente}/Rotas`)).default;
             
             var token = await localStorage.getItem("token");
 
@@ -36,13 +38,13 @@ export default class Page extends React.Component {
                 });
             } else {
                 localStorage.removeItem("token");
-                this.props.history.push("/login");
+                this.props.history.push("login");
             }
         } catch(err) {
             if(err.message.indexOf("401") > -1)
             {
                 localStorage.removeItem("token");
-                this.props.history.push("/login");
+                this.props.history.push("login");
             }
         }
         
@@ -58,7 +60,7 @@ export default class Page extends React.Component {
 
     logout() {
         localStorage.removeItem("token");
-        this.props.history.push("/login");
+        this.props.history.push("login");
     }
 
     render() {
