@@ -17,7 +17,7 @@ export default class Alert extends Component {
         return (
             <div>
                 {this.props.mensagem &&
-                    <div className={"alert alert-" + this.props.tipo}>
+                    <div id="alerta" className={"alert alert-" + this.props.tipo}>
                         {this.props.mensagem}
                     </div>
                 }

@@ -2,6 +2,8 @@ import React from "react";
 import axios from "axios";
 import { handleFieldChange } from "@intechprev/react-lib";
 import { PlanoService, DocumentoService } from "@intechprev/prevsystem-service";
+import { Link } from "react-router-dom";
+import { Page } from ".";
 
 const apiUrl = process.env.API_URL;
 
@@ -18,8 +20,9 @@ export default class Documentos extends React.Component {
             arquivoUpload: "",
             podeCriarDocumento: false,
             oidArquivoUpload: 0,
-            oidPasta: props.routeProps.match.params.pasta
+            oidPasta: props.match.params.pasta
         }
+        this.page = React.createRef();
     }
 
     componentDidMount() {
@@ -86,72 +89,74 @@ export default class Documentos extends React.Component {
 
     render() {
         return (
-            <div className="row">
-                {localStorage.getItem("admin") === "S" &&
-                    <div className="col-lg-4">
-                        <div className="box">
-                            <div className="box-title">
-                                UPLOAD DE DOCUMENTOS
+            <Page {...this.props} ref={this.page}>
+                <div className="row">
+                    {localStorage.getItem("admin") === "S" &&
+                        <div className="col-lg-4">
+                            <div className="box">
+                                <div className="box-title">
+                                    UPLOAD DE DOCUMENTOS
+                                </div>
+                                <div className="box-content">
+                                    <div className="form-group">
+                                        <label htmlFor="titulo-documento"><b>Título:</b></label>
+                                        <input name="nomeDocumento" className="form-control" value={this.state.nomeDocumento} onChange={(e) => handleFieldChange(this, e)}></input>
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="plano-documento"><b>Plano:</b></label>
+                                        <select id="plano-documento" className="form-control">
+                                            <option>TODOS</option>
+                                            {this.state.planos.map((plano, index) => {
+                                                return <option key={index} value={plano.CD_PLANO}>{plano.DS_PLANO}</option>
+                                            })}
+                                        </select>
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="selecionar-documento"><b>Arquivo:</b></label>
+                                        <form>
+                                            <input id="selecionar-documento" type="file" onChange={this.uploadFile} value={this.state.arquivoUpload}></input>
+                                            <hr/>
+                                            <button id="salvar-documento" className="btn btn-primary" disabled={!this.state.podeCriarDocumento} onClick={this.salvarDocumento}>Salvar</button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="box-content">
-                                <div className="form-group">
-                                    <label htmlFor="titulo-documento"><b>Título:</b></label>
-                                    <input name="nomeDocumento" className="form-control" value={this.state.nomeDocumento} onChange={(e) => handleFieldChange(this, e)}></input>
+
+                            <div className="box">
+                                <div className="box-title">
+                                    CRIAÇÃO DE PASTA
                                 </div>
-                                <div className="form-group">
-                                    <label htmlFor="plano-documento"><b>Plano:</b></label>
-                                    <select id="plano-documento" className="form-control">
-                                        <option>TODOS</option>
-                                        {this.state.planos.map((plano, index) => {
-                                            return <option key={index} value={plano.CD_PLANO}>{plano.DS_PLANO}</option>
-                                        })}
-                                    </select>
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="selecionar-documento"><b>Arquivo:</b></label>
-                                    <form>
-                                        <input id="selecionar-documento" type="file" onChange={this.uploadFile} value={this.state.arquivoUpload}></input>
-                                        <hr/>
-                                        <button id="salvar-documento" className="btn btn-primary" disabled={!this.state.podeCriarDocumento} onClick={this.salvarDocumento}>Salvar</button>
-                                    </form>
+
+                                <div className="box-content">
+                                    <div className="form-group">
+                                        <label htmlFor="nomePasta"><b>Nome:</b></label>
+                                        <input name="nomePasta" className="form-control" value={this.state.nomePasta} onChange={(e) => handleFieldChange(this, e)}></input>
+                                    </div>
+                                    <hr/>
+                                    <button id="salvar-pasta" className="btn btn-primary" onClick={this.salvarPasta}>Salvar</button>
                                 </div>
                             </div>
                         </div>
+                    }
 
+                    <div className="col-lg-8">
                         <div className="box">
-                            <div className="box-title">
-                                CRIAÇÃO DE PASTA
-                            </div>
-
                             <div className="box-content">
-                                <div className="form-group">
-                                    <label htmlFor="nomePasta"><b>Nome:</b></label>
-                                    <input name="nomePasta" className="form-control" value={this.state.nomePasta} onChange={(e) => handleFieldChange(this, e)}></input>
-                                </div>
-                                <hr/>
-                                <button id="salvar-pasta" className="btn btn-primary" onClick={this.salvarPasta}>Salvar</button>
+                                {(this.state.pastas.length > 0 || this.state.documentos.length > 0) &&
+                                    <div>
+                                        <Tabelas itens={this.state.pastas} campoTexto={"NOM_PASTA"} icone={"fa-folder-open text-warning"} tipo={"pasta"} />
+                                        <Tabelas itens={this.state.documentos} campoTexto={"TXT_TITULO"} icone={"fa-file text-info"} tipo={"documento"} />
+                                    </div>
+                                }
+
+                                {this.state.pastas.length === 0 && this.state.documentos.length === 0 &&
+                                    <div className="alert alert-danger">Nenhum item disponível.</div>
+                                }
                             </div>
-                        </div>
-                    </div>
-                }
-
-                <div className="col-lg-8">
-                    <div className="box">
-                        <div className="box-content">
-                            {(this.state.pastas.length > 0 || this.state.documentos.length > 0) &&
-                                <div>
-                                    <Tabelas itens={this.state.pastas} campoTexto={"NOM_PASTA"} icone={"fa-folder-open text-warning"} tipo={"pasta"} />
-                                    <Tabelas itens={this.state.documentos} campoTexto={"TXT_TITULO"} icone={"fa-file text-info"} tipo={"documento"} />
-                                </div>
-                            }
-
-                            {this.state.pastas.length === 0 && this.state.documentos.length === 0 &&
-                                <div className="alert alert-danger">Nenhum item disponível.</div>
-                            }
                         </div>
                     </div>
                 </div>
-            </div>
+            </Page>
         );
     }
 }
@@ -179,7 +184,7 @@ class Tabelas extends React.Component {
                                 <i className={"fa fa-2x " + this.props.icone}></i>
                             </div>
                             <div className="col mt-1">
-                                <a href={process.env.PUBLIC_URL + `/documentos/${item.OID_DOCUMENTO_PASTA}`}>{item[this.props.campoTexto]}</a>
+                                <Link className="btn btn-link" onClick={() => document.location.reload()} to={`/documentos/${item.OID_DOCUMENTO_PASTA}`}>{item[this.props.campoTexto]}</Link>
                             </div>
                             
                             {localStorage.getItem("admin") === "S" &&

@@ -1,5 +1,6 @@
 import React from 'react';
 import { InfoRendService } from "@intechprev/prevsystem-service";
+import { Page } from ".";
 
 export default class InformeRendimentos extends React.Component {
     constructor(props) {
@@ -12,6 +13,8 @@ export default class InformeRendimentos extends React.Component {
                 Grupos: []
             }
         }
+
+        this.page = React.createRef();
     }
 
     async componentDidMount() {
@@ -54,7 +57,7 @@ export default class InformeRendimentos extends React.Component {
     render() {
         if (this.state.datas.length > 0) {
             return (
-                <div>
+                <Page {...this.props} ref={this.page}>
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="box">
@@ -79,18 +82,25 @@ export default class InformeRendimentos extends React.Component {
                                     
                                     {
                                         this.state.informe.Grupos.map((informe, index) => {
+                                            console.log("informe:", informe);
                                             return (
                                                 <div key={index}>
                                                     <h5><b>{informe.DES_GRUPO}</b></h5>
 
                                                     <table className="table table-striped">
                                                         <tbody>
-                                                            <tr key={index}>
-                                                                <td>{informe.DES_INFO_REND}</td>
-                                                                <td className="text-right">
-                                                                    R$ {informe.VAL_LINHA}
-                                                                </td>
-                                                            </tr>
+                                                                {
+                                                                    informe.Itens.map((linha, index) => {
+                                                                        return (
+                                                                            <tr key={index}>
+                                                                                <td>{linha.DES_INFO_REND}</td>
+                                                                                <td className="text-right">
+                                                                                    <b>R$ {linha.VAL_LINHA}</b>
+                                                                                </td>
+                                                                            </tr>
+                                                                        );
+                                                                    })
+                                                                }
                                                         </tbody>
                                                     </table>
                                                     <br/>
@@ -104,11 +114,13 @@ export default class InformeRendimentos extends React.Component {
                             </div>
                         </div>
                     </div>
-                </div>
+                </Page>
             );
         } else {
             return (
-                <div id="sem-informe" className="alert alert-danger">Nenhum informe disponível.</div>
+                <Page {...this.props} ref={this.page}>
+                    <div id="sem-informe" className="alert alert-danger">Nenhum informe disponível.</div>
+                </Page>
             );
         }
 

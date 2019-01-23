@@ -14,14 +14,16 @@ function GetRotas() {
             caminho: "/",
             componente: (routeProps) => <Home {...routeProps} />,
             mostrarMenu: true,
-            exact: true
+            exact: true,
+            id: "home"
         },
         {
             titulo: "Dados Pessoais",
             icone: "fas fa-user",
             caminho: "/dados",
             componente: (routeProps) => <DadosPessoais {...routeProps} />,
-            mostrarMenu: true
+            mostrarMenu: true,
+            id: "dadosPessoais"
         },
         {
             titulo: "Planos",
@@ -29,7 +31,8 @@ function GetRotas() {
             caminho: "/planos",
             componente: (routeProps) => <Planos {...routeProps} />, 
             mostrarMenu: true, 
-            exact: true
+            exact: true,
+            id: "planos"
         },
         {
             titulo: "Detalhes do Plano",
@@ -45,7 +48,8 @@ function GetRotas() {
             caminho: "/contracheque",
             componente: (routeProps) => <Contracheque {...routeProps} />,
             mostrarMenu: true,
-            exact: true
+            exact: true,
+            id: "contracheque"
         },
         {
             titulo: "Inf. Rendimentos",
@@ -53,7 +57,8 @@ function GetRotas() {
             caminho: "/infoRend",
             componente: (routeProps) => <InformeRendimentos {...routeProps} />,
             mostrarMenu: true,
-            exact: true
+            exact: true,
+            id: "informeRendimentos"
         },
         {
             titulo: "Contracheque Detalhe",
@@ -67,21 +72,24 @@ function GetRotas() {
             caminho: "/documentos/:pasta?",
             caminhoLink: "/documentos",
             componente: (routeProps) => <Documentos {...routeProps} />,
-            mostrarMenu: true
+            mostrarMenu: true,
+            id: "documentos"
         },
         {
             titulo: "Mensagens",
             icone: "fas fa-envelope",
             caminho: "/mensagens",
             componente: (routeProps) => <Mensagens {...routeProps} />,
-            mostrarMenu: true
+            mostrarMenu: true,
+            id: "mensagens"
         },
         {
             titulo: "Trocar senha",
             icone: "fas fa-lock",
             caminho: "/trocarSenha",
             componente: (routeProps) => <TrocarSenha {...routeProps} />,
-            mostrarMenu: true
+            mostrarMenu: true,
+            id: "trocarSenha"
         },
         // {
         //     titulo: "Painel de Controle",
@@ -95,28 +103,32 @@ function GetRotas() {
             icone: "",
             caminho: "/mensagem/nova",
             componente: (routeProps) => <MensagemNova {...routeProps} />,
-            exact: true
+            exact: true,
+            id: "novaMensagem"
         },
         {
             titulo: "Login",
             caminho: "/login",
             componente: (routeProps) => <Login {...routeProps} />,
             mostrarMenu: false,
-            exact: false
+            exact: false,
+            id: "login"
         },
         {
             titulo: "Esqueci Minha Senha",
             caminho: "/esqueciSenha",
             componente: (routeProps) => <EsqueciSenha {...routeProps} />,
             mostrarMenu: false,
-            exact: false
+            exact: false,
+            id: "esqueciSenha"
         },
         {
             titulo: "Listar Participantes",
             caminho: "/listarParticipantes",
             componente: (routeProps) => <ListarParticipantes {...routeProps} />,
             mostrarMenu: false,
-            exact: false
+            exact: false,
+            id: "listarParticipantes"
         }
     ];
 

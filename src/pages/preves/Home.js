@@ -1,5 +1,5 @@
 import React from "react";
-import { FuncionarioService } from "@intechprev/prevsystem-service";
+import { DadosPessoaisService } from "@intechprev/prevsystem-service";
 import Page from "../Page";
 import { Row, Col } from "../../components";
 import Box from "../../components/Box";
@@ -10,15 +10,15 @@ export default class Home extends React.Component {
 
         this.state = {
             dados: {
-                Funcionario: {},
+                dadosPessoais: {}
             }
         }
         
     }
 
     componentWillMount = async () => {
-        var { data: dados } = await FuncionarioService.Buscar();
-        await this.setState({ dados });
+        var result = await DadosPessoaisService.Buscar();
+        await this.setState({ dados: result.data });
     }
 
     render() {
@@ -40,7 +40,7 @@ export default class Home extends React.Component {
                 <Row>
                     <Col tamanho={"lg-12"}>
                         <Box>
-                            <h2>Olá, <span className="text-primary">{this.state.dados.Funcionario.NOME_ENTID},</span></h2>
+                            <h2>Olá, <span className="text-primary">{this.state.dados.dadosPessoais.NOME_ENTID},</span></h2>
                             <h5>
                                 <p className="text-justify">Bem vindo ao Portal do Participante. Aqui, você encontra as principais informações sobre seu Plano de Benefício.
                                 Nosso portal está em desenvolvimento, mas diversas funcionalidades já estão disponíveis para acesso, dentre elas: </p>
