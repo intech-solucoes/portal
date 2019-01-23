@@ -22,8 +22,8 @@ export default class Login extends React.Component {
                     
             var { data: dados } = await FuncionarioService.Buscar();
 
-            await localStorage.setItem("fundacao", dados.funcionario.CD_FUNDACAO);
-            await localStorage.setItem("empresa", dados.funcionario.CD_EMPRESA);
+            await localStorage.setItem("fundacao", dados.Funcionario.CD_FUNDACAO);
+            await localStorage.setItem("empresa", dados.Funcionario.CD_EMPRESA);
 
             document.location = ".";
         } catch(erro) {

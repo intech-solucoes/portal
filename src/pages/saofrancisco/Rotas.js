@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-    Home, DadosPessoais, Planos, Mensagens, TrocarSenha, MensagemNova,
+    Home, DadosPessoais, Planos, PlanoDetalhes, Mensagens, TrocarSenha, MensagemNova,
     Login, EsqueciSenha, 
     LoginAdmin, ListarParticipantes
 } from "../";
@@ -33,6 +33,14 @@ function GetRotas() {
             mostrarMenu: true, 
             exact: true,
             id: "planos"
+        },
+        {
+            titulo: "Detalhes do Plano",
+            icone: "fas fa-list",
+            caminho: "/planos/:plano",
+            componente: (routeProps) => <PlanoDetalhes {...routeProps} />,
+            mostrarMenu: true, 
+            exact: true
         },
         {
             titulo: "Mensagens",
