@@ -82,7 +82,6 @@ export default class InformeRendimentos extends React.Component {
                                     
                                     {
                                         this.state.informe.Grupos.map((informe, index) => {
-                                            console.log("informe:", informe);
                                             return (
                                                 <div key={index}>
                                                     <h5><b>{informe.DES_GRUPO}</b></h5>

@@ -38,6 +38,7 @@ function GetRotas() {
             titulo: "Detalhes do Plano",
             icone: "fas fa-list",
             caminho: "/planos/:plano",
+            caminhoLink: "/planos/",
             componente: (routeProps) => <PlanoDetalhes {...routeProps} />,
             mostrarMenu: false, 
             exact: true
@@ -70,7 +71,7 @@ function GetRotas() {
             titulo: "Documentos",
             icone: "fas fa-file",
             caminho: "/documentos/:pasta?",
-            caminhoLink: "/documentos",
+            caminhoLink: "/documentos/",
             componente: (routeProps) => <Documentos {...routeProps} />,
             mostrarMenu: true,
             id: "documentos"

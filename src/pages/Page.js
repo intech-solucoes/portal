@@ -70,7 +70,7 @@ export default class Page extends React.Component {
             var titulo = "";
 
             for(var i = 0; i < Rotas.length; i++) {
-                if(rota === Rotas[i].caminho || rota === Rotas[i].caminhoLink) {
+                if(rota === Rotas[i].caminho || rota === Rotas[i].caminhoLink || rota.includes(Rotas[i].caminhoLink)) {
                     titulo = <h2 id="titulo">{Rotas[i].titulo}</h2>;
                 }
             }

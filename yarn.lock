@@ -18,15 +18,21 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@intechprev/prevsystem-service@^0.0.17":
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/@intechprev/prevsystem-service/-/prevsystem-service-0.0.17.tgz#99181877d946754e9f3641f97828ec9d072189e8"
+"@intechprev/prevsystem-service@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@intechprev/prevsystem-service/-/prevsystem-service-1.0.7.tgz#a2d0c4a6fde75692cc580a77bd2a1b775f033004"
   dependencies:
-    "@intechprev/react-lib" "^0.0.5"
+    "@intechprev/service" "^1.0.2"
 
 "@intechprev/react-lib@^0.0.5":
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/@intechprev/react-lib/-/react-lib-0.0.5.tgz#cdcf6a9eb1f4de4121503bdc982723c099ae55d5"
+  dependencies:
+    axios "^0.18.0"
+
+"@intechprev/service@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@intechprev/service/-/service-1.0.2.tgz#fb484c92442df49e863418a2886401c3d40c4225"
   dependencies:
     axios "^0.18.0"
 

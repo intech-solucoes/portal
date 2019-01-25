@@ -4,9 +4,9 @@ import { handleFieldChange } from "@intechprev/react-lib";
 import { PlanoService, DocumentoService } from "@intechprev/prevsystem-service";
 import { Link } from "react-router-dom";
 import { Page } from ".";
+import config from '../config.json';
 
-const apiUrl = process.env.API_URL;
-
+const apiUrl = config.apiUrl
 export default class Documentos extends React.Component {
     constructor(props) {
         super(props);
@@ -20,9 +20,14 @@ export default class Documentos extends React.Component {
             arquivoUpload: "",
             podeCriarDocumento: false,
             oidArquivoUpload: 0,
-            oidPasta: props.match.params.pasta
+            oidPasta: props.match.params.pasta,
+            pastaAtual: "",
+            nomeDocumentoVazio: false,
+            nomePastaVazio: false
+
         }
         this.page = React.createRef();
+        this.setState({ pastaAtual: this.state.oidPasta });
     }
 
     componentDidMount() {
@@ -30,10 +35,22 @@ export default class Documentos extends React.Component {
             .then((result) => {
                 this.setState({ planos: result.data });
             });
-
         this.buscarLista();
+
+        this.setState({ pastaAtual: this.state.oidPasta });
     }
 
+    componentDidUpdate() {
+        var pastaAntiga = this.state.oidPasta;
+        var oidPasta = this.props.location.pathname.split('/');
+        oidPasta = oidPasta[oidPasta.length - 1];
+        // oidPasta = oidPasta === "" ? "raiz" : oidPasta;
+
+        if(pastaAntiga !== oidPasta && pastaAntiga !== undefined)
+            window.location.reload();
+
+    }
+    
     buscarLista = async () => {
         var resultDocumentos = await DocumentoService.BuscarPorPasta(this.state.oidPasta);
 
@@ -46,26 +63,38 @@ export default class Documentos extends React.Component {
     salvarPasta = async (e) => {
         e.preventDefault();
 
-        await DocumentoService.CriarPasta(this.state.nomePasta, this.state.oidPasta);
-        await this.setState({
-            nomePasta: ""
-        });
+        await this.setState({ nomePastaVazio: false });
+        if(this.state.nomePasta === "")
+            await this.setState({ nomePastaVazio: true });
 
-        await this.buscarLista();
+        if(!this.state.nomePastaVazio) {
+            await DocumentoService.CriarPasta(this.state.nomePasta, this.state.oidPasta);
+            await this.setState({
+                nomePasta: ""
+            });
+    
+            await this.buscarLista();
+        }
     }
 
     salvarDocumento = async (e) => {
         e.preventDefault();
 
-        await DocumentoService.Criar(this.state.oidArquivoUpload, this.state.nomeDocumento, "SIM", 1, this.state.oidPasta);
-        
-        await this.setState({
-            nomeDocumento: "",
-            arquivoUpload: "",
-            oidArquivoUpload: 0
-        });
+        await this.setState({ nomeDocumentoVazio: false });
+        if(this.state.nomeDocumento === "")
+            await this.setState({ nomeDocumentoVazio: true });
 
-        await this.buscarLista();
+        if(!this.state.nomeDocumentoVazio) {
+            await DocumentoService.Criar(this.state.oidArquivoUpload, this.state.nomeDocumento, "SIM", 1, this.state.oidPasta);
+            
+            await this.setState ({
+                nomeDocumento: "",
+                arquivoUpload: "",
+                oidArquivoUpload: 0
+            });
+    
+            await this.buscarLista();
+        }
     }
 
     uploadFile = (e) => {
@@ -85,6 +114,20 @@ export default class Documentos extends React.Component {
                 oidArquivoUpload: result.data
             });
         })
+
+    }
+
+    renderizaErro = (stateErro, mensagemErro) => {
+        if(stateErro) {
+            return (    
+                <div className="text-danger">
+                    <i className="fas fa-exclamation-circle"></i>&nbsp;
+                    <label id='mensagem-erro'>
+                        {mensagemErro}
+                    </label>
+                </div>
+            )
+        }
     }
 
     render() {
@@ -118,6 +161,7 @@ export default class Documentos extends React.Component {
                                             <hr/>
                                             <button id="salvar-documento" className="btn btn-primary" disabled={!this.state.podeCriarDocumento} onClick={this.salvarDocumento}>Salvar</button>
                                         </form>
+                                        {this.renderizaErro(this.state.nomeDocumentoVazio, "Título do documento obrigatório!")}
                                     </div>
                                 </div>
                             </div>
@@ -134,6 +178,7 @@ export default class Documentos extends React.Component {
                                     </div>
                                     <hr/>
                                     <button id="salvar-pasta" className="btn btn-primary" onClick={this.salvarPasta}>Salvar</button>
+                                    {this.renderizaErro(this.state.nomePastaVazio, "Nome da pasta obrigatório!")}
                                 </div>
                             </div>
                         </div>
@@ -173,6 +218,35 @@ class Tabelas extends React.Component {
         document.location.reload();
     }
 
+    downloadDocumento = async (oidDocumento) => {
+        try {
+            var { data: documento } = await DocumentoService.BuscarPorOidDocumento(oidDocumento);
+            
+            DocumentoService.Download(oidDocumento)
+                .then(result => {
+                    const blobURL = window.URL.createObjectURL(new Blob([result.data]));
+                    const tempLink = document.createElement('a');
+                    tempLink.style.display = 'none';
+                    tempLink.href = blobURL;
+                    tempLink.setAttribute('download', documento.NOM_ARQUIVO_LOCAL);
+
+                    if (typeof tempLink.download === 'undefined') {
+                        tempLink.setAttribute('target', '_blank');
+                    }
+
+                    document.body.appendChild(tempLink);
+                    tempLink.click();
+                    document.body.removeChild(tempLink);
+                    window.URL.revokeObjectURL(blobURL);
+                });
+        } catch (err) {
+            if(err.response)
+                console.error(err.response.data);
+            else
+                console.error(err);
+        }
+    }
+
     render() {
         return (
             <div>
@@ -183,8 +257,16 @@ class Tabelas extends React.Component {
                             <div className="col-1">
                                 <i className={"fa fa-2x " + this.props.icone}></i>
                             </div>
+
                             <div className="col mt-1">
-                                <Link className="btn btn-link" onClick={() => document.location.reload()} to={`/documentos/${item.OID_DOCUMENTO_PASTA}`}>{item[this.props.campoTexto]}</Link>
+                                {this.props.tipo === "pasta" &&
+                                    <Link className="btn btn-link" onClick={async () => window.location.reload()} 
+                                        to={`/documentos/${item.OID_DOCUMENTO_PASTA}`}> {item[this.props.campoTexto]} </Link>
+                                }
+
+                                {this.props.tipo !== "pasta" &&
+                                    <button className={"btn btn-link"} onClick={() => this.downloadDocumento(item.OID_DOCUMENTO)}> {item[this.props.campoTexto]} </button>
+                                }
                             </div>
                             
                             {localStorage.getItem("admin") === "S" &&
