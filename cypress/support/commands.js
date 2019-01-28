@@ -24,6 +24,11 @@ Cypress.Commands.add("login", (rota, loginObject) => {
             expect(resp.status).to.eq(200);
             localStorage.setItem('token', resp.body.AccessToken);
     }).as('login');
+
+    // cy.request('GET', 'http://localhost:5000/api/funcionario')  // Colocar auth nisso aqui.22
+    //     .then((resp) => {
+    //         console.log(resp);
+    //     });
 })
 //
 //

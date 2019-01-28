@@ -25,7 +25,7 @@ export default class Planos extends React.Component {
         return (
             <Page {...this.props}>
                 <Box>
-                    <table className="table">
+                    <table className="table" id="tabelaPlanos">
                         <thead>
                             <tr>
                                 <th>Plano</th>

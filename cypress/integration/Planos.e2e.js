@@ -1,6 +1,6 @@
 describe('Planos' , () => {
     beforeEach(() => {
-        cy.login('http://localhost:5000/api/usuario/login', {
+        cy.login('http://localhost/SaoFranciscoAPI/api/usuario/login', {
             "Cpf": "15243362115", 
             "Senha": "123"
         });
@@ -9,10 +9,15 @@ describe('Planos' , () => {
 
         cy.get('#planos')
             .click();
+
+        cy.wait(3000);
     })
 
     it('Deve checar se há pelo menos um plano', () => {
-        cy.get('#').find('tr').should('have.length', 4) // wip
+        cy.get('#tabelaPlanos')
+            .find('tbody')
+            .find('tr')
+            .should('have.length', 1);
         
     })
 })
