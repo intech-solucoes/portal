@@ -1,4 +1,4 @@
-const { print, filesystem, prompt } = require('gluegun');
+const { filesystem, prompt } = require('gluegun');
 
 (async () => {
     
@@ -20,6 +20,6 @@ const { print, filesystem, prompt } = require('gluegun');
         return;
 
     await filesystem.removeAsync(`./tests/${client}`);
-    await filesystem.copy(`./cypress/integration`, `./tests/${client}`, { overwrite: true });
+    await filesystem.copy(`./cypress/integration`, `./test/${client}`, { overwrite: true });
 
 })();

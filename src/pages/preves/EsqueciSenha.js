@@ -145,10 +145,10 @@ export default class EsqueciSenha extends React.Component {
                     <p align="middle">Preencha as informações para que possamos gerar uma senha que será enviada para seu email cadastrado.</p>
                     <form>
                         <div className="form-group">
-                            <input name="cpf" placeholder="CPF (somente números)" maxLength="11" className="form-control" value={this.state.cpf} onChange={(e) => handleFieldChange(this, e)} />
+                            <input id="cpf" name="cpf" placeholder="CPF (somente números)" maxLength="11" className="form-control" value={this.state.cpf} onChange={(e) => handleFieldChange(this, e)} />
                         </div>
                         <div className="form-group">
-                            <InputMask mask="99/99/9999" name="dataNascimento" placeholder="Data de Nascimento" className="form-control" value={this.state.dataNascimento} onChange={(e) => handleFieldChange(this, e)} />
+                            <InputMask id="dataNascimento" mask="99/99/9999" name="dataNascimento" placeholder="Data de Nascimento" className="form-control" value={this.state.dataNascimento} onChange={(e) => handleFieldChange(this, e)} />
                         </div>
                         {this.state.mensagemErro !== "" &&
                             <div className="text-danger">
