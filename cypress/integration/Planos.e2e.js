@@ -1,6 +1,6 @@
 describe('Planos' , () => {
     beforeEach(() => {
-        cy.login('http://localhost/SaoFranciscoAPI/api/usuario/login', {
+        cy.login('http://localhost/PrevesApi/api/usuario/login', {
             "Cpf": "15243362115", 
             "Senha": "123"
         });

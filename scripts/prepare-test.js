@@ -1,6 +1,4 @@
-const { print, filesystem, prompt, system, colors } = require('gluegun');
-
-const { spin } = print;
+const { filesystem, prompt } = require('gluegun');
 
 const apiUrl = require('../src/config.json').apiUrl;
 
@@ -21,14 +19,15 @@ const apiUrl = require('../src/config.json').apiUrl;
     });
 
     const tests = await filesystem.listAsync(`./test/${client}`);
+
     await filesystem.removeAsync('./cypress/integration');
     await filesystem.copy(`./test/${client}`, './cypress/integration', { overwrite: true });
 
-    var configTest = {
-        ApiUrl: apiUrl
-    }
-    console.log("1", configTest);
-    configTest = JSON.stringify(configTest);
-    console.log("2", configTest);
-    filesystem.
+    // var configTest = {
+    //     ApiUrl: apiUrl
+    // }
+
+    // configTest = JSON.stringify(configTest);
+    // console.log(configTest);
+    // filesystem.write('/src/config-test.json', configTest);  // de alguma forma, substituir o conteudo no json pelo novo OU criar um arquivo e colar lá com as novas configs com o filesyste.copy
 })();

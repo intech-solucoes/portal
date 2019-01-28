@@ -69,7 +69,8 @@
     "prep": "node scripts/prepare.js",
     "test": "cypress run",
     "test:watch": "node scripts/prepare-test.js && cypress open",
-    "prep-test": "node scripts/prepare-test.js"
+    "prep-test": "node scripts/prepare-test.js",
+    "save-test": "node scripts/save-test.js"
   },
   "devDependencies": {
     "cpx": "^1.5.0",
