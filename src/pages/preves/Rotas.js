@@ -65,7 +65,10 @@ function GetRotas() {
             titulo: "Contracheque Detalhe",
             icone: "fas fa-closed-captioning",
             caminho: "/contracheque/:plano/:data",
-            componente: (routeProps) => <ContrachequeDetalhe {...routeProps} />
+            caminhoLink: "/contracheque/",
+            componente: (routeProps) => <ContrachequeDetalhe {...routeProps} />,
+            mostrarMenu: false, 
+            exact: true
         },
         {
             titulo: "Documentos",

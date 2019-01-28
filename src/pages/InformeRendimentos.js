@@ -94,7 +94,7 @@ export default class InformeRendimentos extends React.Component {
                                                                             <tr key={index}>
                                                                                 <td>{linha.DES_INFO_REND}</td>
                                                                                 <td className="text-right">
-                                                                                    <b>R$ {linha.VAL_LINHA}</b>
+                                                                                    <b>R$ {linha.VAL_LINHA.toLocaleString('pt-br', {minimumFractionDigits: 2})}</b>
                                                                                 </td>
                                                                             </tr>
                                                                         );
