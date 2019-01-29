@@ -23,11 +23,23 @@ const apiUrl = require('../src/config.json').apiUrl;
     await filesystem.removeAsync('./cypress/integration');
     await filesystem.copy(`./test/${client}`, './cypress/integration', { overwrite: true });
 
-    // var configTest = {
-    //     ApiUrl: apiUrl
-    // }
+    const { cpf } = await prompt.ask({
+        name: 'cpf',
+        message: 'Informe o CPF que será utilizado para os testes:',
+    });
 
-    // configTest = JSON.stringify(configTest);
-    // console.log(configTest);
-    // filesystem.write('/src/config-test.json', configTest);  // de alguma forma, substituir o conteudo no json pelo novo OU criar um arquivo e colar lá com as novas configs com o filesyste.copy
+    const { password } = await prompt.ask({
+        name: 'password',
+        message: 'Informe a senha:',
+    });
+
+    var configTest = {
+        Cpf: cpf,
+        Senha: password
+    }
+
+    configTest = JSON.stringify(configTest, null, 4);
+    await filesystem.removeAsync('./cypress/support/config-test.json');
+
+    await filesystem.write('./cypress/support/config-test.json', configTest);
 })();

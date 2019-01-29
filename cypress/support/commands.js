@@ -11,19 +11,20 @@
 //
 // -- This is a parent command --
 
+const configs = require('./config-test.json');
+
 /**
  * @description Faz login programaticamente pela rota e objeto de login recebido e define o token no navegador (não utilizar para testar tela de login).
  * @param {string} rota - Rota que será chamada para o login.
- * @param {object} loginObject - Objeto com os atributos necessários e específicos para login (Ex.: Cpf e senha, e-mail e senha).
  */
-Cypress.Commands.add("login", (rota, loginObject) => { 
+Cypress.Commands.add("login", (rota) => { 
     cy.visit('/');
 
-    cy.request('POST', rota, loginObject)
+    cy.request('POST', rota, configs)
         .then((resp) => {
             expect(resp.status).to.eq(200);
             localStorage.setItem('token', resp.body.AccessToken);
-    }).as('login');
+    });
 
     // cy.request('GET', 'http://localhost:5000/api/funcionario')  // Colocar auth nisso aqui.22
     //     .then((resp) => {

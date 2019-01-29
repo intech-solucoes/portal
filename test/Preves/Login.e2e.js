@@ -1,5 +1,9 @@
 /// <reference types="Cypress" />
 
+const configs = require('../support/config-test.json');
+const cpf = configs.Cpf;
+const senha = configs.Senha;
+
 describe('Login', () => {
     beforeEach(() => {
         cy.visit('/');
@@ -15,17 +19,22 @@ describe('Login', () => {
     it("Valida credenciais inválidas", () => {
         doLogin("asd", "123");
 
-        cy.get("#alert")
-            .should("have.text", "Matrícula ou senha incorretos!");
+        cy.get("#alerta")
+            .should("have.text", "O sinônimo \'SEG_USUARIO\' refere-se a um objeto inválido.");
+
+        doLogin(cpf, "asdf");
+
+        cy.get("#alerta")
+            .should("have.text", "CPF ou senha incorretos!")
     });
 
     it("Faz login com sucesso", () => {
-        doLogin("15243362115", "123");
+        doLogin(cpf, senha);
 
-        // cy.wait(5000);  // Trocar para um alias.
+        cy.wait(3000);  // Trocar para um alias.
 
-        // cy.get("#titulos")
-        //     .should("have.text", "Home");    // Comentando pois o título da Home ainda não está definido;
+        cy.get("#titulo")
+            .should("have.text", "Home");    // Ficar de olho nessa linha pois o título da Home pode mudar.
     });
 });
 
