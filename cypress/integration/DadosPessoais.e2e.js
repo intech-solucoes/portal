@@ -4,11 +4,7 @@ const ApiUrl = require('../../src/config.json').apiUrl;
 
 describe('Dados Pessoais', () => {
     beforeEach(() => {
-        console.log(ApiUrl);
-        cy.login(`${ApiUrl}/usuario/login`, {
-            "Cpf": "12178513727", 
-            "Senha": "123"
-        });
+        cy.login(`${ApiUrl}/usuario/login`);
 
         cy.visit('/#/');
 

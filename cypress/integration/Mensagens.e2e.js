@@ -1,11 +1,10 @@
 /// <reference types="Cypress" />
 
+const ApiUrl = require('../../src/config.json').apiUrl;
+
 describe('Mensagens', () => {
     beforeEach(() => {
-        cy.login('http://localhost:5000/api/usuario/login', {
-            "Cpf": "15243362115", 
-            "Senha": "123"
-        });
+        cy.login(`${ApiUrl}/usuario/login`);
 
         localStorage.setItem("admin", "S");
         localStorage.setItem("empresa", "0002");

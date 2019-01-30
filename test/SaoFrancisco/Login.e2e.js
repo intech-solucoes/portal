@@ -1,5 +1,9 @@
 /// <reference types="Cypress" />
 
+const configs = require('../support/config-test.json');
+const cpf = configs.Cpf;
+const senha = configs.Senha;
+
 describe('Login', () => {
     beforeEach(() => {
         cy.visit('/');
@@ -15,14 +19,14 @@ describe('Login', () => {
     it("Valida credenciais inválidas", () => {
         doLogin("asd", "123");
 
-        cy.get("#alert")
+        cy.get("#alerta")
             .should("have.text", "Matrícula ou senha incorretos!");
     });
 
     it("Faz login com sucesso", () => {
-        doLogin("15243362115", "123");
+        doLogin(cpf, senha);
 
-        // cy.wait(5000);  // Trocar para um alias.
+        // cy.wait(3000);  // Trocar para um alias.
 
         // cy.get("#titulos")
         //     .should("have.text", "Home");    // Comentando pois o título da Home ainda não está definido;

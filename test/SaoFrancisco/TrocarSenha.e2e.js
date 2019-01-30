@@ -1,9 +1,10 @@
+/// <reference types="Cypress" />
+
+const ApiUrl = require('../../src/config.json').apiUrl;
+
 describe('Validações de troca de senha', () => { 
     beforeEach(() => {
-        cy.login('http://localhost:5000/api/usuario/login', {
-            "Cpf": "15243362115", 
-            "Senha": "123"
-        });
+        cy.login(`${ApiUrl}/usuario/login`);
 
         cy.visit('/#/')
 
