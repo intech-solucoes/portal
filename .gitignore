@@ -60,3 +60,6 @@ build/
 \.DS_Store
 
 \.sass-cache/
+
+# Test directory with dinamics files
+cypress/integration/

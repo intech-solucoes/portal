@@ -1,14 +1,13 @@
 /// <reference types="Cypress" />
 
+const ApiUrl = require('../../src/config.json').apiUrl;
+
 describe('Mensagens', () => {
     beforeEach(() => {
-        cy.login('http://localhost:5000/api/usuario/login', {
-            "Cpf": "15243362115", 
-            "Senha": "123"
-        });
+        cy.login(`${ApiUrl}/usuario/login`);
 
         localStorage.setItem("admin", "S");
-        localStorage.setItem("empresa", "0002");
+        localStorage.setItem("empresa", "0006");
         localStorage.setItem("fundacao", "01");
 
         cy.visit('/#/');
@@ -36,17 +35,17 @@ describe('Mensagens', () => {
             .should('have.text', 'Nova Mensagem');
 
         var tituloMensagem = 'Mensagem Teste';
-        var mensagem = 'Mensagem gerada pelo teste automatizado 3.';
+        var mensagem = 'Mensagem teste.';
         var enviarEmail = false;
         var enviarPortal = true;
         var dataExpiracao = new Date();
         dataExpiracao.setDate(dataExpiracao.getDate() + 1);
         dataExpiracao = dataFormatada(dataExpiracao);
         var fundacao = '01';
-        var empresa = '0002';
-        var plano = '0001';
+        var empresa = '0001';
+        var plano = '0002';
         var situacaoPlano = '01';
-        var matricula = '000001015';
+        var matricula = '000000008';
 
         preencherCamposMensagem(tituloMensagem, mensagem, enviarEmail, enviarPortal, dataExpiracao, fundacao, empresa, plano, 
                                 situacaoPlano, matricula);
@@ -60,9 +59,9 @@ describe('Mensagens', () => {
             .click();
 
         var dataCriacao = dataFormatada(new Date());
-        var textoFundacao = 'FUNDAÇÃO SÃO FRANCISCO DE SEGURIDADE SOCIAL';
-        var textoEmpresa = 'FUNDAÇÃO SÃO FRANCISCO DE SEGURIDADE SOCIAL';
-        var textoPlano = 'BENEFICIO DEFINIDO';
+        var textoFundacao = 'PREVIDÊNCIA COMPLEMENTAR DO ESTADO DO ESPÍRITO SANTO';
+        var textoEmpresa = 'PODER EXECUTIVO';
+        var textoPlano = 'PREVES CDT';
         var textoSituacaoPlano = 'ATIVO';
         verificarDadosMensagem(tituloMensagem, dataCriacao, textoFundacao, textoEmpresa, textoPlano, textoSituacaoPlano, matricula, enviarEmail, enviarPortal, mensagem);
     });
