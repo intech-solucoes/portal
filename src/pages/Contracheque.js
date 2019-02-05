@@ -51,7 +51,7 @@ export default class ContraCheque extends React.Component {
 
                                             <div className="box-content">
                                                 {plano.contracheque.length > 0 && 
-                                                    <table className="table">
+                                                    <table className="table" id="tabelaContracheque">
                                                         <thead>
                                                             <tr>
                                                                 <th>Referência</th>
@@ -90,7 +90,7 @@ export default class ContraCheque extends React.Component {
                                                 }
 
                                                 {plano.contracheque.length === 0 && 
-                                                    <div>Nenhum contracheque disponível para este plano.</div>
+                                                    <div id="semContracheque">Nenhum contracheque disponível para este plano.</div>
                                                 }
                                             </div>
                                         </div>

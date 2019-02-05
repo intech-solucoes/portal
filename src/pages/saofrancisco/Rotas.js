@@ -2,7 +2,7 @@ import React from 'react';
 
 import {
     Home, DadosPessoais, Planos, PlanoDetalhes, Mensagens, TrocarSenha, MensagemNova,
-    Login, EsqueciSenha, 
+    Login, EsqueciSenha, InformeRendimentos, Contracheque,
     LoginAdmin, ListarParticipantes
 } from "../";
 
@@ -41,6 +41,24 @@ function GetRotas() {
             componente: (routeProps) => <PlanoDetalhes {...routeProps} />,
             mostrarMenu: false, 
             exact: true
+        },
+        {
+            titulo: "Contracheque",
+            icone: "fas fa-closed-captioning",
+            caminho: "/contracheque",
+            componente: (routeProps) => <Contracheque {...routeProps} />,
+            mostrarMenu: true,
+            exact: true,
+            id: "contracheque"
+        },
+        {
+            titulo: "Inf. Rendimentos",
+            icone: "fas fa-chart-pie",
+            caminho: "/infoRend",
+            componente: (routeProps) => <InformeRendimentos {...routeProps} />,
+            mostrarMenu: true,
+            exact: true,
+            id: "informeRendimentos"
         },
         {
             titulo: "Mensagens",
