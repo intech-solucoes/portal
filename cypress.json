@@ -1,3 +1,19 @@
 {
-    "baseUrl": "http://localhost:3000/"
+    "baseUrl": "http://localhost:3000/",
+    "env": {
+        "Preves": {
+            "ativo": "12178513727",
+            "assistido": "11817235745",
+            "planoSE": "07481968705",
+            "planoCTD": "09693699726"
+        },
+        "SaoFrancisco": {
+            "ativo": "15243362115",
+            "assistido": "00120146487"
+        },
+        "Regius": {
+            "assistido": "",
+            "ativo": ""
+        }
+    }
 }
