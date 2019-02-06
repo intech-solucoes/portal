@@ -1,9 +1,10 @@
 /// <reference types="Cypress" />
 const ApiUrl = require('../../src/config.json').apiUrl;
+const logins = Cypress.env("Preves");
 
 describe('Validações de troca de senha', () => { 
     beforeEach(() => {
-        cy.login(`${ApiUrl}/usuario/login`);
+        cy.login(`${ApiUrl}/usuario/login`, logins.ativo);
         cy.visit('/#/');
 
         cy.get('#trocarSenha')

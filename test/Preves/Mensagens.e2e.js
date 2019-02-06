@@ -1,10 +1,11 @@
 /// <reference types="Cypress" />
 
 const ApiUrl = require('../../src/config.json').apiUrl;
+const logins = Cypress.env('Preves');
 
 describe('Mensagens', () => {
     beforeEach(() => {
-        cy.login(`${ApiUrl}/usuario/login`);
+        cy.login(`${ApiUrl}/usuario/login`, logins.ativo);
 
         localStorage.setItem("admin", "S");
         localStorage.setItem("empresa", "0006");

@@ -1,8 +1,7 @@
 /// <reference types="Cypress" />
 
-const configs = require('../support/config-test.json');
-const cpf = configs.Cpf;
-const senha = configs.Senha;
+const cpf = Cypress.env('Preves').ativo;
+const senha = '123';
 
 describe('Login', () => {
     beforeEach(() => {
@@ -20,7 +19,7 @@ describe('Login', () => {
         doLogin("asd", "123");
 
         cy.get("#alerta")
-            .should("have.text", "O sinônimo \'SEG_USUARIO\' refere-se a um objeto inválido.");
+            .should("have.text", "CPF ou senha incorretos!")
 
         doLogin(cpf, "asdf");
 
