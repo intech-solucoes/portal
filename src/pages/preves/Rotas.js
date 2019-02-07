@@ -18,7 +18,7 @@ function GetRotas() {
             id: "home"
         },
         {
-            titulo: "Dados Pessoais",
+            titulo: "Seus Dados",
             icone: "fas fa-user",
             caminho: "/dados",
             componente: (routeProps) => <DadosPessoais {...routeProps} />,

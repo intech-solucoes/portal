@@ -1,13 +1,7 @@
 import React, { Component } from "react";
 
-import { Col, Row } from "./";
-
 export default class Box extends Component {
-    static defaultProps = {
-        renderRow: true
-    }
-
-    renderBox = () => {
+    render() {
         return (
             <div className="box">
                 {this.props.titulo &&
@@ -22,19 +16,4 @@ export default class Box extends Component {
             </div>
         );
     }
-
-    render() {
-        if(this.props.renderRow) {
-            return (
-                <Row>
-                    <Col>
-                        {this.renderBox()}
-                    </Col>
-                </Row>
-            );
-        } else {
-            this.renderBox();
-        }
-    }
-
 }

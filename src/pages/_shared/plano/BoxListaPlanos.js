@@ -1,7 +1,7 @@
 import React from "react";
 
 import { PlanoService } from "@intechprev/prevsystem-service";
-import FormFieldStatic from "../FormFieldStatic";
+import { FormFieldStatic } from "../../../components";
 
 const config = require("../../../config.json");
 

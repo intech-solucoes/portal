@@ -24,39 +24,24 @@ export default class Documentos extends React.Component {
             pastaAtual: "",
             nomeDocumentoVazio: false,
             nomePastaVazio: false
-
         }
+
         this.page = React.createRef();
-        this.setState({ pastaAtual: this.state.oidPasta });
     }
 
-    componentDidMount() {
-        PlanoService.BuscarTodos()
-            .then((result) => {
-                this.setState({ planos: result.data });
-            });
+    componentDidMount = async () => {
+        var { data: planos } = await PlanoService.BuscarTodos();
+        await this.setState({ planos });
+
         this.buscarLista();
-
-        this.setState({ pastaAtual: this.state.oidPasta });
-    }
-
-    componentDidUpdate() {
-        var pastaAntiga = this.state.oidPasta;
-        var oidPasta = this.props.location.pathname.split('/');
-        oidPasta = oidPasta[oidPasta.length - 1];
-        // oidPasta = oidPasta === "" ? "raiz" : oidPasta;
-
-        if(pastaAntiga !== oidPasta && pastaAntiga !== undefined)
-            window.location.reload();
-
     }
     
     buscarLista = async () => {
-        var resultDocumentos = await DocumentoService.BuscarPorPasta(this.state.oidPasta);
+        var { data: resultado } = await DocumentoService.BuscarPorPasta(this.state.oidPasta);
 
         await this.setState({ 
-            documentos: resultDocumentos.data.documentos,
-            pastas: resultDocumentos.data.pastas
+            documentos: resultado.documentos,
+            pastas: resultado.pastas
         });
     }
 
@@ -64,6 +49,7 @@ export default class Documentos extends React.Component {
         e.preventDefault();
 
         await this.setState({ nomePastaVazio: false });
+
         if(this.state.nomePasta === "")
             await this.setState({ nomePastaVazio: true });
 
@@ -161,7 +147,7 @@ export default class Documentos extends React.Component {
                                             <hr/>
                                             <button id="salvar-documento" className="btn btn-primary" disabled={!this.state.podeCriarDocumento} onClick={this.salvarDocumento}>Salvar</button>
                                         </form>
-                                        {this.renderizaErro(this.state.nomeDocumentoVazio, "Título do documento obrigatório!")}
+                                        {this.renderizaErro(this.state.nomeDocumento === "", "Título do documento obrigatório!")}
                                     </div>
                                 </div>
                             </div>
@@ -189,8 +175,8 @@ export default class Documentos extends React.Component {
                             <div className="box-content">
                                 {(this.state.pastas.length > 0 || this.state.documentos.length > 0) &&
                                     <div>
-                                        <Tabelas itens={this.state.pastas} campoTexto={"NOM_PASTA"} icone={"fa-folder-open text-warning"} tipo={"pasta"} />
-                                        <Tabelas itens={this.state.documentos} campoTexto={"TXT_TITULO"} icone={"fa-file text-info"} tipo={"documento"} />
+                                        <Tabelas {...this.props} itens={this.state.pastas} campoTexto={"NOM_PASTA"} icone={"fa-folder-open text-warning"} tipo={"pasta"} />
+                                        <Tabelas {...this.props} itens={this.state.documentos} campoTexto={"TXT_TITULO"} icone={"fa-file text-info"} tipo={"documento"} />
                                     </div>
                                 }
 
@@ -260,12 +246,11 @@ class Tabelas extends React.Component {
 
                             <div className="col mt-1">
                                 {this.props.tipo === "pasta" &&
-                                    <Link className="btn btn-link" onClick={async () => window.location.reload()} 
-                                        to={`/documentos/${item.OID_DOCUMENTO_PASTA}`}> {item[this.props.campoTexto]} </Link>
+                                    <Link className="btn btn-link" to={`/documentos/${item.OID_DOCUMENTO_PASTA}`}>{item[this.props.campoTexto]}</Link>
                                 }
 
                                 {this.props.tipo !== "pasta" &&
-                                    <button className={"btn btn-link"} onClick={() => this.downloadDocumento(item.OID_DOCUMENTO)}> {item[this.props.campoTexto]} </button>
+                                    <button className={"btn btn-link"} onClick={() => this.downloadDocumento(item.OID_DOCUMENTO)}>{item[this.props.campoTexto]}</button>
                                 }
                             </div>
                             

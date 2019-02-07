@@ -65,7 +65,7 @@ const { spin } = print;
     await filesystem.removeAsync('./public/imagens');
     await filesystem.copy(`./imagens/${client}`, './public/imagens', { overwrite: true });
 
-    await system.run("sass -t compressed ./src/styles/main.scss ./public/css/main.css");
+    await system.run("sass ./src/styles/main.scss:./public/css/main.css");
 
     spinner.text = "2/6 Copiando configurações...";
 
@@ -102,7 +102,7 @@ const { spin } = print;
 
         spinner.text = "6/6 Copiando arquivos para" + `${appFile.publish[destino]}`.blue + "...";
         await filesystem.copy(`./build`, appFile.publish[destino], { overwrite: true });
-    }
 
-    spinner.stop();
+        spinner.stop();
+    }
 })();

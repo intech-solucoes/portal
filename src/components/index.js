@@ -5,6 +5,7 @@ import Alert from "./Alert";
 import CampoTexto from "./CampoTexto";
 import Form from "./Form";
 import Button from "./Button";
+import FormFieldStatic from "./FormFieldStatic";
 
 export {
     Col,
@@ -13,5 +14,6 @@ export {
     Alert,
     CampoTexto,
     Form,
-    Button
+    Button,
+    FormFieldStatic
 };

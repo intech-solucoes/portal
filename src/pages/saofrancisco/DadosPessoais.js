@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { FuncionarioService } from "@intechprev/prevsystem-service";
 
 import { Page } from "../";
-import FormFieldStatic from "../_shared/FormFieldStatic";
+import { FormFieldStatic } from "../../components";
 
 export default class DadosPessoais extends Component {
 
