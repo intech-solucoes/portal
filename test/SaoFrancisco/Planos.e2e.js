@@ -1,10 +1,11 @@
 /// <reference types="Cypress" />
 
 const ApiUrl = require('../../src/config.json').apiUrl;
+const logins = Cypress.env('SaoFrancisco');
 
 describe('Planos' , () => {
     beforeEach(() => {
-        cy.login(`${ApiUrl}/usuario/login`);
+        cy.login(`${ApiUrl}/usuario/login`, logins.ativo);
 
         cy.visit('/#/');
 

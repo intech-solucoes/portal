@@ -1,8 +1,6 @@
 /// <reference types="Cypress" />
 
-const configs = require('../support/config-test.json');
-const cpf = configs.Cpf;
-const senha = configs.Senha;
+const logins = Cypress.env('SaoFrancisco');
 
 describe('Login', () => {
     beforeEach(() => {
@@ -24,12 +22,12 @@ describe('Login', () => {
     });
 
     it("Faz login com sucesso", () => {
-        doLogin(cpf, senha);
+        doLogin(logins.ativo, "123");
 
-        // cy.wait(3000);  // Trocar para um alias.
+        cy.wait(3000);  // Trocar para um alias.
 
-        // cy.get("#titulos")
-        //     .should("have.text", "Home");    // Comentando pois o título da Home ainda não está definido;
+        cy.get("#titulos")
+            .should("have.text", "Home");    // Ficar de olho pois o título da Home pode mudar.
     });
 });
 

@@ -1,10 +1,11 @@
 /// <reference types="Cypress" />
 
 const ApiUrl = require('../../src/config.json').apiUrl;
+const logins = Cypress.env('SaoFrancisco');
 
 describe('Dados Pessoais', () => {
     beforeEach(() => {
-        cy.login(`${ApiUrl}/usuario/login`);
+        cy.login(`${ApiUrl}/usuario/login`, logins.ativo);
 
         cy.visit('/#/');
 
@@ -18,7 +19,7 @@ describe('Dados Pessoais', () => {
         cy.get("#titulo")
             .should('have.text', 'Dados Pessoais');
 
-        for(var i = 0; i <= 23; i++) {
+        for(var i = 0; i <= 23; i++) {  // Alterar isso aqui quando os ajustes na tela de Dados forem feitos.
             cy.get(`#${i}`)
                 .children().should('have.length.greaterThan', -1);
         }
