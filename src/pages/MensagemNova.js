@@ -54,8 +54,8 @@ export default class MensagemNova extends React.Component {
     async componentDidMount() {
 
         try {
-            var resultMensagem = await MensagemService.BuscarTodas();
-            await this.setState({ mensagens: resultMensagem.data })
+            var { data: mensagens } = await MensagemService.BuscarTodas();
+            await this.setState({ mensagens })
         } catch(err) {
             console.error(err);
         }

@@ -2,7 +2,7 @@ import React from 'react';
 
 import {
     Home, DadosPessoais, Planos, PlanoDetalhes, Mensagens, TrocarSenha, MensagemNova,
-    Login, EsqueciSenha, Contracheque, ContrachequeDetalhe, Documentos,
+    Login, EsqueciSenha, Contracheque, ContrachequeDetalhe, Documentos, InformeRendimentos,
     LoginAdmin, ListarParticipantes
 } from "../";
 

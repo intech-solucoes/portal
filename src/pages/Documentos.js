@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import axios from "axios";
 import { handleFieldChange } from "@intechprev/react-lib";
 import { PlanoService, DocumentoService } from "@intechprev/prevsystem-service";
@@ -8,7 +8,7 @@ import { Page } from ".";
 import config from '../config.json';
 
 const apiUrl = config.apiUrl
-export default class Documentos extends React.Component {
+export default class Documentos extends Component {
     constructor(props) {
         super(props);
 
@@ -125,7 +125,7 @@ export default class Documentos extends React.Component {
                 <Row>
                     {localStorage.getItem("admin") === "S" &&
 
-                        <Col className="lg-4">
+                        <Col className={"lg-4"}>
                             <Box titulo={"UPLOAD DE DOCUMENTOS"}>
 
                                 <Form ref={this.form}>
@@ -166,29 +166,27 @@ export default class Documentos extends React.Component {
                                     <input name="nomePasta" className="form-control" value={this.state.nomePasta} onChange={(e) => handleFieldChange(this, e)}></input>
                                 </div>
                                 <hr/>
-                                <button id="salvar-pasta" className="btn btn-primary" onClick={this.salvarPasta}>Salvar</button>
+                                <Button id="salvar-pasta" className={"btn btn-primary"} titulo={"Salvar"} onClick={this.salvarPasta} />
                                 {this.renderizaErro(this.state.nomePasta, "Nome da pasta obrigatório!")}
                             </Box>
                         </Col>
 
                     }
 
-                    <div className="col-lg-8">
-                        <div className="box">
-                            <div className="box-content">
-                                {(this.state.pastas.length > 0 || this.state.documentos.length > 0) &&
-                                    <div>
-                                        <Tabelas {...this.props} itens={this.state.pastas} campoTexto={"NOM_PASTA"} icone={"fa-folder-open text-warning"} tipo={"pasta"} />
-                                        <Tabelas {...this.props} itens={this.state.documentos} campoTexto={"TXT_TITULO"} icone={"fa-file text-info"} tipo={"documento"} />
-                                    </div>
-                                }
+                    <Col tamanho={"8"}>
+                        <Box>
+                            {(this.state.pastas.length > 0 || this.state.documentos.length > 0) &&
+                                <div>
+                                    <Tabelas {...this.props} itens={this.state.pastas} campoTexto={"NOM_PASTA"} icone={"fa-folder-open text-warning"} tipo={"pasta"} />
+                                    <Tabelas {...this.props} itens={this.state.documentos} campoTexto={"TXT_TITULO"} icone={"fa-file text-info"} tipo={"documento"} />
+                                </div>
+                            }
 
-                                {this.state.pastas.length === 0 && this.state.documentos.length === 0 &&
-                                    <div className="alert alert-danger">Nenhum item disponível.</div>
-                                }
-                            </div>
-                        </div>
-                    </div>
+                            {this.state.pastas.length === 0 && this.state.documentos.length === 0 &&
+                                <div className="alert alert-danger">Nenhum item disponível.</div>
+                            }
+                        </Box>
+                    </Col>
                 </Row>
 
             </Page>
@@ -243,24 +241,24 @@ class Tabelas extends React.Component {
             {
                 this.props.itens.map((item, index) => {
                     return (
-                        <div key={index} className="row m-3">
-                            <div className="col-1">
+                        <Row key={index} className={"m-3"}>
+                            <Col tamanho={"1"}>
                                 <i className={"fa fa-2x " + this.props.icone}></i>
-                            </div>
+                            </Col>
 
-                            <div className="col mt-1">
+                            <Col className={"mt-1"}>
                                 {this.props.tipo === "pasta" &&
-                                    <Link className="btn btn-link" to={`/documentos/${item.OID_DOCUMENTO_PASTA}`}>{item[this.props.campoTexto]}</Link>
+                                    <Link className={"btn btn-link"} to={`/documentos/${item.OID_DOCUMENTO_PASTA}`}>{item[this.props.campoTexto]}</Link>
                                 }
 
                                 {this.props.tipo !== "pasta" &&
                                     <button className={"btn btn-link"} onClick={() => this.downloadDocumento(item.OID_DOCUMENTO)}>{item[this.props.campoTexto]}</button>
                                 }
-                            </div>
+                            </Col>
                             
                             {localStorage.getItem("admin") === "S" &&
-                                <div className="col-1">
-                                    <button className="btn btn-sm btn-danger" 
+                                <Col tamanho={"1"}>
+                                    <Button className={"btn btn-sm btn-danger"}
                                         onClick={async () => {
                                             if(this.props.tipo === "pasta")
                                                 await this.deletarPasta(item.OID_DOCUMENTO_PASTA);
@@ -268,9 +266,10 @@ class Tabelas extends React.Component {
                                                 await this.deletarDocumento(item.OID_DOCUMENTO);
                                         }}>
                                         <i className="fa fa-trash"></i>
-                                    </button>
-                                </div>}
-                        </div>
+                                    </Button>
+                                </Col>
+                            }
+                        </Row>
                     );
                 })
             }
