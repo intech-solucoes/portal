@@ -2,7 +2,7 @@ import React from 'react';
 
 import {
     Home, DadosPessoais, Planos, PlanoDetalhes, Mensagens, TrocarSenha, MensagemNova,
-    Login, EsqueciSenha, 
+    Login, EsqueciSenha, Contracheque, ContrachequeDetalhe, Documentos,
     LoginAdmin, ListarParticipantes
 } from "../";
 
@@ -98,6 +98,33 @@ function GetRotas() {
             mostrarMenu: false,
             mostrarMenuAdmin: true,
             exact: true
+        },
+        {
+            titulo: "Contracheque",
+            icone: "fas fa-closed-captioning",
+            caminho: "/contracheque",
+            componente: (routeProps) => <Contracheque {...routeProps} />,
+            mostrarMenu: true,
+            exact: true,
+            id: "contracheque"
+        },
+        {
+            titulo: "Contracheque Detalhe",
+            icone: "fas fa-closed-captioning",
+            caminho: "/contracheque/:plano/:data",
+            caminhoLink: "/contracheque/",
+            componente: (routeProps) => <ContrachequeDetalhe {...routeProps} />,
+            mostrarMenu: false, 
+            exact: true
+        },
+        {
+            titulo: "Documentos",
+            icone: "fas fa-file",
+            caminho: "/documentos/:pasta?",
+            caminhoLink: "/documentos/",
+            componente: (routeProps) => <Documentos {...routeProps} />,
+            mostrarMenu: true,
+            id: "documentos"
         }
     ];
 

@@ -6,7 +6,6 @@ export default class ControleFuncionalidades extends React.Component {
         this.state = {
             modalVisible: false
         }
-        this.toggleModal = this.toggleModal.bind(this);
     }
 
     renderModal() {
@@ -73,7 +72,7 @@ export default class ControleFuncionalidades extends React.Component {
         }
     }
 
-    toggleModal() {
+    toggleModal = () => {
         this.setState({ modalVisivel: !this.state.modalVisivel });
     }
 

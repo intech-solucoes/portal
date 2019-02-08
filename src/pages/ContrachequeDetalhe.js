@@ -25,27 +25,25 @@ export default class ContrachequeDetalhe extends React.Component {
         };
 
         this.page = React.createRef();
-        this.gerarRelatorio = this.gerarRelatorio.bind(this);
     }
 
     async componentDidMount() {
-        var result = await PlanoService.BuscarPorCodigo(this.state.cdPlano);
-        await this.setState({ plano: result.data });
+        var { data: plano } = await PlanoService.BuscarPorCodigo(this.state.cdPlano);
+        await this.setState({ plano });
 
-        result = await ContrachequeService.BuscarPorPlanoReferenciaTipoFolha(this.state.cdPlano, this.state.dataReferencia);
-        await this.setState({ contracheque: result.data });
+        var { data: contracheque } = await ContrachequeService.BuscarPorPlanoReferenciaTipoFolha(this.state.cdPlano, this.state.dataReferencia);
+        await this.setState({ contracheque });
     }
 
-    gerarRelatorio() {
-        ContrachequeService.Relatorio(this.state.cdPlano, this.state.dataReferencia)
-            .then((result) => {
-                const url = window.URL.createObjectURL(new Blob([result.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', 'contracheque.pdf');
-                document.body.appendChild(link);
-                link.click();
-            });
+    gerarRelatorio = async () => {
+        var { data: relatorio } = await ContrachequeService.Relatorio(this.state.cdPlano, this.state.dataReferencia);
+
+        const url = window.URL.createObjectURL(new Blob([relatorio]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'contracheque.pdf');
+        document.body.appendChild(link);
+        link.click();
     }
 
     render() {

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { ContrachequeService, PlanoService } from "@intechprev/prevsystem-service";
 import { Page } from ".";
 import { Link } from "react-router-dom";
 
-export default class ContraCheque extends React.Component {
+export default class ContraCheque extends Component {
 
     constructor(props) {
         super(props);
@@ -11,26 +11,22 @@ export default class ContraCheque extends React.Component {
         this.state = {
             planos: []
         }
-
-        this.buscarDatas = this.buscarDatas.bind(this);
         this.page = React.createRef();
     }
 
     async componentDidMount() {
-        var resultPlanos = await PlanoService.Buscar()
-        await this.buscarDatas(resultPlanos.data);
+        var { data: resultPlanos} = await PlanoService.Buscar()
+        await this.buscarDatas(resultPlanos);
     }
 
-    buscarDatas(planos) {
-        planos.forEach((plano) => {
-            ContrachequeService.BuscarDatas(plano.CD_PLANO)
-                .then(result => {
-                    plano.contracheque = result.data;
+    buscarDatas = async (planos) => {
+        planos.forEach(async (plano) => {
+            var { data: datas } = await ContrachequeService.BuscarDatas(plano.CD_PLANO);
+            plano.contracheque = datas;
 
-                    this.setState({ 
-                        planos: [...this.state.planos, plano]
-                    });
-                });
+            await this.setState({ 
+                planos: [...this.state.planos, plano]
+            });
         });
     }
 

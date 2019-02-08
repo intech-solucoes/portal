@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { handleFieldChange } from "@intechprev/react-lib";
 import { PlanoService, DocumentoService } from "@intechprev/prevsystem-service";
+import { Row, Col, Box, Form, CampoTexto, Button } from '../components';
 import { Link } from "react-router-dom";
 import { Page } from ".";
 import config from '../config.json';
@@ -27,6 +28,7 @@ export default class Documentos extends React.Component {
         }
 
         this.page = React.createRef();
+        this.form = React.createRef();
     }
 
     componentDidMount = async () => {
@@ -103,8 +105,8 @@ export default class Documentos extends React.Component {
 
     }
 
-    renderizaErro = (stateErro, mensagemErro) => {
-        if(stateErro) {
+    renderizaErro = (campo, mensagemErro) => {
+        if(campo === "") {  
             return (    
                 <div className="text-danger">
                     <i className="fas fa-exclamation-circle"></i>&nbsp;
@@ -119,18 +121,20 @@ export default class Documentos extends React.Component {
     render() {
         return (
             <Page {...this.props} ref={this.page}>
-                <div className="row">
+
+                <Row>
                     {localStorage.getItem("admin") === "S" &&
-                        <div className="col-lg-4">
-                            <div className="box">
-                                <div className="box-title">
-                                    UPLOAD DE DOCUMENTOS
-                                </div>
-                                <div className="box-content">
+
+                        <Col className="lg-4">
+                            <Box titulo={"UPLOAD DE DOCUMENTOS"}>
+
+                                <Form ref={this.form}>
+                                
                                     <div className="form-group">
                                         <label htmlFor="titulo-documento"><b>Título:</b></label>
                                         <input name="nomeDocumento" className="form-control" value={this.state.nomeDocumento} onChange={(e) => handleFieldChange(this, e)}></input>
                                     </div>
+                                    
                                     <div className="form-group">
                                         <label htmlFor="plano-documento"><b>Plano:</b></label>
                                         <select id="plano-documento" className="form-control">
@@ -140,34 +144,33 @@ export default class Documentos extends React.Component {
                                             })}
                                         </select>
                                     </div>
+                                    
                                     <div className="form-group">
                                         <label htmlFor="selecionar-documento"><b>Arquivo:</b></label>
                                         <form>
                                             <input id="selecionar-documento" type="file" onChange={this.uploadFile} value={this.state.arquivoUpload}></input>
                                             <hr/>
-                                            <button id="salvar-documento" className="btn btn-primary" disabled={!this.state.podeCriarDocumento} onClick={this.salvarDocumento}>Salvar</button>
+                                            
+                                            <Button id="salvar-documento" titulo={"Salvar"} tipo={"primary"} submit desativado={!this.state.podeCriarDocumento} 
+                                                    onClick={this.salvarDocumento} />
                                         </form>
-                                        {this.renderizaErro(this.state.nomeDocumento === "", "Título do documento obrigatório!")}
+                                        {this.renderizaErro(this.state.nomeDocumento, "Título do documento obrigatório!")}
                                     </div>
-                                </div>
-                            </div>
+                                </Form>
 
-                            <div className="box">
-                                <div className="box-title">
-                                    CRIAÇÃO DE PASTA
-                                </div>
+                            </Box>
 
-                                <div className="box-content">
-                                    <div className="form-group">
-                                        <label htmlFor="nomePasta"><b>Nome:</b></label>
-                                        <input name="nomePasta" className="form-control" value={this.state.nomePasta} onChange={(e) => handleFieldChange(this, e)}></input>
-                                    </div>
-                                    <hr/>
-                                    <button id="salvar-pasta" className="btn btn-primary" onClick={this.salvarPasta}>Salvar</button>
-                                    {this.renderizaErro(this.state.nomePastaVazio, "Nome da pasta obrigatório!")}
+                            <Box titulo={"CRIAÇÃO DE PASTA"}>
+                                <div className="form-group">
+                                    <label htmlFor="nomePasta"><b>Nome:</b></label>
+                                    <input name="nomePasta" className="form-control" value={this.state.nomePasta} onChange={(e) => handleFieldChange(this, e)}></input>
                                 </div>
-                            </div>
-                        </div>
+                                <hr/>
+                                <button id="salvar-pasta" className="btn btn-primary" onClick={this.salvarPasta}>Salvar</button>
+                                {this.renderizaErro(this.state.nomePasta, "Nome da pasta obrigatório!")}
+                            </Box>
+                        </Col>
+
                     }
 
                     <div className="col-lg-8">
@@ -186,7 +189,8 @@ export default class Documentos extends React.Component {
                             </div>
                         </div>
                     </div>
-                </div>
+                </Row>
+
             </Page>
         );
     }
