@@ -1,17 +1,26 @@
 import React, { Component } from 'react';
 import { Row, Col, Box, Form, CampoTexto, Button } from '../components';
 
+import { FuncionarioService } from "@intechprev/prevsystem-service";
+
 export default class ListarParticipantes extends Component {
 
     constructor(props) {
         super(props)
 
         this.state = {
-
+            matricula: "",
+            nome: "",
+            resultadoPesquisa: []
         };
 
         this.form = React.createRef();
     };
+
+    pesquisar = async () => {
+        var { data: resultadoPesquisa } = await FuncionarioService.Pesquisar(null, null, null, null, this.state.matricula, this.state.nome);
+        await this.setState({ resultadoPesquisa });
+    }
 
     selecionar = () => {
 
@@ -25,55 +34,45 @@ export default class ListarParticipantes extends Component {
 
                         <Form ref={this.form}>
 
-                            <CampoTexto nome={"matricula"} placeholder={"Matricula"} />
-                            <CampoTexto nome={"nome"} placeholder={"Nome"} />
-                            <Button titulo={"Procurar"} tipo={"primary"} submit />
+                            <CampoTexto contexto={this} nome={"matricula"} placeholder={"Matricula"} />
+                            <CampoTexto contexto={this} nome={"nome"} placeholder={"Nome"} />
+                            <Button titulo={"Procurar"} tipo={"primary"} submit onClick={this.pesquisar} />
 
                         </Form>
-                        <br/>
 
-                        <table className={"table"}>
-                            <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Matrícula</th>
-                                    <th>Inscrição</th>
-                                    <th>Empresa</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
+                        {this.state.resultadoPesquisa.length > 0 && 
+                            <div>
+                                <br/>
 
-                            <tbody>
-                                <tr>
-                                    <td>Participante</td>
-                                    <td>000012345</td>
-                                    <td>000012345</td>
-                                    <td>São Francisco</td>
-                                    <td>
-                                        <Button titulo={"Selecionar"} tipo={"primary"} pequeno onClick={this.selecionar} />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Participante</td>
-                                    <td>000012345</td>
-                                    <td>000012345</td>
-                                    <td>São Francisco</td>
-                                    <td>
-                                        <Button titulo={"Selecionar"} tipo={"primary"} pequeno />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Participante</td>
-                                    <td>000012345</td>
-                                    <td>000012345</td>
-                                    <td>São Francisco</td>
-                                    <td>
-                                        <Button titulo={"Selecionar"} tipo={"primary"} pequeno />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                <table className={"table"}>
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Matrícula</th>
+                                            <th>Inscrição</th>
+                                            <th>Empresa</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
 
+                                    <tbody>
+                                        {this.state.resultadoPesquisa.map((func, index) => {
+                                            return (
+                                                <tr>
+                                                    <td>{func.NOME_ENTID}</td>
+                                                    <td>{func.NUM_MATRICULA}</td>
+                                                    <td>{func.NUM_INSCRICAO}</td>
+                                                    <td>{func.CD_EMPRESA}</td>
+                                                    <td>
+                                                        <Button titulo={"Selecionar"} tipo={"primary"} pequeno onClick={() => this.selecionar(func.COD_ENTID)} />
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
                     </Box>
                 </Col>
             </Row>

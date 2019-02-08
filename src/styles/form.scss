@@ -3,7 +3,7 @@ hr.separator {
     color: #ffffff;
     background-color: #ffffff;
     height: 1px;
-    margin: 20px 0;
+    margin: 10px 0;
 }
 
 label {
@@ -11,5 +11,9 @@ label {
 }
 
 .form-control-plaintext {
-    font-size: 14pt;
+    font-size: 10pt;
+}
+
+.form-group {
+    margin-bottom: 10px;
 }

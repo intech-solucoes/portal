@@ -18,9 +18,10 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@intechprev/prevsystem-service@^1.2.2":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@intechprev/prevsystem-service/-/prevsystem-service-1.2.2.tgz#cfbf5d998c06cb7a2754af3165c1ee0650270856"
+"@intechprev/prevsystem-service@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@intechprev/prevsystem-service/-/prevsystem-service-1.4.0.tgz#d1d8a7772c2eeff53387b47a15284c628ecaa44d"
+  integrity sha512-aSKLFsjXYtz48U3gv5avhMZ+QjfJHmsLoTPN+9BegJrL7cn3/a0KwG0xRKVtb13e0KN+l5HZ7Hn5VxK75z19WQ==
   dependencies:
     "@intechprev/service" "^1.0.2"
 
@@ -1903,6 +1904,11 @@ class-utils@^0.3.5:
 classnames@^2.2.3:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
+
+classnames@^2.2.6:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
+  integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
 
 cldr-data-downloader@0.3.x:
   version "0.3.4"

@@ -30,6 +30,7 @@ export default class Planos extends React.Component {
                             <tr>
                                 <th>Plano</th>
                                 <th width="280px">Situação</th>
+                                <th width="280px">Categoria</th>
                                 <th>Data de inscrição</th>
                                 <th></th>
                             </tr>
@@ -40,7 +41,8 @@ export default class Planos extends React.Component {
                                     return (
                                         <tr key={index}>
                                             <td>{plano.DS_PLANO}</td>
-                                            <td><h5><span className="badge badge-primary">{plano.DS_CATEGORIA}</span></h5></td>
+                                            <td>{plano.DS_SIT_PLANO}</td>
+                                            <td>{plano.DS_CATEGORIA}</td>
                                             <td>{plano.DT_INSC_PLANO}</td>
                                             <td>
                                                 <Link onClick={() => localStorage.setItem("empresa", plano.CD_EMPRESA)} to={`/planos/${plano.CD_PLANO}`}>Detalhes do plano</Link>

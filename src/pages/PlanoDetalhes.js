@@ -1,10 +1,9 @@
 import React from 'react';
-import { PlanoService } from "@intechprev/prevsystem-service";
+import { PlanoService, SalarioBaseService, FichaFechamentoPrevesService } from "@intechprev/prevsystem-service";
 
-import FormFieldStatic from './_shared/FormFieldStatic';
 import DataInvalida from './_shared/Data';
 import { Page } from ".";
-import { Box } from "../components";
+import { Box, FormFieldStatic, Row, Col } from "../components";
 
 var InputMask = require('react-input-mask');
 
@@ -28,6 +27,8 @@ export default class DetalhesPlano extends React.Component {
             plano: {
                 SalarioContribuicao: 0
             },
+            salario: {},
+            saldo: {},
             extrato: {},
             dependentes: [],
             possuiSeguro: false
@@ -39,8 +40,10 @@ export default class DetalhesPlano extends React.Component {
         try {
             var { data: plano } = await PlanoService.BuscarPorCodigo(this.state.cdPlano);
             var { data: possuiSeguro } = await PlanoService.PossuiCertificadoSeguro();
+            var { data: salario } = await SalarioBaseService.Buscar();
+            var { data: saldo } = await FichaFechamentoPrevesService.BuscarSaldoPorPlano(this.state.cdPlano);
 
-            await this.setState({ plano, possuiSeguro });
+            await this.setState({ plano, possuiSeguro, salario, saldo });
         } catch(err) {
             console.error(err);
         }
@@ -281,35 +284,93 @@ export default class DetalhesPlano extends React.Component {
     render() {
         return(
             <Page {...this.props}>
-                <Box>
-                    <div className="form-row">
-                        <FormFieldStatic titulo="Plano" valor={this.state.plano.DS_PLANO} />
-                    </div>
-                    
-                    <div className="form-row">
-                        <FormFieldStatic titulo="Situação no Plano" valor={this.state.plano.DS_CATEGORIA} col="6" />
-                        <FormFieldStatic titulo="Data de inscrição" valor={this.state.plano.DT_INSC_PLANO} col="6" />
-                    </div>
-                    
-                    <div className="form-row btn-toolbar">
-                        <div className="btn-group mr-2">
-                            <button type="button" id="gerarExtrato" className="btn btn-primary btn-md" onClick={() => this.toggleModal() }>Gerar extrato</button>
-                        </div>
-
-                        {this.renderModal()}
-
-                        <div className="btn-group mr-2">
-                            <button type="button" id="gerarCertificado" className="btn btn-primary btn-md" onClick={this.gerarCertificado}>Gerar Certificado de Participação</button>
-                        </div>
-                        
-                        {this.state.possuiSeguro && 
-                            <div className="btn-group mr-2">
-                                <button type="button" id="gerarCertificadoSeguro" className="btn btn-primary btn-md" onClick={this.gerarCertificadoSeguro}>Gerar Certificado de Seguro</button>
+                <Row>
+                    <Col>
+                        <Box>
+                            <div className="form-row">
+                                <FormFieldStatic titulo="Plano" valor={this.state.plano.DS_PLANO} />
+                                <FormFieldStatic titulo="Data de inscrição" valor={this.state.plano.DT_INSC_PLANO} />
                             </div>
-                        }
+                            
+                            <div className="form-row">
+                                <FormFieldStatic titulo="Situação no Plano" valor={this.state.plano.DS_SIT_PLANO} />
+                                <FormFieldStatic titulo="Categoria" valor={this.state.plano.DS_CATEGORIA} />
+                            </div>
 
-                    </div>
-                </Box>
+                            <div className="form-row">
+                                <FormFieldStatic titulo="Salário de Participação" tipo={"dinheiro"} valor={this.state.salario.VL_SALARIO} />
+                            </div>
+                        </Box>
+                        
+                        <Box>
+                            <h4>Saldo</h4><br/>
+
+                            {this.state.cdPlano === "0001" &&
+                                <div>
+                                    <div className="form-row">
+                                        <FormFieldStatic titulo="Quantidade de Cotas Participante" valor={this.state.saldo.CotasPartic} />
+                                        <FormFieldStatic titulo="Quantidade de Cotas Patrocinadora" valor={this.state.saldo.CotasPatroc} />
+                                    </div>
+                                    <div className="form-row">
+                                        <FormFieldStatic titulo="Saldo Participante" tipo={"dinheiro"} valor={this.state.saldo.SaldoPartic} />
+                                        <FormFieldStatic titulo="Saldo Patrocinadora" tipo={"dinheiro"} valor={this.state.saldo.SaldoPatroc} />
+                                    </div>
+                                    <div className="form-row">
+                                        <FormFieldStatic titulo="Saldo Total" tipo={"dinheiro"} valor={this.state.saldo.Total} />
+                                    </div>
+                                    <div className="form-row">
+                                        <FormFieldStatic titulo="Data do Indice" valor={this.state.saldo.DataIndice} />
+                                        <FormFieldStatic titulo="Valor do Indice" valor={this.state.saldo.ValorIndice} />
+                                    </div>
+                                </div>
+                            }
+
+                            {this.state.cdPlano === "0002" &&
+                                <div>
+                                    <div className="form-row">
+                                        <FormFieldStatic titulo="Quantidade de Cotas" valor={this.state.saldo.Cotas} />
+                                        <FormFieldStatic titulo="Saldo" tipo={"dinheiro"} valor={this.state.saldo.Saldo} />
+                                    </div>
+                                    <div className="form-row">
+                                        <FormFieldStatic titulo="Data do Indice" valor={this.state.saldo.DataIndice} />
+                                        <FormFieldStatic titulo="Valor do Indice" valor={this.state.saldo.ValorIndice} />
+                                    </div>
+                                </div>
+                            }
+                        </Box>
+                    </Col>
+
+                    <Col>
+                        <Box>
+                            <h4>Extrato de Contribuições</h4>
+
+                            <p>Imprima o seu extrato para visualizar suas contribuições por período, assim como seu saldo do período.</p>
+
+                            <button type="button" id="gerarExtrato" className="btn btn-primary btn-md" onClick={() => this.toggleModal()}>Gerar extrato</button>
+
+                            {this.renderModal()}
+                        </Box>
+
+                        <Box>
+                            <h4>Certificado de Participação</h4>
+
+                            <p>Faça download do seu certificado de participação no plano {this.state.plano.DS_PLANO}.</p>
+                            
+                            <button type="button" id="gerarCertificado" className="btn btn-primary btn-md" onClick={this.gerarCertificado}>Baixar Certificado de Participação</button>
+                        </Box>
+
+                        {this.state.possuiSeguro && 
+                            <Box>
+                                <h4>Certificado de Seguro</h4>
+
+                                <p>Faça download do seu certificado de seguro.</p>
+                                <div className="btn-group mr-2">
+                                    <button type="button" id="gerarCertificadoSeguro" className="btn btn-primary btn-md" onClick={this.gerarCertificadoSeguro}>Baixar Certificado de Seguro</button>
+                                </div>
+                            </Box>
+                        }
+                    </Col>
+                </Row>
             </Page>
         );
     }

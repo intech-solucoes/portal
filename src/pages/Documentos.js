@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { handleFieldChange } from "@intechprev/react-lib";
 import { PlanoService, DocumentoService } from "@intechprev/prevsystem-service";
+import { Row, Col, Box, Form, CampoTexto, Button } from '../components';
 import { Link } from "react-router-dom";
 import { Page } from ".";
 import config from '../config.json';
@@ -24,39 +25,25 @@ export default class Documentos extends React.Component {
             pastaAtual: "",
             nomeDocumentoVazio: false,
             nomePastaVazio: false
-
         }
+
         this.page = React.createRef();
-        this.setState({ pastaAtual: this.state.oidPasta });
+        this.form = React.createRef();
     }
 
-    componentDidMount() {
-        PlanoService.BuscarTodos()
-            .then((result) => {
-                this.setState({ planos: result.data });
-            });
+    componentDidMount = async () => {
+        var { data: planos } = await PlanoService.BuscarTodos();
+        await this.setState({ planos });
+
         this.buscarLista();
-
-        this.setState({ pastaAtual: this.state.oidPasta });
-    }
-
-    componentDidUpdate() {
-        var pastaAntiga = this.state.oidPasta;
-        var oidPasta = this.props.location.pathname.split('/');
-        oidPasta = oidPasta[oidPasta.length - 1];
-        // oidPasta = oidPasta === "" ? "raiz" : oidPasta;
-
-        if(pastaAntiga !== oidPasta && pastaAntiga !== undefined)
-            window.location.reload();
-
     }
     
     buscarLista = async () => {
-        var resultDocumentos = await DocumentoService.BuscarPorPasta(this.state.oidPasta);
+        var { data: resultado } = await DocumentoService.BuscarPorPasta(this.state.oidPasta);
 
         await this.setState({ 
-            documentos: resultDocumentos.data.documentos,
-            pastas: resultDocumentos.data.pastas
+            documentos: resultado.documentos,
+            pastas: resultado.pastas
         });
     }
 
@@ -64,6 +51,7 @@ export default class Documentos extends React.Component {
         e.preventDefault();
 
         await this.setState({ nomePastaVazio: false });
+
         if(this.state.nomePasta === "")
             await this.setState({ nomePastaVazio: true });
 
@@ -117,8 +105,8 @@ export default class Documentos extends React.Component {
 
     }
 
-    renderizaErro = (stateErro, mensagemErro) => {
-        if(stateErro) {
+    renderizaErro = (campo, mensagemErro) => {
+        if(campo === "") {  
             return (    
                 <div className="text-danger">
                     <i className="fas fa-exclamation-circle"></i>&nbsp;
@@ -133,18 +121,20 @@ export default class Documentos extends React.Component {
     render() {
         return (
             <Page {...this.props} ref={this.page}>
-                <div className="row">
+
+                <Row>
                     {localStorage.getItem("admin") === "S" &&
-                        <div className="col-lg-4">
-                            <div className="box">
-                                <div className="box-title">
-                                    UPLOAD DE DOCUMENTOS
-                                </div>
-                                <div className="box-content">
+
+                        <Col className="lg-4">
+                            <Box titulo={"UPLOAD DE DOCUMENTOS"}>
+
+                                <Form ref={this.form}>
+                                
                                     <div className="form-group">
                                         <label htmlFor="titulo-documento"><b>Título:</b></label>
                                         <input name="nomeDocumento" className="form-control" value={this.state.nomeDocumento} onChange={(e) => handleFieldChange(this, e)}></input>
                                     </div>
+                                    
                                     <div className="form-group">
                                         <label htmlFor="plano-documento"><b>Plano:</b></label>
                                         <select id="plano-documento" className="form-control">
@@ -154,34 +144,33 @@ export default class Documentos extends React.Component {
                                             })}
                                         </select>
                                     </div>
+                                    
                                     <div className="form-group">
                                         <label htmlFor="selecionar-documento"><b>Arquivo:</b></label>
                                         <form>
                                             <input id="selecionar-documento" type="file" onChange={this.uploadFile} value={this.state.arquivoUpload}></input>
                                             <hr/>
-                                            <button id="salvar-documento" className="btn btn-primary" disabled={!this.state.podeCriarDocumento} onClick={this.salvarDocumento}>Salvar</button>
+                                            
+                                            <Button id="salvar-documento" titulo={"Salvar"} tipo={"primary"} submit desativado={!this.state.podeCriarDocumento} 
+                                                    onClick={this.salvarDocumento} />
                                         </form>
-                                        {this.renderizaErro(this.state.nomeDocumentoVazio, "Título do documento obrigatório!")}
+                                        {this.renderizaErro(this.state.nomeDocumento, "Título do documento obrigatório!")}
                                     </div>
-                                </div>
-                            </div>
+                                </Form>
 
-                            <div className="box">
-                                <div className="box-title">
-                                    CRIAÇÃO DE PASTA
-                                </div>
+                            </Box>
 
-                                <div className="box-content">
-                                    <div className="form-group">
-                                        <label htmlFor="nomePasta"><b>Nome:</b></label>
-                                        <input name="nomePasta" className="form-control" value={this.state.nomePasta} onChange={(e) => handleFieldChange(this, e)}></input>
-                                    </div>
-                                    <hr/>
-                                    <button id="salvar-pasta" className="btn btn-primary" onClick={this.salvarPasta}>Salvar</button>
-                                    {this.renderizaErro(this.state.nomePastaVazio, "Nome da pasta obrigatório!")}
+                            <Box titulo={"CRIAÇÃO DE PASTA"}>
+                                <div className="form-group">
+                                    <label htmlFor="nomePasta"><b>Nome:</b></label>
+                                    <input name="nomePasta" className="form-control" value={this.state.nomePasta} onChange={(e) => handleFieldChange(this, e)}></input>
                                 </div>
-                            </div>
-                        </div>
+                                <hr/>
+                                <button id="salvar-pasta" className="btn btn-primary" onClick={this.salvarPasta}>Salvar</button>
+                                {this.renderizaErro(this.state.nomePasta, "Nome da pasta obrigatório!")}
+                            </Box>
+                        </Col>
+
                     }
 
                     <div className="col-lg-8">
@@ -189,8 +178,8 @@ export default class Documentos extends React.Component {
                             <div className="box-content">
                                 {(this.state.pastas.length > 0 || this.state.documentos.length > 0) &&
                                     <div>
-                                        <Tabelas itens={this.state.pastas} campoTexto={"NOM_PASTA"} icone={"fa-folder-open text-warning"} tipo={"pasta"} />
-                                        <Tabelas itens={this.state.documentos} campoTexto={"TXT_TITULO"} icone={"fa-file text-info"} tipo={"documento"} />
+                                        <Tabelas {...this.props} itens={this.state.pastas} campoTexto={"NOM_PASTA"} icone={"fa-folder-open text-warning"} tipo={"pasta"} />
+                                        <Tabelas {...this.props} itens={this.state.documentos} campoTexto={"TXT_TITULO"} icone={"fa-file text-info"} tipo={"documento"} />
                                     </div>
                                 }
 
@@ -200,7 +189,8 @@ export default class Documentos extends React.Component {
                             </div>
                         </div>
                     </div>
-                </div>
+                </Row>
+
             </Page>
         );
     }
@@ -260,12 +250,11 @@ class Tabelas extends React.Component {
 
                             <div className="col mt-1">
                                 {this.props.tipo === "pasta" &&
-                                    <Link className="btn btn-link" onClick={async () => window.location.reload()} 
-                                        to={`/documentos/${item.OID_DOCUMENTO_PASTA}`}> {item[this.props.campoTexto]} </Link>
+                                    <Link className="btn btn-link" to={`/documentos/${item.OID_DOCUMENTO_PASTA}`}>{item[this.props.campoTexto]}</Link>
                                 }
 
                                 {this.props.tipo !== "pasta" &&
-                                    <button className={"btn btn-link"} onClick={() => this.downloadDocumento(item.OID_DOCUMENTO)}> {item[this.props.campoTexto]} </button>
+                                    <button className={"btn btn-link"} onClick={() => this.downloadDocumento(item.OID_DOCUMENTO)}>{item[this.props.campoTexto]}</button>
                                 }
                             </div>
                             

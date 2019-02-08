@@ -8,6 +8,8 @@ import { Row, Col } from "../components";
 import Rotas from "./preves/Rotas";
 
 const config = require("../config.json");
+//const Rotas = require(`./${config.cliente}/Rotas`);
+//console.log(Rotas);
 //var Rotas = [];
 
 export default class Page extends React.Component {
