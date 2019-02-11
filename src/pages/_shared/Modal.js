@@ -1,6 +1,15 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export default class Modal extends React.Component {
+    static propTypes = {
+        mostrarDados: PropTypes.bool
+    };
+
+    static defaultProps = {
+        mostrarDados: true
+    };
+
     constructor(props) {
         super(props);
 
