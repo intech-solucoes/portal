@@ -400,6 +400,7 @@ export default class MensagemNova extends React.Component {
                                             </select>
                                         </div>
             
+                                        {/** Tirar underline, permitir numeros incompletos (manda para todos que incluem o número incompleto)  */}
                                         <div className="form-group">
                                             <label htmlFor="matricula"><b>Matrícula</b></label>
                                             <InputMask mask="999999999" id="matricula" name="matricula" className="form-control" value={this.state.matricula} onChange={this.onChangeInput} />

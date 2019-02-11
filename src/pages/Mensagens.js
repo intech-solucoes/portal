@@ -64,7 +64,7 @@ export default class Mensagens extends React.Component {
                                         }
 
                                         {plano.mensagens.length > 0 &&
-                                            <ListaMensagens mensagens={plano.mensagens} />}
+                                            <ListaMensagens mostrarDados={false} mensagens={plano.mensagens} />}
 
                                         {plano.mensagens.length === 0 &&
                                             <div id="alertMensagem" className="alert alert-danger">Nenhuma mensagem enviada.</div>}

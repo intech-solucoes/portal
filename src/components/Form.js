@@ -45,8 +45,8 @@ export default class Form extends Component {
                     this.erros.push(`Campo "${campo.props.label || campo.props.placeholder}" inválido.`);
             });
 
-        await this.setState({
-            valido: this.erros.length === 0
+            await this.setState({
+                valido: this.erros.length === 0
         });
     }
 

@@ -52,19 +52,24 @@ export default class Modal extends React.Component {
                             </div>
                             <div className="modal-body">
                                 <p><b>Data de Criação: <label id="dataCriacaoModal">{this.state.mensagem.DTA_MENSAGEM}</label></b></p>
-                                <p><b>Fundação: <label id="fundacaoModal">{this.state.mensagem.NOM_FUNDACAO}</label></b></p>
-                                <p><b>Empresa: <label id="empresaModal">{this.state.mensagem.NOM_EMPRESA ? this.state.mensagem.NOM_EMPRESA : "Todas"}</label></b></p>
-                                <p><b>Plano: <label id="planoModal">{this.state.mensagem.DS_PLANO ? this.state.mensagem.DS_PLANO : "Todos"}</label></b></p>
-                                <p><b>Situação Plano: <label id="situacaoPlanoModal">{this.state.mensagem.DS_SIT_PLANO ? this.state.mensagem.DS_SIT_PLANO : "Todas"}</label></b></p>
-                                <p><b>Matrícula: <label id="matriculaModal">{this.state.mensagem.NUM_MATRICULA ? this.state.mensagem.NUM_MATRICULA : "Todas"}</label></b></p>
-                                <div className="btn-toolbar">
-                                    {/* Badge do Portal */}
-                                    {this.renderBadge(this.state.mensagem.IND_PORTAL, "success", "Portal")}
-                                    
-                                    {/* Badge de E-mail */}
-                                    {this.renderBadge(this.state.mensagem.IND_EMAIL, "danger", "E-mail")}
-                                </div>
-                                <br/>
+
+                                {this.props.mostrarDados &&
+                                    <div>
+                                        <p><b>Fundação: <label id="fundacaoModal">{this.state.mensagem.NOM_FUNDACAO}</label></b></p>
+                                        <p><b>Empresa: <label id="empresaModal">{this.state.mensagem.NOM_EMPRESA ? this.state.mensagem.NOM_EMPRESA : "Todas"}</label></b></p>
+                                        <p><b>Plano: <label id="planoModal">{this.state.mensagem.DS_PLANO ? this.state.mensagem.DS_PLANO : "Todos"}</label></b></p>
+                                        <p><b>Situação Plano: <label id="situacaoPlanoModal">{this.state.mensagem.DS_SIT_PLANO ? this.state.mensagem.DS_SIT_PLANO : "Todas"}</label></b></p>
+                                        <p><b>Matrícula: <label id="matriculaModal">{this.state.mensagem.NUM_MATRICULA ? this.state.mensagem.NUM_MATRICULA : "Todas"}</label></b></p>
+                                        <div className="btn-toolbar">
+                                            {/* Badge do Portal */}
+                                            {this.renderBadge(this.state.mensagem.IND_PORTAL, "success", "Portal")}
+                                            
+                                            {/* Badge de E-mail */}
+                                            {this.renderBadge(this.state.mensagem.IND_EMAIL, "danger", "E-mail")}
+                                        </div>
+                                        <br/>
+                                    </div>
+                                }
                                 
                                 <p id="mensagemModal">{this.state.mensagem.TXT_CORPO}</p>
                             </div>

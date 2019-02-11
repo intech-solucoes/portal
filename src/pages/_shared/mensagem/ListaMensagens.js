@@ -1,8 +1,17 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import Modal from "../Modal";
 
 export default class ListaMensagens extends React.Component {
+    static propTypes = {
+        mostrarDados: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        mostrarDados: true
+    };
+
     constructor(props) {
         super(props);
 
@@ -31,7 +40,7 @@ export default class ListaMensagens extends React.Component {
     render() {
         return (
             <div>
-                <Modal ref={this.modal} />
+                <Modal ref={this.modal} mostrarDados={this.props.mostarDados} />
 
                 <table className="table table-hover">
                     <thead>
@@ -53,10 +62,12 @@ export default class ListaMensagens extends React.Component {
                                             {mensagem.DTA_MENSAGEM}
                                         </td>
                                         <td className="align-middle">
-                                            <div>
-                                                {this.renderBadge(mensagem.IND_PORTAL, "success", "Portal")}
-                                                {this.renderBadge(mensagem.IND_EMAIL, "danger", "E-mail")}
-                                            </div>
+                                            {this.props.mostrarDados &&
+                                                <div>
+                                                    {this.renderBadge(mensagem.IND_PORTAL, "success", "Portal")}
+                                                    {this.renderBadge(mensagem.IND_EMAIL, "danger", "E-mail")}
+                                                </div>
+                                            }
 
                                             {mensagem.TXT_TITULO}
                                         </td>

@@ -23,18 +23,15 @@ export default class Documentos extends Component {
             oidArquivoUpload: 0,
             oidPasta: props.match.params.pasta,
             pastaAtual: "",
-            nomeDocumentoVazio: false,
-            nomePastaVazio: false
+            erroNomeDocumento: false,
+            erroNomePasta: false
         }
 
         this.page = React.createRef();
         this.form = React.createRef();
     }
 
-    componentDidMount = async () => {
-        var { data: planos } = await PlanoService.BuscarTodos();
-        await this.setState({ planos });
-
+    componentDidMount = () => {
         this.buscarLista();
     }
     
@@ -50,12 +47,12 @@ export default class Documentos extends Component {
     salvarPasta = async (e) => {
         e.preventDefault();
 
-        await this.setState({ nomePastaVazio: false });
+        await this.setState({ erroNomePasta: false });
 
         if(this.state.nomePasta === "")
-            await this.setState({ nomePastaVazio: true });
+            await this.setState({ erroNomePasta: true });
 
-        if(!this.state.nomePastaVazio) {
+        if(!this.state.erroNomePasta) {
             await DocumentoService.CriarPasta(this.state.nomePasta, this.state.oidPasta);
             await this.setState({
                 nomePasta: ""
@@ -68,11 +65,11 @@ export default class Documentos extends Component {
     salvarDocumento = async (e) => {
         e.preventDefault();
 
-        await this.setState({ nomeDocumentoVazio: false });
+        await this.setState({ erroNomeDocumento: false });
         if(this.state.nomeDocumento === "")
-            await this.setState({ nomeDocumentoVazio: true });
+            await this.setState({ erroNomeDocumento: true });
 
-        if(!this.state.nomeDocumentoVazio) {
+        if(!this.state.erroNomeDocumento) {
             await DocumentoService.Criar(this.state.oidArquivoUpload, this.state.nomeDocumento, "SIM", 1, this.state.oidPasta);
             
             await this.setState ({
@@ -105,9 +102,9 @@ export default class Documentos extends Component {
 
     }
 
-    renderizaErro = (campo, mensagemErro) => {
-        if(campo === "") {  
-            return (    
+    renderizaErro = (campoErro, mensagemErro) => {
+        if(campoErro) {  
+            return (
                 <div className="text-danger">
                     <i className="fas fa-exclamation-circle"></i>&nbsp;
                     <label id='mensagem-erro'>
@@ -131,30 +128,18 @@ export default class Documentos extends Component {
                                 <Form ref={this.form}>
                                 
                                     <div className="form-group">
-                                        <label htmlFor="titulo-documento"><b>Título:</b></label>
-                                        <input name="nomeDocumento" className="form-control" value={this.state.nomeDocumento} onChange={(e) => handleFieldChange(this, e)}></input>
-                                    </div>
-                                    
-                                    <div className="form-group">
-                                        <label htmlFor="plano-documento"><b>Plano:</b></label>
-                                        <select id="plano-documento" className="form-control">
-                                            <option>TODOS</option>
-                                            {this.state.planos.map((plano, index) => {
-                                                return <option key={index} value={plano.CD_PLANO}>{plano.DS_PLANO}</option>
-                                            })}
-                                        </select>
+                                        <label htmlFor="nomeDocumento"><b>Título:</b></label>
+                                        <input id="nomeDocumento" name="nomeDocumento" className="form-control" value={this.state.nomeDocumento} onChange={(e) => handleFieldChange(this, e)}></input>
                                     </div>
                                     
                                     <div className="form-group">
                                         <label htmlFor="selecionar-documento"><b>Arquivo:</b></label>
-                                        <form>
-                                            <input id="selecionar-documento" type="file" onChange={this.uploadFile} value={this.state.arquivoUpload}></input>
-                                            <hr/>
-                                            
-                                            <Button id="salvar-documento" titulo={"Salvar"} tipo={"primary"} submit desativado={!this.state.podeCriarDocumento} 
-                                                    onClick={this.salvarDocumento} />
-                                        </form>
-                                        {this.renderizaErro(this.state.nomeDocumento, "Título do documento obrigatório!")}
+                                        <input name="selecionar-documento" id="selecionar-documento" type="file" onChange={this.uploadFile} />
+                                        <hr/>
+                                        
+                                        <Button id="salvar-documento" titulo={"Salvar"} tipo={"primary"} submit desativado={!this.state.podeCriarDocumento} 
+                                                onClick={this.salvarDocumento} />
+                                        {this.renderizaErro(this.state.erroNomeDocumento, "Título do documento obrigatório!")}
                                     </div>
                                 </Form>
 
@@ -167,7 +152,7 @@ export default class Documentos extends Component {
                                 </div>
                                 <hr/>
                                 <Button id="salvar-pasta" className={"btn btn-primary"} titulo={"Salvar"} onClick={this.salvarPasta} />
-                                {this.renderizaErro(this.state.nomePasta, "Nome da pasta obrigatório!")}
+                                {this.renderizaErro(this.state.erroNomePasta, "Nome da pasta obrigatório!")}
                             </Box>
                         </Col>
 
@@ -210,23 +195,23 @@ class Tabelas extends React.Component {
         try {
             var { data: documento } = await DocumentoService.BuscarPorOidDocumento(oidDocumento);
             
-            DocumentoService.Download(oidDocumento)
-                .then(result => {
-                    const blobURL = window.URL.createObjectURL(new Blob([result.data]));
-                    const tempLink = document.createElement('a');
-                    tempLink.style.display = 'none';
-                    tempLink.href = blobURL;
-                    tempLink.setAttribute('download', documento.NOM_ARQUIVO_LOCAL);
+            var { data: documentoBlob } = await DocumentoService.Download(oidDocumento);
 
-                    if (typeof tempLink.download === 'undefined') {
-                        tempLink.setAttribute('target', '_blank');
-                    }
+            const blobURL = window.URL.createObjectURL(new Blob([documentoBlob]));
+            const tempLink = document.createElement('a');
+            tempLink.style.display = 'none';
+            tempLink.href = blobURL;
+            tempLink.setAttribute('download', documento.NOM_ARQUIVO_LOCAL);
 
-                    document.body.appendChild(tempLink);
-                    tempLink.click();
-                    document.body.removeChild(tempLink);
-                    window.URL.revokeObjectURL(blobURL);
-                });
+            if (typeof tempLink.download === 'undefined') {
+                tempLink.setAttribute('target', '_blank');
+            }
+
+            document.body.appendChild(tempLink);
+            tempLink.click();
+            document.body.removeChild(tempLink);
+            window.URL.revokeObjectURL(blobURL);
+
         } catch (err) {
             if(err.response)
                 console.error(err.response.data);
