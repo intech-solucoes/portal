@@ -17,11 +17,9 @@ export default class Modal extends React.Component {
             visible: false,
             mensagem: {}
         };
-
-        this.toggleModal = this.toggleModal.bind(this);
     }
 
-    toggleModal(mensagem) {
+    toggleModal = (mensagem) => {
         this.setState({
             visible: !this.state.visible,
             mensagem: mensagem
@@ -44,7 +42,7 @@ export default class Modal extends React.Component {
                 </div>
             )
         } else if(badgeVisivel === "NAO")
-            return <div></div>
+            return null
     }
 
     render() {
@@ -53,12 +51,14 @@ export default class Modal extends React.Component {
                 <div className="modal" role="dialog">
                     <div className="modal-dialog modal-lg" role="document">
                         <div className="modal-content">
+
                             <div className="modal-header">
                                 <h5 className="modal-title" id="tituloModal">{this.state.mensagem.TXT_TITULO}</h5>
                                 <button type="button" className="close" onClick={() => this.toggleModal()}>
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
+
                             <div className="modal-body">
                                 <p><b>Data de Criação: <label id="dataCriacaoModal">{this.state.mensagem.DTA_MENSAGEM}</label></b></p>
 
@@ -69,6 +69,7 @@ export default class Modal extends React.Component {
                                         <p><b>Plano: <label id="planoModal">{this.state.mensagem.DS_PLANO ? this.state.mensagem.DS_PLANO : "Todos"}</label></b></p>
                                         <p><b>Situação Plano: <label id="situacaoPlanoModal">{this.state.mensagem.DS_SIT_PLANO ? this.state.mensagem.DS_SIT_PLANO : "Todas"}</label></b></p>
                                         <p><b>Matrícula: <label id="matriculaModal">{this.state.mensagem.NUM_MATRICULA ? this.state.mensagem.NUM_MATRICULA : "Todas"}</label></b></p>
+
                                         <div className="btn-toolbar">
                                             {/* Badge do Portal */}
                                             {this.renderBadge(this.state.mensagem.IND_PORTAL, "success", "Portal")}
@@ -76,21 +77,24 @@ export default class Modal extends React.Component {
                                             {/* Badge de E-mail */}
                                             {this.renderBadge(this.state.mensagem.IND_EMAIL, "danger", "E-mail")}
                                         </div>
+
                                         <br/>
                                     </div>
                                 }
                                 
                                 <p id="mensagemModal">{this.state.mensagem.TXT_CORPO}</p>
                             </div>
+
                             <div className="modal-footer">
                                 <button id="botaoFecharModal" type="button" className="btn btn-default" onClick={() => this.toggleModal()}>Fechar</button>
                             </div>
+
                         </div>
                     </div>
                 </div>
             );
         } else {
-            return "";
+            return null;
         }
     }
 }

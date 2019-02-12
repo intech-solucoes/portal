@@ -34,13 +34,13 @@ export default class ListaMensagens extends React.Component {
                 </div>
             )
         } else if(badgeVisivel === "NAO")
-            return <div></div>
+            return null
     }
 
     render() {
         return (
             <div>
-                <Modal ref={this.modal} mostrarDados={this.props.mostarDados} />
+                <Modal ref={this.modal} mostrarDados={this.props.mostrarDados} />
 
                 <table className="table table-hover">
                     <thead>
@@ -55,12 +55,15 @@ export default class ListaMensagens extends React.Component {
                             this.props.mensagens.map((mensagem, index) => {
                                 return (
                                     <tr key={index}>
-                                        <td width="1px" className="align-middle">
+
+                                        <td width="50px" className="align-middle">
                                             <button id={"mensagem-" + mensagem.OID_MENSAGEM} className="btn btn-link" onClick={() => this.modal.current.toggleModal(mensagem)}><i className="fa fa-search"></i></button>
                                         </td>
+
                                         <td width="150px" className="align-middle">
                                             {mensagem.DTA_MENSAGEM}
                                         </td>
+
                                         <td className="align-middle">
                                             {this.props.mostrarDados &&
                                                 <div>
@@ -71,6 +74,7 @@ export default class ListaMensagens extends React.Component {
 
                                             {mensagem.TXT_TITULO}
                                         </td>
+
                                     </tr>
                                 );
                             })

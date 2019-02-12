@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { handleFieldChange } from "@intechprev/react-lib";
-import { PlanoService, DocumentoService } from "@intechprev/prevsystem-service";
-import { Row, Col, Box, Form, CampoTexto, Button } from '../components';
+import { DocumentoService } from "@intechprev/prevsystem-service";
+import { Row, Col, Box, Form, Button } from '../components';
 import { Link } from "react-router-dom";
 import { Page } from ".";
 import config from '../config.json';

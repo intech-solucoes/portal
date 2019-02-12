@@ -18,8 +18,6 @@ export default class LoginAdmin extends Component {
 
     onSubmit = async () => {
         await this.loginForm.current.validar();
-
-        
     }
 
     render() {
