@@ -123,25 +123,27 @@ export default class Page extends React.Component {
                             <Title />
                         </Col>
                         
-                        <Col tamanho={"sm-4"} className={"text-right user-icon"}>
-                            <Row>
-                                <Col className={"nome-usuario"}>
-                                    {this.state.nomeUsuario}
-                                </Col>
-
-                                {this.state.admin &&
-                                    <Col tamanho={"4"}>
-                                        <Link to={"/listarParticipantes"} className={"icon"}>
-                                            <i className={"fas fa-user-friends"}></i>
-                                        </Link>&nbsp;
-                                        <Link to={"/admin/login"} className={"icon"}>
-                                            <i className={"fas fa-lock"}></i>
-                                        </Link>
+                        {config.cliente !== "preves" &&
+                            <Col tamanho={"sm-4"} className={"text-right user-icon"}>
+                                <Row>
+                                    <Col className={"nome-usuario"}>
+                                        {this.state.nomeUsuario}
                                     </Col>
-                                }
-                            </Row>
-                        </Col>
-                    </Row>
+
+                                    {this.state.admin &&
+                                        <Col tamanho={"4"}>
+                                            <Link to={"/listarParticipantes"} className={"icon"}>
+                                                <i className={"fas fa-user-friends"}></i>
+                                            </Link>&nbsp;
+                                            <Link to={"/admin/login"} className={"icon"}>
+                                                <i className={"fas fa-lock"}></i>
+                                            </Link>
+                                        </Col>
+                                    }
+                                </Row>
+                            </Col>
+                        }
+                        </Row>
 
                     <div className="wrapper-content">
                         {this.props.children}

@@ -7,6 +7,7 @@ import Form from "./Form";
 import Button from "./Button";
 import FormFieldStatic from "./FormFieldStatic";
 import PainelErros from "./PainelErros";
+import Combo from "./Combo";
 
 export {
     Col,
@@ -17,5 +18,6 @@ export {
     Form,
     Button,
     FormFieldStatic,
-    PainelErros
+    PainelErros,
+    Combo
 };
