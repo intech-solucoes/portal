@@ -5,8 +5,6 @@ import DataInvalida from './_shared/Data';
 import ListaMensagens from "./_shared/mensagem/ListaMensagens";
 import { Page } from ".";
 
-var InputMask = require('react-input-mask');
-
 export default class MensagemNova extends React.Component {
     constructor(props) {
         super(props);
@@ -36,6 +34,7 @@ export default class MensagemNova extends React.Component {
             // mensagemId: 1
         }
 
+        this.alert = React.createRef();
         this.form = React.createRef();
         this.page = React.createRef();
     }
@@ -111,51 +110,50 @@ export default class MensagemNova extends React.Component {
 
     validar = async () => {
         await this.form.current.validar();
-        // var checkboxVazia = this.validarCheckboxes();
-        // var dataInvalida = this.validarData();
-        // var fundacaoVazia = this.validarFundacao();
+        this.validarCheckboxes();
+        this.validarData();
 
-        // var dadosMensagem = {};
-        
-        // if(!checkboxVazia && !dataInvalida && !fundacaoVazia) {
-        //     dadosMensagem.TXT_TITULO = this.state.titulo;
-        //     dadosMensagem.TXT_CORPO = this.state.mensagem;
-        //     dadosMensagem.DTA_EXPIRACAO = this.state.dataExpiracao;
-        //     dadosMensagem.CD_FUNDACAO = this.state.fundacao;
-        //     dadosMensagem.CD_EMPRESA = this.state.empresa;
-        //     dadosMensagem.CD_PLANO = this.state.plano;
-        //     dadosMensagem.CD_SIT_PLANO = this.state.situacaoPlano;
-        //     dadosMensagem.NUM_MATRICULA = this.state.matricula;
-        //     dadosMensagem.IND_MOBILE = this.state.enviarMobile ? "SIM" : "NAO";
-        //     dadosMensagem.IND_PORTAL = this.state.enviarPortal ? "SIM" : "NAO";
-        //     dadosMensagem.IND_EMAIL = this.state.enviarEmail ? "SIM" : "NAO";
-        //     dadosMensagem.IND_SMS = this.state.enviarSms ? "SIM" : "NAO";
+        var dadosMensagem = {};
+
+        if(this.alert.current.props.mensagem.length === 0) {
+            dadosMensagem.TXT_TITULO = this.state.titulo;
+            dadosMensagem.TXT_CORPO = this.state.mensagem;
+            dadosMensagem.DTA_EXPIRACAO = this.state.dataExpiracao;
+            dadosMensagem.CD_FUNDACAO = this.state.fundacao;
+            dadosMensagem.CD_EMPRESA = this.state.empresa;
+            dadosMensagem.CD_PLANO = this.state.plano;
+            dadosMensagem.CD_SIT_PLANO = this.state.situacaoPlano;
+            dadosMensagem.NUM_MATRICULA = this.state.matricula;
+            dadosMensagem.IND_MOBILE = this.state.enviarMobile ? "SIM" : "NAO";
+            dadosMensagem.IND_PORTAL = this.state.enviarPortal ? "SIM" : "NAO";
+            dadosMensagem.IND_EMAIL = this.state.enviarEmail ? "SIM" : "NAO";
+            dadosMensagem.IND_SMS = this.state.enviarSms ? "SIM" : "NAO";
             
-        //     try { 
-        //         await MensagemService.EnviarMensagem(dadosMensagem);
-        //         alert("Mensagem enviada com sucesso!");
-        //         await this.limparCampos();
+            try { 
+                await MensagemService.EnviarMensagem(dadosMensagem);
+                alert("Mensagem enviada com sucesso!");
+                await this.limparCampos();
                 
-        //         var { data: mensagens } = await MensagemService.BuscarTodas();
-        //         this.setState({ mensagens });
+                var { data: mensagens } = await MensagemService.BuscarTodas();
+                this.setState({ mensagens });
 
-        //     } catch(err) {
-        //         if(err.response)
-        //             alert(err.response.data);
-        //         else
-        //             console.error(err);
-        //     }
+            } catch(err) {
+                if(err.response)
+                    alert(err.response.data);
+                else
+                    console.error(err);
+            }
 
 
-        // } else {
-        //     window.scrollTo(0, 60);
-        // }
+        } else {
+            
+        }
     }
 
-    validarCheckboxes = () => {
-        var checkboxVazia = (!this.state.enviarEmail && !this.state.enviarPortal)
-        if(checkboxVazia)
-            console.log("Preencha uma checkbox");
+    validarCheckboxes = async () => {
+        if(!this.state.enviarEmail && !this.state.enviarPortal) {
+            await this.alert.current.adicionarErro("Preencha ao menos uma checkbox");
+        }
     }
 
     validarData = () => {
@@ -164,25 +162,9 @@ export default class MensagemNova extends React.Component {
         var dataInvalida = DataInvalida(dataObjeto, this.state.dataExpiracao);
 
         if(dataObjeto < new Date()) {
-            console.log("data inválida.");
             return true;
         } else {
-            console.log("data inválida:", dataInvalida);
             return dataInvalida;
-        }
-    }
-
-    /**
-     * @description Método que valida o campo fundação, que deve ser selecionado com uma opção diferente da opção default.
-     * @returns {boolean} True para fundação inválida (opção default) e false para fundação válida (sem erro).
-     */
-    validarFundacao = () => {
-        if(this.state.fundacao === "") {
-            console.log("Selecione uma fundação");
-            return true;
-            
-        } else {
-            return false;
         }
     }
 
@@ -216,60 +198,60 @@ export default class MensagemNova extends React.Component {
                                 <Row>                          
                                     <Col className={"col-lg-6"}>
 
-                                        <CampoTexto contexto={this} nome={"tituloMensagem"} max={50} valor={this.state.titulo} label={"Título:"} obrigatorio />
+                                        <CampoTexto contexto={this} nome={"titulo"} max={50} valor={this.state.titulo} label={"Título"} obrigatorio />
 
-                                        <CampoTexto contexto={this} nome={"mensagem"} textarea valor={this.state.mensagem} rows={10} label={"Corpo da Mensagem:"} obrigatorio />
+                                        <CampoTexto contexto={this} nome={"mensagem"} max={4000} textarea valor={this.state.mensagem} rows={10} label={"Corpo da Mensagem"} obrigatorio />
 
                                         <div className="form-group">
-                                            <label><b>Enviar via:</b></label>
+                                            <label><b>Enviar via</b></label>
                                             <Row>
                                                 <Col className={"col-lg-2"}>
-                                                    <input name="enviarEmail" id="enviarEmail" type="checkbox" checked={this.state.enviarEmail} onChange={this.onChangeInput} />
-                                                    <label htmlFor="enviarEmail"><b>E-mail</b></label>
+                                                    <input name="enviarEmail" id="enviarEmail" type="checkbox" checked={this.state.enviarEmail} onChange={this.onChangeInput} />&nbsp;
+                                                    <label htmlFor="enviarEmail">E-mail</label>
                                                 </Col>
 
                                                 <Col className={"col-lg-2"}>
-                                                    <input name="enviarPortal" id="enviarPortal" type="checkbox" checked={this.state.enviarPortal} onChange={this.onChangeInput} />
-                                                    <label htmlFor="enviarPortal"><b>Portal</b></label>
+                                                    <input name="enviarPortal" id="enviarPortal" type="checkbox" checked={this.state.enviarPortal} onChange={this.onChangeInput} />&nbsp;
+                                                    <label htmlFor="enviarPortal">Portal</label>
                                                 </Col>
                                             </Row>
                                         </div>
             
                                         <div className="form-group">
                                             <CampoTexto contexto={this} nome={"dataExpiracao"} mascara={"99/99/9999"} valor={this.state.dataExpiracao} 
-                                                        label={"Data de Expiração:"} underline />
+                                                        label={"Data de Expiração"} underline />
                                             <span className="text text-secondary">Deixe em branco para indicar que a mensagem não terá uma data de expiração</span>
                                         </div>
                                     </Col>
             
                                     <Col className={"col-lg-6"}>
 
-                                        <Combo contexto={this} label={"Fundação:"} onChange={this.onChangeFundacao}
+                                        <Combo contexto={this} label={"Fundação"} onChange={this.onChangeFundacao}
                                                nome="fundacao" valor={this.state.fundacao} obrigatorio textoVazio="Selecione uma fundação"
                                                opcoes={this.state.listaFundacao} nomeMembro={"NOME_ENTID"} valorMembro={"CD_FUNDACAO"} />
 
-                                        <Combo contexto={this} label={"Empresa:"} onChange={this.onChangeEmpresa}
-                                               nome="empresa" valor={this.state.empresa} obrigatorio textoVazio="Todas(os)"
+                                        <Combo contexto={this} label={"Empresa"} onChange={this.onChangeEmpresa}
+                                               nome="empresa" valor={this.state.empresa} textoVazio="Todas(os)"
                                                opcoes={this.state.listaEmpresa} nomeMembro={"NOME_ENTID"} valorMembro={"CD_EMPRESA"} />
                 
-                                        <Combo contexto={this} label={"Plano:"}
-                                               nome="plano" valor={this.state.plano} obrigatorio textoVazio="Todas(os)"
+                                        <Combo contexto={this} label={"Plano"}
+                                               nome="plano" valor={this.state.plano} textoVazio="Todas(os)"
                                                opcoes={this.state.listaPlano} nomeMembro={"DS_PLANO"} valorMembro={"CD_PLANO"} />
                 
-                                        <Combo contexto={this} label={"Situação do plano:"}
-                                               nome="situacaoPlano" valor={this.state.situacaoPlano} obrigatorio textoVazio="Todas(os)"
+                                        <Combo contexto={this} label={"Situação do plano"}
+                                               nome="situacaoPlano" valor={this.state.situacaoPlano} textoVazio="Todas(os)"
                                                opcoes={this.state.listaSituacaoPlano} nomeMembro={"DS_SIT_PLANO"} valorMembro={"CD_SIT_PLANO"} />
             
-                                        {/** Tirar underline, permitir numeros incompletos (manda para todos que incluem o número incompleto)  */}
                                         <div className="form-group">
-                                            <CampoTexto contexto={this} nome={"matricula"} mascara={"999999999"} valor={this.state.matricula} label={"Matrícula:"} />
+                                            <CampoTexto contexto={this} nome={"matricula"} mascara={"999999999"} valor={this.state.matricula} label={"Matrícula"} />
                                             <span className="text text-secondary">Deixe em branco para enviar para todas as matrículas dentro dos parâmetros acima</span>
                                         </div>
                                     </Col>
 
                                 </Row>
                                 <Button id="enviar" titulo={"Enviar"} tipo="primary" submit onClick={this.validar} />
-                                <Alert padraoFormulario tipo={"danger"} />
+                                <br /><br />
+                                <Alert ref={this.alert} padraoFormulario tipo={"danger"} />
                             </Form>      
                         </Box>
                             

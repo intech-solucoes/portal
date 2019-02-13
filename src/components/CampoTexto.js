@@ -57,7 +57,7 @@ export default class CampoTexto extends Component {
                     {this.props.textarea ? 
                         <Col>
                             <textarea name={this.props.nome} id={this.props.nome} className="form-control" rows={this.props.rows} 
-                                    placeholder={this.props.placeholder} value={this.props.valor} 
+                                    placeholder={this.props.placeholder} value={this.props.valor} maxLength={this.props.max}
                                     onChange={(e) => handleFieldChange(this.props.contexto, e, this.props.parent)} />
                         </Col>
                         :

@@ -13,12 +13,30 @@ export default class Alert extends Component {
         padraoFormulario: false
     }
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            mensagem: ""
+        }
+    }
+
+    async componentDidMount() { 
+        await this.setState({ mensagem: this.props.mensagem });
+    }
+
+    adicionarErro = async (mensagemErro) => { 
+        await this.setState({ 
+            mensagem: this.props.mensagem + '<br/>' + mensagemErro
+        });
+    }
+
     render() {
         return (
             <div>
                 {this.props.mensagem &&
-                    <div id="alerta" className={"alert alert-" + this.props.tipo}>
-                        {this.props.mensagem}
+                    <div id="alerta" className={"alert alert-" + this.props.tipo}
+                        dangerouslySetInnerHTML={{ __html: this.state.mensagem }}>
                     </div>
                 }
             </div>
