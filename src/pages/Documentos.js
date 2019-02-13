@@ -133,7 +133,7 @@ export default class Documentos extends Component {
                                     </div>
                                     
                                     <div className="form-group">
-                                        <label htmlFor="selecionar-documento"><b>Arquivo:</b></label>
+                                        <label htmlFor="selecionar-documento"><b>Arquivo:</b></label><br />
                                         <input name="selecionar-documento" id="selecionar-documento" type="file" onChange={this.uploadFile} />
                                         <hr/>
                                         

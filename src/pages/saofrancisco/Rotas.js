@@ -124,6 +124,15 @@ function GetRotas() {
             componente: (routeProps) => <Documentos {...routeProps} />,
             mostrarMenu: true,
             id: "documentos"
+        },
+        {
+            titulo: "Inf. Rendimentos",
+            icone: "fas fa-chart-pie",
+            caminho: "/infoRend",
+            componente: (routeProps) => <InformeRendimentos {...routeProps} />,
+            mostrarMenu: true,
+            exact: true,
+            id: "informeRendimentos"
         }
     ];
 

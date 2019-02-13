@@ -218,21 +218,18 @@ export default class MensagemNova extends React.Component {
 
                                         <CampoTexto contexto={this} nome={"tituloMensagem"} max={50} valor={this.state.titulo} label={"Título:"} obrigatorio />
 
-                                        <div className="form-group">
-                                            <label htmlFor="mensagem"><b>Corpo da Mensagem:</b></label>
-                                            <textarea name="mensagem" id="mensagem" className="form-control" rows="10" value={this.state.mensagem} onChange={this.onChangeInput}/>
-                                        </div>
+                                        <CampoTexto contexto={this} nome={"mensagem"} textarea valor={this.state.mensagem} rows={10} label={"Corpo da Mensagem:"} obrigatorio />
 
                                         <div className="form-group">
                                             <label><b>Enviar via:</b></label>
                                             <Row>
                                                 <Col className={"col-lg-2"}>
-                                                    <input name="enviarEmail" id="enviarEmail" type="checkbox" checked={this.state.enviarEmail} onChange={this.onChangeInput} />&nbsp;
+                                                    <input name="enviarEmail" id="enviarEmail" type="checkbox" checked={this.state.enviarEmail} onChange={this.onChangeInput} />
                                                     <label htmlFor="enviarEmail"><b>E-mail</b></label>
                                                 </Col>
 
                                                 <Col className={"col-lg-2"}>
-                                                    <input name="enviarPortal" id="enviarPortal" type="checkbox" checked={this.state.enviarPortal} onChange={this.onChangeInput} />&nbsp; 
+                                                    <input name="enviarPortal" id="enviarPortal" type="checkbox" checked={this.state.enviarPortal} onChange={this.onChangeInput} />
                                                     <label htmlFor="enviarPortal"><b>Portal</b></label>
                                                 </Col>
                                             </Row>
