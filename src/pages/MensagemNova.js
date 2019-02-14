@@ -30,8 +30,7 @@ export default class MensagemNova extends React.Component {
             listaSituacaoPlano: [],
             mensagens: [],
 
-            modalVisivel: false,
-            // mensagemId: 1
+            modalVisivel: false
         }
 
         this.alert = React.createRef();
@@ -109,13 +108,15 @@ export default class MensagemNova extends React.Component {
     }
 
     validar = async () => {
+        await this.alert.current.limparErros();
         await this.form.current.validar();
-        this.validarCheckboxes();
-        this.validarData();
+        await this.validarData();
+        await this.validarCheckboxes();
+        // await this.alert.current.adicionarErro("");     // Adicionar um erro no final pra atualizar o alert.
 
         var dadosMensagem = {};
 
-        if(this.alert.current.props.mensagem.length === 0) {
+        if(this.alert.current.state.mensagem.length === 0 && this.alert.current.props.mensagem === 0) {
             dadosMensagem.TXT_TITULO = this.state.titulo;
             dadosMensagem.TXT_CORPO = this.state.mensagem;
             dadosMensagem.DTA_EXPIRACAO = this.state.dataExpiracao;
@@ -143,8 +144,6 @@ export default class MensagemNova extends React.Component {
                 else
                     console.error(err);
             }
-
-
         } else {
             
         }
@@ -152,19 +151,24 @@ export default class MensagemNova extends React.Component {
 
     validarCheckboxes = async () => {
         if(!this.state.enviarEmail && !this.state.enviarPortal) {
-            await this.alert.current.adicionarErro("Preencha ao menos uma checkbox");
+            console.log("adicionando erro checkbox!");
+            await this.alert.current.adicionarErro("Campo \"Enviar via\" obrigatório.");
         }
     }
 
-    validarData = () => {
+    validarData = async () => {
         var dataObjeto = this.state.dataExpiracao.split("/");
         dataObjeto = new Date(dataObjeto[2], dataObjeto[1] - 1, dataObjeto[0]);
         var dataInvalida = DataInvalida(dataObjeto, this.state.dataExpiracao);
 
         if(dataObjeto < new Date()) {
-            return true;
+            console.log("adicionando erro data superior!");
+            await this.alert.current.adicionarErro("A Data de Expiração deve ser superior à data atual.");
         } else {
-            return dataInvalida;
+            if(dataInvalida) {
+                console.log("adicionando erro data invalida!");
+                await this.alert.current.adicionarErro("Campo \"Data de Expiração\" inválido.");
+            }
         }
     }
 
@@ -256,7 +260,14 @@ export default class MensagemNova extends React.Component {
                         </Box>
                             
                         <Box titulo={"HISTÓRICO DE MENSAGENS"}>
-                            <ListaMensagens mensagens={this.state.mensagens} />
+                            {this.state.mensagens.length === 0 &&
+                                <div id="alerta" className={"alert alert-danger"}>
+                                    Nenhuma mensagem enviada.
+                                </div>
+                            }
+                            {this.state.mensagens.length !== 0 &&
+                                <ListaMensagens mensagens={this.state.mensagens} />
+                            }
                         </Box>
                     </Col>
                 </Row>
