@@ -48,7 +48,6 @@ export default class Form extends Component {
         await this.setState({
             valido: this.erros.length === 0
         });
-        console.log("Form validado...");
     }
 
     buscarCamposRecursiva = async (children) => {
@@ -87,7 +86,6 @@ export default class Form extends Component {
             }
             else return child;
         });
-        console.log("Render Form:", this.state);
         return (
             <form>
                 {childrenWithProps}

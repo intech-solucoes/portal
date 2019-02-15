@@ -25,9 +25,10 @@
   dependencies:
     "@intechprev/service" "^1.0.2"
 
-"@intechprev/react-lib@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@intechprev/react-lib/-/react-lib-0.0.5.tgz#cdcf6a9eb1f4de4121503bdc982723c099ae55d5"
+"@intechprev/react-lib@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@intechprev/react-lib/-/react-lib-0.0.8.tgz#ee60cbb43adb87207346f2af3d9bb00ec66ec18b"
+  integrity sha512-h8E98oWjwtl0YCOewOQt+CxdFfJynlQHdgTsrn0wW1jZpydVXO7O6e0iM8DABHPMHLnp8oQ20aO/ARurjq325Q==
   dependencies:
     axios "^0.18.0"
 

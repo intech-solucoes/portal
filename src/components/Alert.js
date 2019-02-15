@@ -25,21 +25,17 @@ export default class Alert extends Component {
         var espacamento = this.props.mensagem.length > 0 ? "<br/>" : "";
 
         await this.setState({
-            mensagem: this.state.mensagem + espacamento + mensagemErro      // Aq na primeira vez que é chamado o state mensagem é vazio, sobrando apenas a mensagem adicionada.
+            mensagem: this.state.mensagem + espacamento + mensagemErro
         });
-
-        console.log("Erro adicionado:", mensagemErro);                     // seria necessario mais uma variavel independente de msg?!
-        console.log("mensagem total:", this.state.mensagem);
     }
 
     limparErros = async () => { 
         await this.setState({
-            mensagem: ""   // mensagem: this.props.mensagem
+            mensagem: ""
         })
     }
 
     render() {
-        console.log("Render Alert", this.state.mensagem, this.props.mensagem);
         return (
             <div>
                 {(this.state.mensagem || this.props.mensagem) &&

@@ -1,5 +1,6 @@
 import React from 'react';
 import { MensagemService, ListasService } from "@intechprev/prevsystem-service";
+import { handleFieldChange } from "@intechprev/react-lib";
 import { Row, Col, Box, CampoTexto, Button, Form, Alert, Combo } from "../components";
 import DataInvalida from './_shared/Data';
 import ListaMensagens from "./_shared/mensagem/ListaMensagens";
@@ -210,12 +211,12 @@ export default class MensagemNova extends React.Component {
                                             <label><b>Enviar via</b></label>
                                             <Row>
                                                 <Col className={"col-lg-2"}>
-                                                    <input name="enviarEmail" id="enviarEmail" type="checkbox" checked={this.state.enviarEmail} onChange={this.onChangeInput} />&nbsp;
+                                                    <input name="enviarEmail" id="enviarEmail" type="checkbox" checked={this.state.enviarEmail} onChange={(e) => handleFieldChange(this, e)} />&nbsp;
                                                     <label htmlFor="enviarEmail">E-mail</label>
                                                 </Col>
 
                                                 <Col className={"col-lg-2"}>
-                                                    <input name="enviarPortal" id="enviarPortal" type="checkbox" checked={this.state.enviarPortal} onChange={this.onChangeInput} />&nbsp;
+                                                    <input name="enviarPortal" id="enviarPortal" type="checkbox" checked={this.state.enviarPortal} onChange={(e) => handleFieldChange(this, e)} />&nbsp;
                                                     <label htmlFor="enviarPortal">Portal</label>
                                                 </Col>
                                             </Row>
