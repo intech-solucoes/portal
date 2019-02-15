@@ -61,20 +61,6 @@ export default class MensagemNova extends React.Component {
     }
 
     /**
-     * @description Método que atualiza o state do campo.
-     * @param {event} object
-     */
-    onChangeInput = (event) => {
-        const target = event.target;
-        const valor = target.type === 'checkbox' ? target.checked : target.value;
-        const campo = target.name;
-
-        this.setState({
-            [campo]: valor
-        });
-    }
-
-    /**
      * @description Método que busca as empresas que existem dentro da fundação selecionada e armazena no state listaEmpresa.
      * @param {event} object
      */
@@ -116,8 +102,7 @@ export default class MensagemNova extends React.Component {
         // await this.alert.current.adicionarErro("");     // Adicionar um erro no final pra atualizar o alert.
 
         var dadosMensagem = {};
-
-        if(this.alert.current.state.mensagem.length === 0 && this.alert.current.props.mensagem === 0) {
+        if(this.alert.current.state.mensagem.length === 0 && this.alert.current.props.mensagem.length === 0) {
             dadosMensagem.TXT_TITULO = this.state.titulo;
             dadosMensagem.TXT_CORPO = this.state.mensagem;
             dadosMensagem.DTA_EXPIRACAO = this.state.dataExpiracao;
@@ -152,7 +137,6 @@ export default class MensagemNova extends React.Component {
 
     validarCheckboxes = async () => {
         if(!this.state.enviarEmail && !this.state.enviarPortal) {
-            console.log("adicionando erro checkbox!");
             await this.alert.current.adicionarErro("Campo \"Enviar via\" obrigatório.");
         }
     }
@@ -163,13 +147,10 @@ export default class MensagemNova extends React.Component {
         var dataInvalida = DataInvalida(dataObjeto, this.state.dataExpiracao);
 
         if(dataObjeto < new Date()) {
-            console.log("adicionando erro data superior!");
             await this.alert.current.adicionarErro("A Data de Expiração deve ser superior à data atual.");
         } else {
-            if(dataInvalida) {
-                console.log("adicionando erro data invalida!");
+            if(dataInvalida)
                 await this.alert.current.adicionarErro("Campo \"Data de Expiração\" inválido.");
-            }
         }
     }
 

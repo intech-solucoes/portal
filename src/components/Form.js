@@ -66,6 +66,21 @@ export default class Form extends Component {
         }
     }
 
+    buscarAlertRecursiva = async (child) => {
+        try {
+            if(child.type === Alert && child.props.padraoFormulario) {
+                console.log("alert encontrado:", child);
+                return child;
+            }
+            else {
+                console.log("Recursiva:", child.children);
+                await this.buscarAlertRecursiva(child.children);
+            }
+        } catch(err) {
+            // console.error(err);
+        }
+    }
+
     render() {
         const { children } = this.props;
 

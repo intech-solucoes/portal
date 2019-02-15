@@ -22,7 +22,8 @@ export default class Alert extends Component {
     }
 
     adicionarErro = async (mensagemErro) => { 
-        var espacamento = this.props.mensagem.length > 0 ? "<br/>" : "";
+        var temMensagem = this.props.mensagem.length > 0 || this.state.mensagem.length > 0;
+        var espacamento = temMensagem ? "<br/>" : "";
 
         await this.setState({
             mensagem: this.state.mensagem + espacamento + mensagemErro
@@ -37,12 +38,14 @@ export default class Alert extends Component {
 
     render() {
         return (
-            <div>
-                {(this.state.mensagem || this.props.mensagem) &&
-                    <div id="alerta" className={"alert alert-" + this.props.tipo}
-                        dangerouslySetInnerHTML={{ __html: this.props.mensagem + this.state.mensagem }}>
-                    </div>
-                }
+            <div className={"row"}>
+                <div className={"col-6"}>
+                    {(this.state.mensagem || this.props.mensagem) &&
+                        <div id="alerta" className={"alert alert-" + this.props.tipo}
+                            dangerouslySetInnerHTML={{ __html: this.props.mensagem + this.state.mensagem }}>
+                        </div>
+                    }
+                </div>
             </div>
         )
     }
