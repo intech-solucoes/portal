@@ -5,12 +5,14 @@ export default class Alert extends Component {
     static propTypes = {
         mensagem: PropTypes.any,
         tipo: PropTypes.string.isRequired,
-        padraoFormulario: PropTypes.bool
+        padraoFormulario: PropTypes.bool,
+        tamanho: PropTypes.string
     }
 
     static defaultProps = {
         mensagem: "",
-        padraoFormulario: false
+        padraoFormulario: false,
+        tamanho: "12"
     }
 
     constructor(props) {
@@ -39,7 +41,7 @@ export default class Alert extends Component {
     render() {
         return (
             <div className={"row"}>
-                <div className={"col-6"}>
+                <div className={"col-" + this.props.tamanho}>
                     {(this.state.mensagem || this.props.mensagem) &&
                         <div id="alerta" className={"alert alert-" + this.props.tipo}
                             dangerouslySetInnerHTML={{ __html: this.props.mensagem + this.state.mensagem }}>

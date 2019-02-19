@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { validarEmail } from "@intechprev/react-lib";
 
-import { CampoTexto, Combo, Row } from '.';
+import { CampoTexto, Combo } from '.';
 import Alert from './Alert';
 
 export default class Form extends Component {

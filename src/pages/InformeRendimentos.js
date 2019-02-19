@@ -66,8 +66,6 @@ export default class InformeRendimentos extends React.Component {
                                     <Row className={"form-group"}>
                                         <label htmlFor="referencia" className="col-sm-2 col-form-label"><b>Referência:</b></label>
                                         <Col className={"col-sm-6"}>
-                                        {/* <Combo contexto={this} nome={"referencia"} opcoes={this.state.datas} 
-                                               nomeMembro={""} valorMembro={""}  */}
                                             <select id="referencia" className="form-control">
                                                 {this.state.datas.map((data, index) => <option key={index}>{data}</option>)}
                                             </select>

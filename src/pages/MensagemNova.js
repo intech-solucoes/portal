@@ -99,7 +99,6 @@ export default class MensagemNova extends React.Component {
         await this.form.current.validar();
         await this.validarData();
         await this.validarCheckboxes();
-        // await this.alert.current.adicionarErro("");     // Adicionar um erro no final pra atualizar o alert.
 
         var dadosMensagem = {};
         if(this.alert.current.state.mensagem.length === 0 && this.alert.current.props.mensagem.length === 0) {
@@ -237,7 +236,7 @@ export default class MensagemNova extends React.Component {
                                 </Row>
                                 <Button id="enviar" titulo={"Enviar"} tipo="primary" submit onClick={this.validar} />
                                 <br /><br />
-                                <Alert ref={this.alert} padraoFormulario tipo={"danger"} />
+                                <Alert ref={this.alert} padraoFormulario tipo={"danger"} tamanho={"6"} />
                             </Form>      
                         </Box>
                             
