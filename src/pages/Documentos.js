@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { handleFieldChange } from "@intechprev/react-lib";
 import { DocumentoService } from "@intechprev/prevsystem-service";
-import { Row, Col, Box, Form, Button } from '../components';
+import { Row, Col, Box, Form, Button, Alert, CampoTexto } from '../components';
 import { Link } from "react-router-dom";
 import { Page } from ".";
 import config from '../config.json';
@@ -23,18 +23,24 @@ export default class Documentos extends Component {
             oidArquivoUpload: 0,
             oidPasta: props.match.params.pasta,
             pastaAtual: "",
-            erroNomeDocumento: false,
-            erroNomePasta: false
+            visibilidadeFileInput: true
         }
 
         this.page = React.createRef();
-        this.form = React.createRef();
+        this.formDocumento = React.createRef();
+        this.alertDocumento = React.createRef();
+        this.formPasta = React.createRef();
+        this.alertPasta = React.createRef();
     }
 
     componentDidMount = () => {
         this.buscarLista();
     }
     
+    UNSAFE_componentWillReceiveProps() {
+        window.location.reload();
+    }
+
     buscarLista = async () => {
         var { data: resultado } = await DocumentoService.BuscarPorPasta(this.state.oidPasta);
 
@@ -47,71 +53,70 @@ export default class Documentos extends Component {
     salvarPasta = async (e) => {
         e.preventDefault();
 
-        await this.setState({ erroNomePasta: false });
+        await this.alertPasta.current.limparErros();
+        await this.formPasta.current.validar();
 
-        if(this.state.nomePasta === "")
-            await this.setState({ erroNomePasta: true });
+        if(this.alertPasta.current.state.mensagem.length === 0 && this.alertPasta.current.props.mensagem.length === 0) {
+            try {
+                await DocumentoService.CriarPasta(this.state.nomePasta, this.state.oidPasta);
+                await this.setState({
+                    nomePasta: ""
+                });
+        
+                await this.buscarLista();
 
-        if(!this.state.erroNomePasta) {
-            await DocumentoService.CriarPasta(this.state.nomePasta, this.state.oidPasta);
-            await this.setState({
-                nomePasta: ""
-            });
+            } catch(err) {
+                console.error(err);
+            }
+        }
+    }
+
+    uploadFile = (e) => {
+        try {
+            const formData = new FormData()
+            var arquivoUpload = e.target.files[0];
     
-            await this.buscarLista();
+            formData.append("File", arquivoUpload, arquivoUpload.name)
+    
+            axios.post(apiUrl + '/upload', formData, {
+                headers: {'Content-Type': 'multipart/form-data'},
+                onUploadProgress: progressEvent => {
+                },
+            })
+            .then((result) => {
+                this.setState({
+                    podeCriarDocumento: true,
+                    oidArquivoUpload: result.data,
+                    visibilidadeFileInput: false
+                });
+            })
+        } catch(err) { 
+            console.error(err);
         }
     }
 
     salvarDocumento = async (e) => {
         e.preventDefault();
 
-        await this.setState({ erroNomeDocumento: false });
-        if(this.state.nomeDocumento === "")
-            await this.setState({ erroNomeDocumento: true });
+        await this.alertDocumento.current.limparErros();
+        await this.formDocumento.current.validar();
 
-        if(!this.state.erroNomeDocumento) {
-            await DocumentoService.Criar(this.state.oidArquivoUpload, this.state.nomeDocumento, "SIM", 1, this.state.oidPasta);
-            
-            await this.setState ({
-                nomeDocumento: "",
-                arquivoUpload: "",
-                oidArquivoUpload: 0
-            });
-    
-            await this.buscarLista();
-        }
-    }
+        console.log("alert", this.alertDocumento.current.state.mensagem, this.alertDocumento.current.props.mensagem);
+        if(this.alertDocumento.current.state.mensagem.length === 0 && this.alertDocumento.current.props.mensagem.length === 0) {
+            try {
+                await DocumentoService.Criar(this.state.oidArquivoUpload, this.state.nomeDocumento, "SIM", 1, this.state.oidPasta);
+                
+                await this.setState ({
+                    nomeDocumento: "",
+                    arquivoUpload: "",
+                    oidArquivoUpload: 0,
+                    visibilidadeFileInput: true
+                });
+                await this.buscarLista();
 
-    uploadFile = (e) => {
-        const formData = new FormData()
-        var arquivoUpload = e.target.files[0];
-
-        formData.append("File", arquivoUpload, arquivoUpload.name)
-
-        axios.post(apiUrl + '/upload', formData, {
-            headers: {'Content-Type': 'multipart/form-data'},
-            onUploadProgress: progressEvent => {
-            },
-        })
-        .then((result) => {
-            this.setState({
-                podeCriarDocumento: true,
-                oidArquivoUpload: result.data
-            });
-        })
-
-    }
-
-    renderizaErro = (campoErro, mensagemErro) => {
-        if(campoErro) {  
-            return (
-                <div className="text-danger">
-                    <i className="fas fa-exclamation-circle"></i>&nbsp;
-                    <label id='mensagem-erro'>
-                        {mensagemErro}
-                    </label>
-                </div>
-            )
+            } catch(err) {
+                console.error(err);
+            }
         }
     }
 
@@ -124,35 +129,45 @@ export default class Documentos extends Component {
 
                         <Col className={"lg-4"}>
                             <Box titulo={"UPLOAD DE DOCUMENTOS"}>
-
-                                <Form ref={this.form}>
+                                <Form ref={this.formDocumento}>
                                 
-                                    <div className="form-group">
-                                        <label htmlFor="nomeDocumento"><b>Título:</b></label>
-                                        <input id="nomeDocumento" name="nomeDocumento" className="form-control" value={this.state.nomeDocumento} onChange={(e) => handleFieldChange(this, e)}></input>
-                                    </div>
+                                    <CampoTexto contexto={this} nome={"nomeDocumento"} max={50} valor={this.state.nomeDocumento} label={"Título"} obrigatorio />
                                     
                                     <div className="form-group">
-                                        <label htmlFor="selecionar-documento"><b>Arquivo:</b></label><br />
-                                        <input name="selecionar-documento" id="selecionar-documento" type="file" onChange={this.uploadFile} />
+
+                                        <label htmlFor="selecionar-documento"><b>Arquivo</b></label><br />
+
+                                        {this.state.visibilidadeFileInput &&
+                                        <input name="selecionar-documento" id="selecionar-documento" type="file" onChange={this.uploadFile} />}
+                                        
+                                        {!this.state.visibilidadeFileInput &&
+                                            <Button titulo={"Enviar outro arquivo"} tipo={"primary"}
+                                                    onClick={async () => await this.setState({ visibilidadeFileInput: true })} />}
+
                                         <hr/>
                                         
                                         <Button id="salvar-documento" titulo={"Salvar"} tipo={"primary"} submit desativado={!this.state.podeCriarDocumento} 
                                                 onClick={this.salvarDocumento} />
-                                        {this.renderizaErro(this.state.erroNomeDocumento, "Título do documento obrigatório!")}
                                     </div>
-                                </Form>
 
+                                    <Alert ref={this.alertDocumento} padraoFormulario tipo={"danger"} />
+
+                                </Form>
                             </Box>
 
                             <Box titulo={"CRIAÇÃO DE PASTA"}>
-                                <div className="form-group">
-                                    <label htmlFor="nomePasta"><b>Nome:</b></label>
-                                    <input name="nomePasta" className="form-control" value={this.state.nomePasta} onChange={(e) => handleFieldChange(this, e)}></input>
-                                </div>
-                                <hr/>
-                                <Button id="salvar-pasta" className={"btn btn-primary"} titulo={"Salvar"} onClick={this.salvarPasta} />
-                                {this.renderizaErro(this.state.erroNomePasta, "Nome da pasta obrigatório!")}
+                                <Form ref={this.formPasta}>
+                                
+                                    <CampoTexto contexto={this} nome={"nomePasta"} max={50} valor={this.state.nomePasta} label={"Nome"} obrigatorio />
+                                    <hr/>
+
+                                    <div className="form-group">
+                                        <Button id="salvar-pasta" className={"btn btn-primary"} titulo={"Salvar"} submit onClick={this.salvarPasta} />
+                                    </div>
+
+                                    <Alert ref={this.alertPasta} padraoFormulario tipo={"danger"} />
+
+                                </Form>
                             </Box>
                         </Col>
 
@@ -237,7 +252,7 @@ class Tabelas extends React.Component {
                                 }
 
                                 {this.props.tipo !== "pasta" &&
-                                    <button className={"btn btn-link"} onClick={() => this.downloadDocumento(item.OID_DOCUMENTO)}>{item[this.props.campoTexto]}</button>
+                                    <Button className={"btn btn-link"} onClick={() => this.downloadDocumento(item.OID_DOCUMENTO)} titulo={item[this.props.campoTexto]} />
                                 }
                             </Col>
                             

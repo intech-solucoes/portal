@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Box, Button, CampoTexto, Alert, PainelErros } from "../components";
+import { Row, Col, Box, Button, CampoTexto, Alert, Form } from "../components";
 import { UsuarioService } from "@intechprev/prevsystem-service";
 import { Page } from ".";
 
@@ -15,11 +15,15 @@ export default class TrocarSenha extends React.Component {
             mensagemSucesso: false
         }
 
-        this.erros = [];
         this.page = React.createRef();
+        this.form = React.createRef();
+        this.alert = React.createRef();
     }
 
     trocarSenha = async () => {
+        await this.alert.current.limparErros();
+        await this.form.current.validar();
+
         // Define os estados iniciais de alertas.
         this.erros = [];
         this.setState({ mensagemSucesso: false })
@@ -36,7 +40,7 @@ export default class TrocarSenha extends React.Component {
         this.setState({ erros: this.erros });
 
         try {
-            if(this.state.erros.length === 0) {
+            if(this.alert.current.state.mensagem.length === 0 && this.alert.current.props.mensagem.length === 0) {
                 await UsuarioService.TrocarSenha(this.state.senhaAntiga, this.state.senhaNova);
                 this.setState({ mensagemSucesso: true })
             }
@@ -57,37 +61,41 @@ export default class TrocarSenha extends React.Component {
                 <Row>
                     <Col className={"col-lg-12"}>
                         <Box>
+                            <Form ref={this.form}>
+                            
+                                <Row className={"form-group"}>
+                                    <label htmlFor="senhaAntiga" className="col-2 col-form-label"><b>Senha antiga:</b></label>
+                                    <Col tamanho={"10"}>
+                                        <CampoTexto contexto={this} nome={"senhaAntiga"} obrigatorio tipo={"password"} />
+                                    </Col>
+                                </Row>
 
-                            <Row className={"form-group"}>
-                                <label htmlFor="senhaAntiga" className="col-2 col-form-label"><b>Senha antiga:</b></label>
-                                <Col tamanho={"10"}>
-                                    <CampoTexto contexto={this} nome={"senhaAntiga"} obrigatorio tipo={"password"} />
-                                </Col>
-                            </Row>
+                                <Row className={"form-group"}>
+                                    <label htmlFor="senhaNova" className="col-sm-2  col-form-label"><b>Nova senha:</b></label>
+                                    <Col tamanho={"10"}>
+                                        <CampoTexto contexto={this} nome={"senhaNova"} obrigatorio tipo={"password"} />
+                                    </Col>
+                                </Row>
 
-                            <Row className={"form-group"}>
-                                <label htmlFor="senhaNova" className="col-sm-2  col-form-label"><b>Nova senha:</b></label>
-                                <Col tamanho={"10"}>
-                                    <CampoTexto contexto={this} nome={"senhaNova"} obrigatorio tipo={"password"} />
-                                </Col>
-                            </Row>
+                                <Row className={"form-group"}>
+                                    <label htmlFor="confirmarSenha" className="col-sm-2  col-form-label"><b>Confirme nova senha:</b></label>
+                                    <Col tamanho={"10"}>
+                                        <CampoTexto contexto={this} nome={"confirmarSenha"} obrigatorio tipo={"password"} />
+                                    </Col>
+                                </Row>
 
-                            <Row className={"form-group"}>
-                                <label htmlFor="confirmarSenha" className="col-sm-2  col-form-label"><b>Confirme nova senha:</b></label>
-                                <Col tamanho={"10"}>
-                                    <CampoTexto contexto={this} nome={"confirmarSenha"} obrigatorio tipo={"password"} />
-                                </Col>
-                            </Row>
+                                {/* <PainelErros erros={this.state.erros} /> */}
 
-                            <PainelErros erros={this.state.erros} />
+                                {this.state.mensagemSucesso &&
+                                    <Alert tipo={"success"} mensagem={"Senha alterada com sucesso"} />
+                                }
+                                <hr />
 
-                            {this.state.mensagemSucesso &&
-                                <Alert tipo={"success"} mensagem={"Senha alterada com sucesso"} />
-                            }
-                            <hr />
+                                <Alert ref={this.alert} padraoFormulario tipo={"danger"} /> 
 
-                            <Button id="trocar-senha" titulo={"Trocar Senha"} tipo="primary" onClick={() => this.trocarSenha()} usaLoading />
-
+                                <Button id="trocar-senha" submit titulo={"Trocar Senha"} tipo="primary" onClick={() => this.trocarSenha()} usaLoading />
+                            
+                            </Form>
                         </Box>
                     </Col>
                 </Row>
