@@ -18,12 +18,12 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@intechprev/prevsystem-service@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@intechprev/prevsystem-service/-/prevsystem-service-1.4.0.tgz#d1d8a7772c2eeff53387b47a15284c628ecaa44d"
-  integrity sha512-aSKLFsjXYtz48U3gv5avhMZ+QjfJHmsLoTPN+9BegJrL7cn3/a0KwG0xRKVtb13e0KN+l5HZ7Hn5VxK75z19WQ==
+"@intechprev/prevsystem-service@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@intechprev/prevsystem-service/-/prevsystem-service-1.5.0.tgz#428103f5e50e35a206253f043a780ed6c66f059d"
+  integrity sha512-vjOzLrKtp/XHMXsjqHNNuNEUvkcTVuvG/w/UAdV2Ecx/YpxDARUuxTfXnG51Epej67dRCD0L9VSiIjzUfPb58g==
   dependencies:
-    "@intechprev/service" "^1.0.2"
+    "@intechprev/service" "^1.1.0"
 
 "@intechprev/react-lib@^0.0.8":
   version "0.0.8"
@@ -32,9 +32,10 @@
   dependencies:
     axios "^0.18.0"
 
-"@intechprev/service@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@intechprev/service/-/service-1.0.2.tgz#fb484c92442df49e863418a2886401c3d40c4225"
+"@intechprev/service@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@intechprev/service/-/service-1.1.0.tgz#11e4db99759d975cb16d3b818c3c3cc397b401b4"
+  integrity sha512-IKXc1mqR9XUnTfnqD00XMG+OOABXa80dh9UaRMEekLtqVLTxdiT3ZC6zxlm28nGTxnoFpBCH6Z5v9KO+BvdhcQ==
   dependencies:
     axios "^0.18.0"
 

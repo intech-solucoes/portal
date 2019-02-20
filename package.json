@@ -4,8 +4,9 @@
   "private": true,
   "homepage": ".",
   "dependencies": {
-    "@intechprev/prevsystem-service": "^1.4.0",
+    "@intechprev/prevsystem-service": "^1.5.0",
     "@intechprev/react-lib": "^0.0.8",
+    "@intechprev/service": "^1.1.0",
     "autoprefixer": "7.1.6",
     "axios": "^0.18.0",
     "babel-core": "6.26.0",

@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { FuncionarioService } from  "@intechprev/prevsystem-service";
+import { FuncionarioService, UsuarioService } from  "@intechprev/prevsystem-service";
 
 import { Row, Col } from "../components";
 
-import Rotas from "./preves/Rotas";
+import Rotas from "./saofrancisco/Rotas";
 
 const config = require("../config.json");
 //const Rotas = require(`./${config.cliente}/Rotas`);
@@ -22,7 +22,7 @@ export default class Page extends React.Component {
         }
     }
 
-    async componentWillMount() {
+    componentWillMount = async () => {
         try {
             // Carrega as rotas aqui pq fora tava dando problema NÃO FAÇO A MINIMA IDEIA DO PQ
             //Rotas = (await import(`./${config.cliente}/Rotas`)).default;
@@ -32,7 +32,8 @@ export default class Page extends React.Component {
             if(token) {
                 var { data: dados } = await FuncionarioService.Buscar();
                 var nomeUsuario = dados.Funcionario.NOME_ENTID;
-                var admin = dados.Usuario.IND_ADMINISTRADOR === "S";
+
+                var { data: admin } = await UsuarioService.VerificarAdmin();
                 
                 await this.setState({
                     nomeUsuario,
@@ -40,12 +41,14 @@ export default class Page extends React.Component {
                 });
             } else {
                 localStorage.removeItem("token");
+                localStorage.removeItem("token-admin");
                 this.props.history.push("login");
             }
         } catch(err) {
             if(err.message.indexOf("401") > -1)
             {
                 localStorage.removeItem("token");
+                localStorage.removeItem("token-admin");
                 this.props.history.push("login");
             }
         }
@@ -62,6 +65,7 @@ export default class Page extends React.Component {
 
     logout() {
         localStorage.removeItem("token");
+        localStorage.removeItem("token-admin");
         this.props.history.push("login");
     }
 
@@ -131,7 +135,7 @@ export default class Page extends React.Component {
                                     </Col>
 
                                     {this.state.admin &&
-                                        <Col tamanho={"4"}>
+                                        <Col tamanho={"3"}>
                                             <Link to={"/listarParticipantes"} className={"icon"}>
                                                 <i className={"fas fa-user-friends"}></i>
                                             </Link>&nbsp;

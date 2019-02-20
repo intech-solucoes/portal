@@ -17,8 +17,9 @@ export default class Login extends React.Component {
         try {
             this.loginForm.current.limparErro();
             
-            var loginResult = await UsuarioService.Login(cpf, senha);    
-            await localStorage.setItem("token", loginResult.data.AccessToken);
+            var { data: login } = await UsuarioService.Login(cpf, senha);
+            await localStorage.setItem("token", login.AccessToken);
+            await localStorage.setItem("token-admin", login.AccessToken);
                     
             var { data: dados } = await FuncionarioService.Buscar();
 
