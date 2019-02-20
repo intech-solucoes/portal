@@ -39,7 +39,7 @@ export default class Home extends React.Component {
                 <Row>
                     <Col tamanho={"lg-12"}>
                         <Box>
-                            <h2>Olá, <span className="text-primary">{this.state.dados.dadosPessoais.NOME_ENTID},</span></h2>
+                            <h2>Olá, <span className="text-primary">{this.state.dados.dadosPessoais.NOME_ENTID}</span></h2>
                             <h5>
                                 <p className="text-justify">Bem vindo ao Portal do Participante. Aqui, você encontra as principais informações sobre seu Plano de Benefício.
                                 Nosso portal está em desenvolvimento, mas diversas funcionalidades já estão disponíveis para acesso, dentre elas: </p>
@@ -79,7 +79,7 @@ export default class Home extends React.Component {
                                 <HomeItem titulo={"Trocar senha"}>
                                     O participante tem a possibilidade de alterar a senha de acesso sempre que julgar necessário. Para isso, deverá informar a senha antiga, e a nova senha
                                 </HomeItem>
-                                <br/>
+                                <br/><br/>
 
                                 <div className="box-footer">
                                     <h5>

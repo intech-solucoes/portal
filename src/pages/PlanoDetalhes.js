@@ -309,15 +309,22 @@ export default class DetalhesPlano extends React.Component {
                                 <div>
                                     <div className="form-row">
                                         <FormFieldStatic titulo="Quantidade de Cotas Participante" valor={this.state.saldo.CotasPartic} />
-                                        <FormFieldStatic titulo="Quantidade de Cotas Patrocinadora" valor={this.state.saldo.CotasPatroc} />
+
+                                        {this.state.saldo.CotasPatroc !== 0 &&
+                                        <FormFieldStatic titulo="Quantidade de Cotas Patrocinadora" valor={this.state.saldo.CotasPatroc} />}
                                     </div>
+
                                     <div className="form-row">
                                         <FormFieldStatic titulo="Saldo Participante" tipo={"dinheiro"} valor={this.state.saldo.SaldoPartic} />
-                                        <FormFieldStatic titulo="Saldo Patrocinadora" tipo={"dinheiro"} valor={this.state.saldo.SaldoPatroc} />
+
+                                        {this.state.saldo.SaldoPatroc !== 0 &&
+                                        <FormFieldStatic titulo="Saldo Patrocinadora" tipo={"dinheiro"} valor={this.state.saldo.SaldoPatroc} />}
                                     </div>
+
                                     <div className="form-row">
                                         <FormFieldStatic titulo="Saldo Total" tipo={"dinheiro"} valor={this.state.saldo.Total} />
                                     </div>
+
                                     <div className="form-row">
                                         <FormFieldStatic titulo="Data do Indice" valor={this.state.saldo.DataIndice} />
                                         <FormFieldStatic titulo="Valor do Indice" valor={this.state.saldo.ValorIndice} />
@@ -328,8 +335,8 @@ export default class DetalhesPlano extends React.Component {
                             {this.state.cdPlano === "0002" &&
                                 <div>
                                     <div className="form-row">
-                                        <FormFieldStatic titulo="Quantidade de Cotas" valor={this.state.saldo.Cotas} />
-                                        <FormFieldStatic titulo="Saldo" tipo={"dinheiro"} valor={this.state.saldo.Saldo} />
+                                        <FormFieldStatic titulo="Quantidade de Cotas" valor={this.state.saldo.CotasPartic} />
+                                        <FormFieldStatic titulo="Saldo" tipo={"dinheiro"} valor={this.state.saldo.SaldoPartic} />
                                     </div>
                                     <div className="form-row">
                                         <FormFieldStatic titulo="Data do Indice" valor={this.state.saldo.DataIndice} />
