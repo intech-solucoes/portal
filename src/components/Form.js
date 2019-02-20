@@ -65,41 +65,30 @@ export default class Form extends Component {
             // console.error(err);
         }
     }
-
-    buscarAlertRecursiva = async (child) => {
-        try {
-            if(child.type === Alert && child.props.padraoFormulario) {
-                console.log("alert encontrado:", child);
-                return child;
-            }
-            else {
-                console.log("Recursiva:", child.children);
-                await this.buscarAlertRecursiva(child.children);
-            }
-        } catch(err) {
-            // console.error(err);
-        }
-    }
-
+    
     render() {
         const { children } = this.props;
 
         const childrenWithProps = React.Children.map(children, child => {
-            if(child.type === Alert && child.props.padraoFormulario) {
-                var mensagem = "";
-
-                for(var i = 0; i < this.erros.length; i++) {
-                    // Concatena a mensagem de erros atual com o novo erro da iteração atual
-                    mensagem = mensagem + this.erros[i];
-                    
-                    // Verifica se é o ultimo item da lista de erros. Caso não seja, adiciona quebra de linha
-                    if(i !== this.erros.length - 1)
-                        mensagem = mensagem + "<br/>";
+            try {
+                if(child && child.type === Alert && child.props.padraoFormulario) {
+                    var mensagem = "";
+    
+                    for(var i = 0; i < this.erros.length; i++) {
+                        // Concatena a mensagem de erros atual com o novo erro da iteração atual
+                        mensagem = mensagem + this.erros[i];
+                        
+                        // Verifica se é o ultimo item da lista de erros. Caso não seja, adiciona quebra de linha
+                        if(i !== this.erros.length - 1)
+                            mensagem = mensagem + "<br/>";
+                    }
+    
+                    return React.cloneElement(child, { mensagem });
                 }
-
-                return React.cloneElement(child, { mensagem });
+                else return child;
+            } catch(err) {
+                console.error(err);
             }
-            else return child;
         });
         return (
             <form>

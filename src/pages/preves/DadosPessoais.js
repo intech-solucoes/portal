@@ -21,9 +21,7 @@ export default class DadosPessoais extends React.Component {
 
     componentWillMount = async () => {
         var { data: dados } = await FuncionarioService.Buscar();
-        this.setState({
-            dados
-        });
+        this.setState({ dados });
     }
 
     render() {
