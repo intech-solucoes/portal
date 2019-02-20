@@ -8,7 +8,7 @@ export default class TrocarSenha extends React.Component {
         super(props);
 
         this.state = {
-            senhaAntiga: "",
+            senhaAtual: "",
             senhaNova: "",
             confirmarSenha: "",
             mensagemSucesso: false
@@ -35,7 +35,7 @@ export default class TrocarSenha extends React.Component {
 
         try {
             if(this.alert.current.state.mensagem.length === 0 && this.alert.current.props.mensagem.length === 0) {
-                await UsuarioService.TrocarSenha(this.state.senhaAntiga, this.state.senhaNova);
+                await UsuarioService.TrocarSenha(this.state.senhaAtual, this.state.senhaNova);
                 this.setState({ mensagemSucesso: true })
             }
         } catch(err) {
@@ -56,9 +56,9 @@ export default class TrocarSenha extends React.Component {
                             <Form ref={this.form}>
                             
                                 <Row className={"form-group"}>
-                                    <label htmlFor="senhaAntiga" className="col-2 col-form-label"><b>Senha antiga</b></label>
+                                    <label htmlFor="senhaAtual" className="col-2 col-form-label"><b>Senha atual</b></label>
                                     <Col tamanho={"10"}>
-                                        <CampoTexto contexto={this} nome={"senhaAntiga"} obrigatorio tipo={"password"} />
+                                        <CampoTexto contexto={this} nome={"senhaAtual"} obrigatorio tipo={"password"} />
                                     </Col>
                                 </Row>
 

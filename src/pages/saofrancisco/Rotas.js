@@ -1,9 +1,9 @@
 import React from 'react';
 
 import {
-    Home, DadosPessoais, Planos, PlanoDetalhes, Mensagens, TrocarSenha, MensagemNova,
-    Login, EsqueciSenha, Contracheque, ContrachequeDetalhe, Documentos, InformeRendimentos,
-    LoginAdmin, ListarParticipantes
+    Home, DadosPessoais, Planos, Documentos, Mensagens, TrocarSenha, PlanoDetalhes, MensagemNova,
+    Contracheque, ContrachequeDetalhe, InformeRendimentos,
+    Login, EsqueciSenha, ListarParticipantes
 } from "../";
 
 function GetRotas() {
@@ -18,7 +18,7 @@ function GetRotas() {
             id: "home"
         },
         {
-            titulo: "Dados Pessoais",
+            titulo: "Seus Dados",
             icone: "fas fa-user",
             caminho: "/dados",
             componente: (routeProps) => <DadosPessoais {...routeProps} />,
@@ -26,7 +26,7 @@ function GetRotas() {
             id: "dadosPessoais"
         },
         {
-            titulo: "Planos",
+            titulo: "Seus Planos",
             icone: "fas fa-list",
             caminho: "/planos",
             componente: (routeProps) => <Planos {...routeProps} />, 
@@ -38,9 +38,46 @@ function GetRotas() {
             titulo: "Detalhes do Plano",
             icone: "fas fa-list",
             caminho: "/planos/:plano",
+            caminhoLink: "/planos/",
             componente: (routeProps) => <PlanoDetalhes {...routeProps} />,
             mostrarMenu: false, 
             exact: true
+        },
+        {
+            titulo: "Contracheque",
+            icone: "fas fa-closed-captioning",
+            caminho: "/contracheque",
+            componente: (routeProps) => <Contracheque {...routeProps} />,
+            mostrarMenu: true,
+            exact: true,
+            id: "contracheque"
+        },
+        {
+            titulo: "Inf. Rendimentos",
+            icone: "fas fa-chart-pie",
+            caminho: "/infoRend",
+            componente: (routeProps) => <InformeRendimentos {...routeProps} />,
+            mostrarMenu: true,
+            exact: true,
+            id: "informeRendimentos"
+        },
+        {
+            titulo: "Contracheque Detalhe",
+            icone: "fas fa-closed-captioning",
+            caminho: "/contracheque/:plano/:data",
+            caminhoLink: "/contracheque/",
+            componente: (routeProps) => <ContrachequeDetalhe {...routeProps} />,
+            mostrarMenu: false, 
+            exact: true
+        },
+        {
+            titulo: "Documentos",
+            icone: "fas fa-file",
+            caminho: "/documentos/:pasta?",
+            caminhoLink: "/documentos/",
+            componente: (routeProps) => <Documentos {...routeProps} />,
+            mostrarMenu: true,
+            id: "documentos"
         },
         {
             titulo: "Mensagens",
@@ -89,54 +126,11 @@ function GetRotas() {
             mostrarMenu: false,
             exact: false,
             id: "listarParticipantes"
-        },
-        {
-            titulo: "Login",
-            caminho: "/admin/login",
-            componente: (routeProps) => <LoginAdmin {...routeProps} />,
-            mostrarMenu: false,
-            mostrarMenuAdmin: true,
-            exact: true
-        },
-        {
-            titulo: "Contracheque",
-            icone: "fas fa-closed-captioning",
-            caminho: "/contracheque",
-            componente: (routeProps) => <Contracheque {...routeProps} />,
-            mostrarMenu: true,
-            exact: true,
-            id: "contracheque"
-        },
-        {
-            titulo: "Contracheque Detalhe",
-            icone: "fas fa-closed-captioning",
-            caminho: "/contracheque/:plano/:data",
-            caminhoLink: "/contracheque/",
-            componente: (routeProps) => <ContrachequeDetalhe {...routeProps} />,
-            mostrarMenu: false, 
-            exact: true
-        },
-        {
-            titulo: "Documentos",
-            icone: "fas fa-file",
-            caminho: "/documentos/:pasta?",
-            caminhoLink: "/documentos/",
-            componente: (routeProps) => <Documentos {...routeProps} />,
-            mostrarMenu: true,
-            id: "documentos"
-        },
-        {
-            titulo: "Inf. Rendimentos",
-            icone: "fas fa-chart-pie",
-            caminho: "/infoRend",
-            componente: (routeProps) => <InformeRendimentos {...routeProps} />,
-            mostrarMenu: true,
-            exact: true,
-            id: "informeRendimentos"
         }
     ];
 
     return rotas;
 } 
+
 
 export default GetRotas();
