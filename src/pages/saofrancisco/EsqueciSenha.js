@@ -141,7 +141,7 @@ export default class EsqueciSenha extends React.Component {
                 <h5>
                     <b>Esqueci minha senha / Primeiro Acesso</b><br />
                     <br/>
-                    <small>Preencha as informações para que possamos gerar uma senha que será enviada para seu email cadastrado.</small>
+                    <small>Preencha as informações para que possamos gerar uma senha que será enviada para seu email cadastrado na fundação São Francisco.</small>
                 </h5>
                 <form>
                     <div className="form-group">
