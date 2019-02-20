@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { handleFieldChange } from "@intechprev/react-lib";
 import { DocumentoService } from "@intechprev/prevsystem-service";
 import { Row, Col, Box, Form, Button, Alert, CampoTexto } from '../components';
 import { Link } from "react-router-dom";
@@ -101,7 +100,6 @@ export default class Documentos extends Component {
         await this.alertDocumento.current.limparErros();
         await this.formDocumento.current.validar();
 
-        console.log("alert", this.alertDocumento.current.state.mensagem, this.alertDocumento.current.props.mensagem);
         if(this.alertDocumento.current.state.mensagem.length === 0 && this.alertDocumento.current.props.mensagem.length === 0) {
             try {
                 await DocumentoService.Criar(this.state.oidArquivoUpload, this.state.nomeDocumento, "SIM", 1, this.state.oidPasta);
@@ -141,8 +139,8 @@ export default class Documentos extends Component {
                                         <input name="selecionar-documento" id="selecionar-documento" type="file" onChange={this.uploadFile} />}
                                         
                                         {!this.state.visibilidadeFileInput &&
-                                            <Button titulo={"Enviar outro arquivo"} tipo={"primary"}
-                                                    onClick={async () => await this.setState({ visibilidadeFileInput: true })} />}
+                                            <Button titulo={"Enviar outro arquivo"} tipo={"default"}
+                                                    onClick={async () => await this.setState({ visibilidadeFileInput: true, oidArquivoUpload: 0, podeCriarDocumento: false })} />}
 
                                         <hr/>
                                         
@@ -197,13 +195,17 @@ export default class Documentos extends Component {
 class Tabelas extends React.Component {
 
     deletarDocumento = async (oidDocumento) => {
-        await DocumentoService.Deletar(oidDocumento);
-        document.location.reload();
+        if(window.confirm('Deseja realmente excluir o documento?')) {
+            await DocumentoService.Deletar(oidDocumento);
+            document.location.reload();
+        }
     }
 
     deletarPasta = async (oidDocumentPasta) => {
-        await DocumentoService.DeletarPasta(oidDocumentPasta);
-        document.location.reload();
+        if(window.confirm('Deseja realmente excluir a pasta e todo seu conteúdo?')) {
+            await DocumentoService.DeletarPasta(oidDocumentPasta);
+            document.location.reload();
+        }
     }
 
     downloadDocumento = async (oidDocumento) => {

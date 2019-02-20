@@ -1,7 +1,7 @@
 import React from 'react';
 import DataInvalida from '../_shared/ValidacaoDataNascimento';
 import  { UsuarioService } from "@intechprev/prevsystem-service";
-import { CampoTexto, Button, Alert, Form } from "../../components";;
+import { CampoTexto, Button, Alert, Form } from "../../components";
 import { PageClean } from "../";
 
 export default class EsqueciSenha extends React.Component {

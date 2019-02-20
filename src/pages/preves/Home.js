@@ -13,12 +13,11 @@ export default class Home extends React.Component {
                 dadosPessoais: {}
             }
         }
-        
     }
 
     componentWillMount = async () => {
-        var result = await DadosPessoaisService.Buscar();
-        await this.setState({ dados: result.data });
+        var { data: dados } = await DadosPessoaisService.Buscar();
+        await this.setState({ dados });
     }
 
     render() {
