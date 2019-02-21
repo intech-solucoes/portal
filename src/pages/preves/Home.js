@@ -79,9 +79,8 @@ export default class Home extends React.Component {
                                 <HomeItem titulo={"Trocar senha"}>
                                     O participante tem a possibilidade de alterar a senha de acesso sempre que julgar necessário. Para isso, deverá informar a senha antiga, e a nova senha
                                 </HomeItem>
-                                <br/><br/>
 
-                                <div className="box-footer">
+                                <div style={{marginTop: 20}} className="box-footer">
                                     <h5>
                                         <p className="text-justify">
                                             O Portal do Participante foi desenvolvido com o objetivo de facilitar a comunicação entre a PREVES e seus participantes. Caso tenha alguma sugestão ou dúvida quanto as informações
