@@ -33,6 +33,7 @@ export default class Form extends Component {
                     this.erros.push(`Campo "${campo.props.label || campo.props.placeholder}" obrigatório.`);
             }
 
+            //para validação de email não utilizar a prop Obrigatorio
             else if(campo.props.tipo === "email" && validarEmail(campo.props.valor))
                 this.erros.push("E-mail inválido.");
 

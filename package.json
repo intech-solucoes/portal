@@ -4,7 +4,7 @@
   "private": true,
   "homepage": ".",
   "dependencies": {
-    "@intechprev/prevsystem-service": "^1.5.0",
+    "@intechprev/prevsystem-service": "^1.5.1",
     "@intechprev/react-lib": "^0.0.8",
     "@intechprev/service": "^1.1.0",
     "autoprefixer": "7.1.6",

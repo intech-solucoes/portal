@@ -23,15 +23,19 @@ export default class ListarParticipantes extends Component {
     }
 
     selecionar = async (cpf) => {
-        var { data: login } = await UsuarioService.SelecionarParticipante(cpf);
-        await localStorage.setItem("token", login.AccessToken);
-                    
-        var { data: dados } = await FuncionarioService.Buscar();
+        try {
+            var { data: login } = await UsuarioService.SelecionarParticipante(cpf);
+            await localStorage.setItem("token", login.AccessToken);
+                        
+            var { data: dados } = await FuncionarioService.Buscar();
 
-        await localStorage.setItem("fundacao", dados.Funcionario.CD_FUNDACAO);
-        await localStorage.setItem("empresa", dados.Funcionario.CD_EMPRESA);
+            await localStorage.setItem("fundacao", dados.Funcionario.CD_FUNDACAO);
+            await localStorage.setItem("empresa", dados.Funcionario.CD_EMPRESA);
 
-        document.location = ".";
+            document.location = ".";
+        } catch(e) {
+            alert(e.response.data);
+        }
     }
 
     render() {
@@ -71,10 +75,11 @@ export default class ListarParticipantes extends Component {
                                                     <td>{func.NOME_ENTID}</td>
                                                     <td>{func.NUM_MATRICULA}</td>
                                                     <td>{func.NUM_INSCRICAO}</td>
-                                                    <td>{func.CPF}</td>
+                                                    <td>{func.CPF_CGC}</td>
                                                     <td>{func.CD_EMPRESA}</td>
                                                     <td>
-                                                        <Button titulo={"Selecionar"} tipo={"primary"} pequeno onClick={async () => await this.selecionar(func.CPF)} />
+                                                        <Button titulo={"Selecionar"} tipo={"primary"} pequeno 
+                                                                onClick={async () => await this.selecionar(func.CPF_CGC)} />
                                                     </td>
                                                 </tr>
                                             )
