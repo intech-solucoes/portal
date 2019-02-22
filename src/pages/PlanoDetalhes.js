@@ -88,6 +88,7 @@ export default class DetalhesPlano extends React.Component {
                                         <Col className={"col-lg-6"}>
                                             <CampoTexto contexto={this} nome={"dataInicio"} mascara={"99/99/9999"} obrigatorio valor={this.state.dataInicio} 
                                                         label={"Data de Início"} underline />
+                                            <br />
                                         </Col>
 
                                         <Col className={"col-lg-6"}>
@@ -95,6 +96,7 @@ export default class DetalhesPlano extends React.Component {
                                                         label={"Data Final"} underline />
                                         </Col>
                                     </Row>
+                                    <br />
                                 </div>
 
                                 <Alert ref={this.alert} padraoFormulario tipo={"danger"} tamanho={"6"} />

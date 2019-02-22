@@ -1,7 +1,6 @@
 import React from 'react';
-import { MensagemService, PlanoService } from "@intechprev/prevsystem-service";
 import { Row, Col, Box, Button, CampoTexto, Form, Alert } from '../components';
-import { DadosPessoaisService, RelacionamentoService } from "@intechprev/prevsystem-service";
+import { RelacionamentoService } from "@intechprev/prevsystem-service";
 
 import { Page } from ".";
 
@@ -23,8 +22,7 @@ export default class Relacionamento extends React.Component {
     validar = async () => {
         await this.alert.current.limparErros();
         await this.form.current.validar();
-        
-        var dadosMensagem = {};
+
         if(this.alert.current.state.mensagem.length === 0 && this.alert.current.props.mensagem.length === 0) {
             try { 
                 await RelacionamentoService.Enviar(this.state.email, this.state.assunto, this.state.mensagem);
