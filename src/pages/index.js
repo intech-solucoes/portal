@@ -30,6 +30,7 @@ export const ListarParticipantes = getPage("ListarParticipantes");
 export const EsqueciSenha = getPage("EsqueciSenha");
 export const PlanoDetalhes = getPage("PlanoDetalhes");
 export const DadosPessoais = getPage("DadosPessoais");
+export const Relacionamento = getPage("Relacionamento")
 
 export {
     Page, PageClean,

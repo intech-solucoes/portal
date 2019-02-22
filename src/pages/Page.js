@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { FuncionarioService, UsuarioService } from  "@intechprev/prevsystem-service";
+import { FuncionarioService, UsuarioService } from "@intechprev/prevsystem-service";
 
 import { Row, Col } from "../components";
 
@@ -18,7 +18,7 @@ export default class Page extends React.Component {
         super(props);
 
         this.state = {
-            nomeUsuario: "Teste"
+            nomeUsuario: ""
         }
     }
 
@@ -26,39 +26,38 @@ export default class Page extends React.Component {
         try {
             // Carrega as rotas aqui pq fora tava dando problema NÃO FAÇO A MINIMA IDEIA DO PQ
             //Rotas = (await import(`./${config.cliente}/Rotas`)).default;
-            
+
             var token = await localStorage.getItem("token");
 
-            if(token) {
+            if (token) {
                 var { data: dados } = await FuncionarioService.Buscar();
                 var nomeUsuario = dados.Funcionario.NOME_ENTID;
 
-                var { data: admin } = await UsuarioService.VerificarAdmin();
-                
+                //var { data: admin } = await UsuarioService.VerificarAdmin();
+
                 await this.setState({
                     nomeUsuario,
-                    admin
+                    //admin
                 });
             } else {
                 localStorage.removeItem("token");
                 localStorage.removeItem("token-admin");
                 this.props.history.push("login");
             }
-        } catch(err) {
-            if(err.message.indexOf("401") > -1)
-            {
+        } catch (err) {
+            if (err.message.indexOf("401") > -1) {
                 localStorage.removeItem("token");
                 localStorage.removeItem("token-admin");
                 this.props.history.push("login");
             }
         }
-        
+
     }
 
     getRota() {
         var rota = window.location.pathname;
-        for(var i = 0; i < Rotas.length; i++) {
-            if(rota === Rotas[i].caminho)
+        for (var i = 0; i < Rotas.length; i++) {
+            if (rota === Rotas[i].caminho)
                 return Rotas[i].componente();
         }
     }
@@ -72,11 +71,11 @@ export default class Page extends React.Component {
     render() {
         var Title = () => {
             var rota = this.props.history.location.pathname;
-            
+
             var titulo = "";
 
-            for(var i = 0; i < Rotas.length; i++) {
-                if(rota === Rotas[i].caminho || rota === Rotas[i].caminhoLink || rota.includes(Rotas[i].caminhoLink)) {
+            for (var i = 0; i < Rotas.length; i++) {
+                if (rota === Rotas[i].caminho || rota === Rotas[i].caminhoLink || rota.includes(Rotas[i].caminhoLink)) {
                     titulo = <h2 id="titulo">{Rotas[i].titulo}</h2>;
                 }
             }
@@ -95,7 +94,7 @@ export default class Page extends React.Component {
                             Rotas.map((rota, index) => {
                                 var link = rota.caminhoLink ? rota.caminhoLink : rota.caminho;
 
-                                if(rota.mostrarMenu) {
+                                if (rota.mostrarMenu) {
                                     return (
                                         <li key={index} id={rota.id}>
                                             <Link to={link}>
@@ -126,7 +125,7 @@ export default class Page extends React.Component {
 
                             <Title />
                         </Col>
-                        
+
                         {config.cliente !== "preves" &&
                             <Col tamanho={"sm-4"} className={"text-right user-icon"}>
                                 <Row>
@@ -147,7 +146,7 @@ export default class Page extends React.Component {
                                 </Row>
                             </Col>
                         }
-                        </Row>
+                    </Row>
 
                     <div className="wrapper-content">
                         {this.props.children}
