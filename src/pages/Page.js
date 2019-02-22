@@ -33,11 +33,11 @@ export default class Page extends React.Component {
                 var { data: dados } = await FuncionarioService.Buscar();
                 var nomeUsuario = dados.Funcionario.NOME_ENTID;
 
-                //var { data: admin } = await UsuarioService.VerificarAdmin();
+                var { data: admin } = await UsuarioService.VerificarAdmin();
 
                 await this.setState({
                     nomeUsuario,
-                    //admin
+                    admin
                 });
             } else {
                 localStorage.removeItem("token");
