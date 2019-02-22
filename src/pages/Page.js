@@ -131,18 +131,18 @@ export default class Page extends React.Component {
                                 <Row>
                                     <Col className={"nome-usuario"}>
                                         {this.state.nomeUsuario}
-                                    </Col>
 
-                                    {this.state.admin &&
-                                        <Col tamanho={"3"}>
-                                            <Link to={"/listarParticipantes"} className={"icon"}>
-                                                <i className={"fas fa-user-friends"}></i>
-                                            </Link>&nbsp;
-                                            <Link to={"/admin/login"} className={"icon"}>
-                                                <i className={"fas fa-lock"}></i>
-                                            </Link>
-                                        </Col>
-                                    }
+                                        {this.state.admin &&
+                                            <span>
+                                                <Link to={"/listarParticipantes"} className={"icon"} style={{ marginLeft: 10, marginRight: 10 }}>
+                                                    <i className={"fas fa-user-friends"}></i>
+                                                </Link>
+                                                <Link to={"/admin"} className={"icon"}>
+                                                    <i className={"fas fa-lock"}></i>
+                                                </Link>
+                                            </span>
+                                        }
+                                    </Col>
                                 </Row>
                             </Col>
                         }
