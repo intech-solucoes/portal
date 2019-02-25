@@ -18,12 +18,14 @@ export default class Page extends React.Component {
         super(props);
 
         this.state = {
-            nomeUsuario: ""
+            nomeUsuario: "",
+            loading: true
         }
     }
 
     componentWillMount = async () => {
         try {
+
             // Carrega as rotas aqui pq fora tava dando problema NÃO FAÇO A MINIMA IDEIA DO PQ
             //Rotas = (await import(`./${config.cliente}/Rotas`)).default;
 
@@ -52,6 +54,12 @@ export default class Page extends React.Component {
             }
         }
 
+    }
+
+    loading = async (valor) => {
+        await this.setState({
+            loading: valor
+        });
     }
 
     getRota() {
@@ -84,72 +92,78 @@ export default class Page extends React.Component {
         };
 
         return (
-            <div className="wrapper">
-                <nav className="navbar-default nav-open">
-                    <ul>
-                        <li className="navbar-header">
-                            <img src="imagens/logo.png" alt="logo" />
-                        </li>
-                        {
-                            Rotas.map((rota, index) => {
-                                var link = rota.caminhoLink ? rota.caminhoLink : rota.caminho;
+            <div>
+                <div className="loader" hidden={!this.state.loading}>
+                    <img src="./imagens/loading.gif" alt="loading" />
+                </div>
+                
+                <div className="wrapper">
+                    <nav className="navbar-default nav-open">
+                        <ul>
+                            <li className="navbar-header">
+                                <img src="imagens/logo.png" alt="logo" />
+                            </li>
+                            {
+                                Rotas.map((rota, index) => {
+                                    var link = rota.caminhoLink ? rota.caminhoLink : rota.caminho;
 
-                                if (rota.mostrarMenu) {
-                                    return (
-                                        <li key={index} id={rota.id}>
-                                            <Link to={link}>
-                                                <i className={rota.icone}></i>
-                                                {rota.titulo}
-                                            </Link>
-                                        </li>
-                                    );
-                                }
-                                else return "";
-                            })
-                        }
-                        <li>
-                            <a href="." onClick={this.logout}>
-                                <i className="fas fa-sign-out-alt"></i>
-                                Sair
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-
-                <div className="page-wrapper nav-open">
-                    <Row className="page-heading">
-                        <Col>
-                            <button className="btn btn-primary btn-menu" onClick={this.toggleMenu}>
-                                <i className="fa fa-list"></i>
-                            </button>
-
-                            <Title />
-                        </Col>
-
-                        {config.cliente !== "preves" &&
-                            <Col tamanho={"sm-4"} className={"text-right user-icon"}>
-                                <Row>
-                                    <Col className={"nome-usuario"}>
-                                        {this.state.nomeUsuario}
-
-                                        {this.state.admin &&
-                                            <span>
-                                                <Link to={"/listarParticipantes"} className={"icon"} style={{ marginLeft: 10, marginRight: 10 }}>
-                                                    <i className={"fas fa-user-friends"}></i>
+                                    if (rota.mostrarMenu) {
+                                        return (
+                                            <li key={index} id={rota.id}>
+                                                <Link to={link}>
+                                                    <i className={rota.icone}></i>
+                                                    {rota.titulo}
                                                 </Link>
-                                                <Link to={"/admin"} className={"icon"}>
-                                                    <i className={"fas fa-lock"}></i>
-                                                </Link>
-                                            </span>
-                                        }
-                                    </Col>
-                                </Row>
+                                            </li>
+                                        );
+                                    }
+                                    else return "";
+                                })
+                            }
+                            <li>
+                                <a href="." onClick={this.logout}>
+                                    <i className="fas fa-sign-out-alt"></i>
+                                    Sair
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <div className="page-wrapper nav-open">
+                        <Row className="page-heading">
+                            <Col>
+                                <button className="btn btn-primary btn-menu" onClick={this.toggleMenu}>
+                                    <i className="fa fa-list"></i>
+                                </button>
+
+                                <Title />
                             </Col>
-                        }
-                    </Row>
 
-                    <div className="wrapper-content">
-                        {this.props.children}
+                            {config.cliente !== "preves" &&
+                                <Col tamanho={"sm-4"} className={"text-right user-icon"}>
+                                    <Row>
+                                        <Col className={"nome-usuario"}>
+                                            {this.state.nomeUsuario}
+
+                                            {this.state.admin &&
+                                                <span>
+                                                    <Link to={"/listarParticipantes"} className={"icon"} style={{ marginLeft: 10, marginRight: 10 }}>
+                                                        <i className={"fas fa-user-friends"}></i>
+                                                    </Link>
+                                                    <Link to={"/admin"} className={"icon"}>
+                                                        <i className={"fas fa-lock"}></i>
+                                                    </Link>
+                                                </span>
+                                            }
+                                        </Col>
+                                    </Row>
+                                </Col>
+                            }
+                        </Row>
+
+                        <div className="wrapper-content">
+                            {this.props.children}
+                        </div>
                     </div>
                 </div>
             </div>

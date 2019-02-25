@@ -21,6 +21,7 @@ export default class Home extends Component {
     async carregarDadosPessoais() {
         var result = await DadosPessoaisService.Buscar();
         await this.setState({ dados: result.data });
+        await this.page.current.loading(false);
     }
 
     async componentDidMount() {

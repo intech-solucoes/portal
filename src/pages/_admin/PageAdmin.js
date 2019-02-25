@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
 
-import { FuncionarioService, UsuarioService } from  "@intechprev/prevsystem-service";
-
 import { Row, Col } from "../../components";
 
 import Rotas from "./Rotas";

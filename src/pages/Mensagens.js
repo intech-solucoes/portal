@@ -33,6 +33,7 @@ export default class Mensagens extends React.Component {
 
             });
 
+            await this.page.current.loading(false);
         } catch(err) {
             console.error(err);
         }

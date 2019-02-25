@@ -34,6 +34,8 @@ export default class ContrachequeDetalhe extends React.Component {
 
         var { data: contracheque } = await ContrachequeService.BuscarPorPlanoReferenciaTipoFolha(this.state.cdPlano, this.state.dataReferencia);
         await this.setState({ contracheque });
+
+        await this.page.current.loading(false);
     }
 
     gerarRelatorio = async () => {

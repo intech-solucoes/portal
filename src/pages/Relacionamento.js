@@ -17,6 +17,11 @@ export default class Relacionamento extends React.Component {
 
         this.form = React.createRef();
         this.alert = React.createRef();
+        this.page = React.createRef();
+    }
+
+    componentDidMount() {
+        this.page.current.loading(false);
     }
 
     validar = async () => {

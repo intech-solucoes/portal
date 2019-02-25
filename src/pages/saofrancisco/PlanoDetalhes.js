@@ -5,8 +5,6 @@ import DataInvalida from '../_shared/Data';
 import { Page } from "../";
 import { Box, FormFieldStatic, CampoTexto, Button, Form, Alert, Row, Col } from "../../components";
 
-var InputMask = require('react-input-mask');
-
 export default class DetalhesPlano extends React.Component {
     constructor(props) {
         super(props);

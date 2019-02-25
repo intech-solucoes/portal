@@ -14,16 +14,18 @@ export default class Planos extends React.Component {
             listaPlanos: []
         }
 
+        this.page = React.createRef();
     }
 
     componentDidMount = async () => {
         var { data: listaPlanos } = await PlanoService.Buscar();
         await this.setState({ listaPlanos });
+        await this.page.current.loading(false);
     }
 
     render() {
         return (
-            <Page {...this.props}>
+            <Page {...this.props} ref={this.page}>
                 <Box>
                     <table className="table" id="tabelaPlanos">
                         <thead>

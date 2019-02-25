@@ -13,11 +13,13 @@ export default class Home extends React.Component {
                 dadosPessoais: {}
             }
         }
+        this.page = React.createRef();
     }
 
     componentWillMount = async () => {
         var { data: dados } = await DadosPessoaisService.Buscar();
         await this.setState({ dados });
+        await this.page.current.loading(false);
     }
 
     render() {
@@ -35,7 +37,7 @@ export default class Home extends React.Component {
         );
 
         return (
-            <Page {...this.props}>
+            <Page {...this.props} ref={this.page}>
                 <Row>
                     <Col tamanho={"lg-12"}>
                         <Box>

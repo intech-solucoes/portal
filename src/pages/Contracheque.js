@@ -18,6 +18,7 @@ export default class ContraCheque extends Component {
     async componentDidMount() {
         var { data: resultPlanos} = await PlanoService.Buscar()
         await this.buscarDatas(resultPlanos);
+        await this.page.current.loading(false);
     }
 
     buscarDatas = async (planos) => {
