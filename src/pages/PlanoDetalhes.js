@@ -26,6 +26,7 @@ export default class DetalhesPlano extends React.Component {
         
         this.form = React.createRef();
         this.alert = React.createRef();
+        this.page = React.createRef();
     }
 
     componentDidMount = async () => {
@@ -36,6 +37,7 @@ export default class DetalhesPlano extends React.Component {
             var { data: saldo } = await FichaFechamentoPrevesService.BuscarSaldoPorPlano(this.state.cdPlano);
 
             await this.setState({ plano, possuiSeguro, salario, saldo });
+            await this.page.current.loading(false);
         } catch(err) {
             console.error(err);
         }
@@ -88,7 +90,6 @@ export default class DetalhesPlano extends React.Component {
                                         <Col className={"col-lg-6"}>
                                             <CampoTexto contexto={this} nome={"dataInicio"} mascara={"99/99/9999"} obrigatorio valor={this.state.dataInicio} 
                                                         label={"Data de Início"} underline />
-                                            <br />
                                         </Col>
 
                                         <Col className={"col-lg-6"}>
@@ -99,7 +100,7 @@ export default class DetalhesPlano extends React.Component {
                                     <br />
                                 </div>
 
-                                <Alert ref={this.alert} padraoFormulario tipo={"danger"} tamanho={"6"} />
+                                <Alert ref={this.alert} padraoFormulario tipo={"danger"} tamanho={"6"} className={"form-group"} />
                                 <div className="modal-footer">
                                     <Button id={"gerar"} titulo={"Gerar"} tipo="primary" submit onClick={this.gerarExtrato} />
                                 </div>
@@ -134,8 +135,8 @@ export default class DetalhesPlano extends React.Component {
     
     
             if(this.alert.current.state.mensagem.length === 0 && this.alert.current.props.mensagem.length === 0) {
-                var dataInicio = this.state.dataInicio.replace(new RegExp('/', 'g'), '.');
-                var dataFim = this.state.dataFim.replace(new RegExp('/', 'g'), '.');
+                dataInicio = this.state.dataInicio.replace(new RegExp('/', 'g'), '.');
+                dataFim = this.state.dataFim.replace(new RegExp('/', 'g'), '.');
                 var empresa = localStorage.getItem("empresa");
         
                 var { data: relatorio } = await PlanoService.RelatorioExtratoPorPlanoEmpresaReferencia(this.state.cdPlano, empresa, dataInicio, dataFim)
@@ -155,7 +156,7 @@ export default class DetalhesPlano extends React.Component {
 
     validarData = async (data, dataObjeto, nomeCampo) => {
         if(DataInvalida(dataObjeto, data))
-            await this.alert.current.adicionarErro(`Campo \"${nomeCampo}\" inválido.`);
+            await this.alert.current.adicionarErro(`Campo "${nomeCampo}" inválido.`);
     }
 
     converteData = (data) => {
@@ -210,7 +211,7 @@ export default class DetalhesPlano extends React.Component {
 
     render() {
         return(
-            <Page {...this.props}>
+            <Page {...this.props} ref={this.page}>
                 <Row>
                     <Col>
                         <Box>
