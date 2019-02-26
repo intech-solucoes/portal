@@ -19,6 +19,10 @@ export default class TrocarSenha extends React.Component {
         this.alert = React.createRef();
     }
 
+    componentDidMount() {
+        this.page.current.loading(false);
+    }
+
     trocarSenha = async () => {
         // Define os estados iniciais de alertas.
         await this.alert.current.limparErros();

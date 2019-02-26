@@ -25,6 +25,8 @@ export default class InformeRendimentos extends React.Component {
 
             if(this.state.datas[0])
                 this.selecionarAno(this.state.datas[0]);
+            
+            await this.page.current.loading(false);
         } catch(err) {
             console.error(err);
         }

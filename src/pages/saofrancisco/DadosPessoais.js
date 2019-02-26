@@ -24,6 +24,8 @@ export default class DadosPessoais extends Component {
         await this.setState({
             dados: result.data
         });
+        
+        await this.page.current.loading(false);
     }
 
     render() {

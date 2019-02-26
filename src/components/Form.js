@@ -53,17 +53,24 @@ export default class Form extends Component {
 
     buscarCamposRecursiva = async (children) => {
         try {
-            children.map((campo) => {
-                if(campo.type === CampoTexto || campo.type === Combo) {
-                    this.campos.push(campo);
-                } 
-                else {
-                    if(campo.props.children !== undefined)
-                        this.buscarCamposRecursiva(campo.props.children);
-                }
-            })
+
+            if(children.length) {
+                children.map((campo) => {
+                    if(campo.type === CampoTexto || campo.type === Combo) {
+                        this.campos.push(campo);
+                    } 
+                    else {
+                        if(campo.props.children !== undefined)
+                            this.buscarCamposRecursiva(campo.props.children);
+                    }
+                })
+            } else {
+                if(children.type === CampoTexto || children.type === Combo)
+                    this.campos.push(children);
+            }
+
         } catch(err) {
-            // console.error(err);
+            console.error(err);
         }
     }
     

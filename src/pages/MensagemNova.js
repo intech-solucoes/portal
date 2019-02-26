@@ -54,7 +54,8 @@ export default class MensagemNova extends React.Component {
                 listaFundacao: listas.Fundacoes,
                 listaSituacaoPlano: listas.SitPlanos
             });
-
+            
+            await this.page.current.loading(false);
         } catch(err) {
             console.error(err);
         }

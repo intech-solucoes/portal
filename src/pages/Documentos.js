@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { DocumentoService } from "@intechprev/prevsystem-service";
-import { Row, Col, Box, Form, Button, Alert, CampoTexto } from '../components';
 import { Link } from "react-router-dom";
+
 import { Page } from ".";
+import { Row, Col, Box, Form, Button, Alert, CampoTexto } from '../components';
 import config from '../config.json';
 
 const apiUrl = config.apiUrl
+
 export default class Documentos extends Component {
     constructor(props) {
         super(props);
@@ -21,8 +23,11 @@ export default class Documentos extends Component {
             podeCriarDocumento: false,
             oidArquivoUpload: 0,
             oidPasta: props.match.params.pasta,
-            pastaAtual: "",
-            visibilidadeFileInput: true
+            pastaAtual: null,
+            pastaPai: "",
+            visibilidadeFileInput: true,
+            uploadPercentage: 0,
+            uploading: false
         }
 
         this.page = React.createRef();
@@ -32,8 +37,9 @@ export default class Documentos extends Component {
         this.alertPasta = React.createRef();
     }
 
-    componentDidMount = () => {
-        this.buscarLista();
+    componentDidMount = async () => {
+        await this.buscarLista();
+        await this.page.current.loading(false);
     }
     
     UNSAFE_componentWillReceiveProps() {
@@ -43,9 +49,16 @@ export default class Documentos extends Component {
     buscarLista = async () => {
         var { data: resultado } = await DocumentoService.BuscarPorPasta(this.state.oidPasta);
 
+        var pastaPai = "";
+
+        if(resultado.pastaAtual && resultado.pastaAtual.OID_DOCUMENTO_PASTA_PAI)
+            pastaPai = resultado.pastaAtual.OID_DOCUMENTO_PASTA_PAI;
+
         await this.setState({ 
             documentos: resultado.documentos,
-            pastas: resultado.pastas
+            pastas: resultado.pastas,
+            pastaAtual: resultado.pastaAtual,
+            pastaPai
         });
     }
 
@@ -70,23 +83,30 @@ export default class Documentos extends Component {
         }
     }
 
-    uploadFile = (e) => {
+    uploadFile = async (e) => {
         try {
             const formData = new FormData()
             var arquivoUpload = e.target.files[0];
     
-            formData.append("File", arquivoUpload, arquivoUpload.name)
+            formData.append("File", arquivoUpload, arquivoUpload.name);
     
+            await this.setState({ uploading: true });
+
             axios.post(apiUrl + '/upload', formData, {
                 headers: {'Content-Type': 'multipart/form-data'},
-                onUploadProgress: progressEvent => {
+                onUploadProgress: async progressEvent => {
+                    await this.setState({ 
+                        uploadPercentage: parseInt(Math.round(( progressEvent.loaded * 100 ) / progressEvent.total ))
+                    });
                 },
             })
-            .then((result) => {
+            .then(result => {
                 this.setState({
                     podeCriarDocumento: true,
                     oidArquivoUpload: result.data,
-                    visibilidadeFileInput: false
+                    visibilidadeFileInput: false,
+                    uploading: false,
+                    uploadPercentage: 0
                 });
             })
         } catch(err) { 
@@ -123,8 +143,7 @@ export default class Documentos extends Component {
             <Page {...this.props} ref={this.page}>
 
                 <Row>
-                    {localStorage.getItem("admin") === "S" &&
-
+                    {localStorage.getItem("admin") === 'S' &&
                         <Col className={"lg-4"}>
                             <Box titulo={"UPLOAD DE DOCUMENTOS"}>
                                 <Form ref={this.formDocumento}>
@@ -135,13 +154,23 @@ export default class Documentos extends Component {
 
                                         <label htmlFor="selecionar-documento"><b>Arquivo</b></label><br />
 
-                                        {this.state.visibilidadeFileInput &&
-                                        <input name="selecionar-documento" id="selecionar-documento" type="file" onChange={this.uploadFile} />}
-                                        
-                                        {!this.state.visibilidadeFileInput &&
-                                            <Button titulo={"Enviar outro arquivo"} tipo={"default"}
-                                                    onClick={async () => await this.setState({ visibilidadeFileInput: true, oidArquivoUpload: 0, podeCriarDocumento: false })} />}
+                                        {this.state.uploading &&
+                                            <div className="progress" style={{ marginBottom: 10 }}>
+                                                <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style={{width: this.state.uploadPercentage + "%"}} aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        }
 
+                                        {this.state.visibilidadeFileInput && !this.state.uploading &&
+                                            <input name="selecionar-documento" id="selecionar-documento" type="file" onChange={this.uploadFile} />
+                                        }
+                                        
+                                        {!this.state.visibilidadeFileInput && !this.state.uploading &&
+                                            <div>
+                                                <Alert tipo={"success"} mensagem={"Arquivo enviado com sucesso"} />
+                                                <Button titulo={"Enviar outro arquivo"} tipo={"default"}
+                                                        onClick={async () => await this.setState({ visibilidadeFileInput: true, oidArquivoUpload: 0, podeCriarDocumento: false })} />
+                                            </div>
+                                        }
                                         <hr/>
                                         
                                         <Button id="salvar-documento" titulo={"Salvar"} tipo={"primary"} submit desativado={!this.state.podeCriarDocumento} 
@@ -168,11 +197,17 @@ export default class Documentos extends Component {
                                 </Form>
                             </Box>
                         </Col>
-
                     }
 
                     <Col tamanho={"8"}>
                         <Box>
+                            {this.state.pastaAtual &&
+                                <Link className={"btn btn-primary mb-4"} to={`/documentos/${this.state.pastaPai}`}>
+                                    <i className={"fa fa-chevron-left mr-2"}></i>
+                                    Voltar
+                                </Link>
+                            }
+
                             {(this.state.pastas.length > 0 || this.state.documentos.length > 0) &&
                                 <div>
                                     <Tabelas {...this.props} itens={this.state.pastas} campoTexto={"NOM_PASTA"} icone={"fa-folder-open text-warning"} tipo={"pasta"} />
@@ -240,25 +275,24 @@ class Tabelas extends React.Component {
     render() {
         return (
             <div>
-            {
-                this.props.itens.map((item, index) => {
-                    return (
-                        <Row key={index} className={"m-3"}>
-                            <Col tamanho={"1"}>
-                                <i className={"fa fa-2x " + this.props.icone}></i>
-                            </Col>
+                {
+                    this.props.itens.map((item, index) => {
+                        return (
+                            <Row key={index} className={"m-3"}>
+                                <Col tamanho={"1"}>
+                                    <i className={"fa fa-2x " + this.props.icone}></i>
+                                </Col>
 
-                            <Col className={"mt-1"}>
-                                {this.props.tipo === "pasta" &&
-                                    <Link className={"btn btn-link"} to={`/documentos/${item.OID_DOCUMENTO_PASTA}`}>{item[this.props.campoTexto]}</Link>
-                                }
+                                <Col className={"mt-1"}>
+                                    {this.props.tipo === "pasta" &&
+                                        <Link className={"btn btn-link"} to={`/documentos/${item.OID_DOCUMENTO_PASTA}`}>{item[this.props.campoTexto]}</Link>
+                                    }
 
-                                {this.props.tipo !== "pasta" &&
-                                    <Button className={"btn btn-link"} onClick={() => this.downloadDocumento(item.OID_DOCUMENTO)} titulo={item[this.props.campoTexto]} />
-                                }
-                            </Col>
-                            
-                            {localStorage.getItem("admin") === "S" &&
+                                    {this.props.tipo !== "pasta" &&
+                                        <Button className={"btn btn-link"} onClick={() => this.downloadDocumento(item.OID_DOCUMENTO)} titulo={item[this.props.campoTexto]} />
+                                    }
+                                </Col>
+                                
                                 <Col tamanho={"1"}>
                                     <Button className={"btn btn-sm btn-danger"}
                                         onClick={async () => {
@@ -270,11 +304,10 @@ class Tabelas extends React.Component {
                                         <i className="fa fa-trash"></i>
                                     </Button>
                                 </Col>
-                            }
-                        </Row>
-                    );
-                })
-            }
+                            </Row>
+                        );
+                    })
+                }
             </div>
         );
     }

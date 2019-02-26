@@ -15,18 +15,19 @@ export default class DadosPessoais extends React.Component {
                 DadosPessoais: {},
                 Entidade: {}
             }
-
         };
+        this.page = React.createRef();
     }
 
     componentWillMount = async () => {
         var { data: dados } = await FuncionarioService.Buscar();
         this.setState({ dados });
+        await this.page.current.loading(false);
     }
 
     render() {
         return (
-            <Page {...this.props}>
+            <Page {...this.props} ref={this.page}>
                 <Row>
                     <Col>
                         <Box titulo={"Dados Pessoais"}>
