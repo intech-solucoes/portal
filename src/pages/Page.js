@@ -5,7 +5,7 @@ import { FuncionarioService, UsuarioService } from "@intechprev/prevsystem-servi
 
 import { Row, Col } from "../components";
 
-import Rotas from "./saofrancisco/Rotas";
+import Rotas from "./preves/Rotas";
 
 const config = require("../config.json");
 //const Rotas = require(`./${config.cliente}/Rotas`);
@@ -93,8 +93,8 @@ export default class Page extends React.Component {
 
         return (
             <div>
-                <div className="loader" hidden={!this.state.loading}>
-                    <img src="./imagens/loading.gif" alt="loading" />
+                <div style={{opacity: 0.5}} className="loader" hidden={!this.state.loading}>
+                    <img style={{width: 300, height: 200}} src="./imagens/loading.gif" alt="loading" />
                 </div>
                 
                 <div className="wrapper">

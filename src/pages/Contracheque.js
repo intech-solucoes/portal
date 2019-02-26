@@ -83,7 +83,7 @@ export default class ContraCheque extends Component {
                                                                         {valor.VAL_LIQUIDO.toLocaleString('pt-br', {minimumFractionDigits: 2})}
                                                                     </td>
                                                                     <td>
-                                                                        <Link to={`/contracheque/${plano.CD_PLANO}/${valor.DT_REFERENCIA.replace(new RegExp('/', 'g'), '.')}` }>Detalhar</Link>
+                                                                        <Link className={"btn btn-primary btn-sm"} to={`/contracheque/${plano.CD_PLANO}/${valor.DT_REFERENCIA.replace(new RegExp('/', 'g'), '.')}` }>Detalhar</Link>
                                                                     </td>
                                                                 </tr>
                                                             );

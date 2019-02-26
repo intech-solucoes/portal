@@ -97,10 +97,9 @@ export default class DetalhesPlano extends React.Component {
                                                         label={"Data Final"} underline />
                                         </Col>
                                     </Row>
-                                    <br />
                                 </div>
 
-                                <Alert ref={this.alert} padraoFormulario tipo={"danger"} tamanho={"6"} className={"form-group"} />
+                                <Alert ref={this.alert} padraoFormulario tipo={"danger"} tamanho={"5"} rowClassName={"justify-content-end"} style={{marginRight: 15}} />
                                 <div className="modal-footer">
                                     <Button id={"gerar"} titulo={"Gerar"} tipo="primary" submit onClick={this.gerarExtrato} />
                                 </div>
