@@ -20,7 +20,17 @@ export default class Login extends React.Component {
             var loginResult = await UsuarioService.Login(cpf, senha);    
             await localStorage.setItem("token", loginResult.data.AccessToken);
             await localStorage.setItem("admin", loginResult.data.Admin);
-            document.location = "/#/selecionarMatricula";
+
+            var { data: funcionarios } = await FuncionarioService.BuscarPorCpf();
+            var matriculas = [];
+            for(var i = 0; i < funcionarios.length; i++)
+                if(!matriculas.includes(funcionarios[i].NUM_MATRICULA))
+                    matriculas.push(funcionarios[i].NUM_MATRICULA);
+
+            if(matriculas.length > 1)
+                document.location = "/#/selecionarMatricula";
+            else
+                document.location = "/#/";
         } catch(erro) {
             if(erro.response) {
                 await this.loginForm.current.mostrarErro(erro.response.data);

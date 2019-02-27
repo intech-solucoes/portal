@@ -1,35 +1,36 @@
 import React, { Component } from 'react';
 import { PageClean } from '.';
 import { Row, Col } from '../components';
-import { FuncionarioService } from '@intechprev/prevsystem-service';
+import { FuncionarioService, UsuarioService } from '@intechprev/prevsystem-service';
 
 export default class SelecionarMatricula extends Component {
     constructor(props) {
         super(props);
         
         this.state = {
-            matriculas: [
-                '09233706761',
-                '09233706761'
-            ]
+            matriculas: []
         }
+        this.matriculas = [];
     }
 
     async componentDidMount() {
-        
+        var { data: funcionarios } = await FuncionarioService.BuscarPorCpf();
 
-        // await this.setState({ matriculas });
+        for(var i = 0; i < funcionarios.length; i++)
+            if(!this.matriculas.includes(funcionarios[i].NUM_MATRICULA))
+                this.matriculas.push(funcionarios[i].NUM_MATRICULA);
 
-        if(this.state.matriculas.length === 1)
-            this.props.history.push('/');
+        await this.setState({ matriculas: this.matriculas });
     }
 
-    selecionar = async (matricula) => { // salvar essa matricula payload do token, se n me engano.
-                    
-        var funcionarioResult = await FuncionarioService.Buscar();
-            
-        await localStorage.setItem("fundacao", funcionarioResult.data.Funcionario.CD_FUNDACAO);
-        await localStorage.setItem("empresa", funcionarioResult.data.Funcionario.CD_EMPRESA);
+    selecionar = async (matricula) => {    // salvar essa matricula payload do token, gerando um NOVO.
+        var { data: funcionarioResult} = await FuncionarioService.Buscar();
+        await localStorage.setItem("fundacao", funcionarioResult.Funcionario.CD_FUNDACAO);
+        await localStorage.setItem("empresa", funcionarioResult.Funcionario.CD_EMPRESA);
+
+        var { data: funcionarioLogin } = await UsuarioService.SelecionarMatricula(matricula);
+        await localStorage.setItem("token", funcionarioLogin.AccessToken);
+        await localStorage.setItem("admin", funcionarioLogin.Admin);
 
         document.location = ".";
     }
