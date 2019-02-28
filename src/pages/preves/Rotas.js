@@ -2,7 +2,7 @@ import React from 'react';
 
 import {
     Home, DadosPessoais, Planos, Documentos, Mensagens, TrocarSenha, PlanoDetalhes, MensagemNova,
-    Contracheque, ContrachequeDetalhe, InformeRendimentos,
+    Contracheque, ContrachequeDetalhe, InformeRendimentos, SelecionarMatricula,
     Login, EsqueciSenha, ListarParticipantes
 } from "../";
 
@@ -133,7 +133,15 @@ function GetRotas() {
             mostrarMenu: false,
             exact: false,
             id: "listarParticipantes"
-        }
+        },
+        {
+            titulo: "Selecionar Matrícula",
+            caminho: "/selecionarMatricula",
+            componente: (routeProps) => <SelecionarMatricula {...routeProps} />,
+            mostrarMenu: false,
+            exact: false,
+            id: "selecionarMatricula"
+        },
     ];
 
     return rotas;

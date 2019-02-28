@@ -128,7 +128,8 @@ export default class Documentos extends Component {
                     nomeDocumento: "",
                     arquivoUpload: "",
                     oidArquivoUpload: 0,
-                    visibilidadeFileInput: true
+                    visibilidadeFileInput: true,
+                    podeCriarDocumento: false
                 });
                 await this.buscarLista();
 

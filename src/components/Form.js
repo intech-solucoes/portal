@@ -68,7 +68,6 @@ export default class Form extends Component {
                 if(children.type === CampoTexto || children.type === Combo)
                     this.campos.push(children);
             }
-
         } catch(err) {
             console.error(err);
         }

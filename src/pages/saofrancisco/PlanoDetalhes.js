@@ -22,6 +22,7 @@ export default class DetalhesPlano extends React.Component {
             dependentes: []
         }
         
+        this.page = React.createRef();
         this.form = React.createRef();
         this.alert = React.createRef();
     }
@@ -31,6 +32,8 @@ export default class DetalhesPlano extends React.Component {
             var { data: plano } = await PlanoService.BuscarPorCodigo(this.state.cdPlano);
 
             await this.setState({ plano });
+
+            this.page.current.loading(false);
         } catch(err) {
             console.error(err);
         }
@@ -75,10 +78,10 @@ export default class DetalhesPlano extends React.Component {
                                                         label={"Data Final"} underline />
                                         </Col>
                                     </Row>
-                                    <br />
+                                    <div></div>
                                 </div>
 
-                                <Alert ref={this.alert} padraoFormulario tipo={"danger"} tamanho={"6"} />
+                                <Alert ref={this.alert} padraoFormulario tipo={"danger"} tamanho={"5"} rowClassName={"justify-content-end"} style={{marginRight: 15}} />
                                 <div className="modal-footer">
                                     <Button id={"gerar"} titulo={"Gerar"} tipo="primary" submit onClick={this.gerarExtrato} />
                                 </div>
@@ -112,26 +115,26 @@ export default class DetalhesPlano extends React.Component {
                 this.alert.current.adicionarErro("A data final é superior à data atual");
     
             if(this.alert.current.state.mensagem.length === 0 && this.alert.current.props.mensagem.length === 0) {
-                var dataInicio = this.state.dataInicio.replace(new RegExp('/', 'g'), '.');
-                var dataFim = this.state.dataFim.replace(new RegExp('/', 'g'), '.');
+                dataInicio = this.state.dataInicio.replace(new RegExp('/', 'g'), '.');
+                dataFim = this.state.dataFim.replace(new RegExp('/', 'g'), '.');
 
-                console.log("CHEGOU NA REQUISIÇÃO");
-                // var { data: relatorio } = await PlanoService.RelatorioExtratoPorPlanoReferencia(this.state.cdPlano, dataInicio, dataFim)
+                var { data: relatorio } = await PlanoService.RelatorioExtratoPorPlanoReferencia(this.state.cdPlano, dataInicio, dataFim);
     
-                // const blobURL = window.URL.createObjectURL(new Blob([relatorio]));
-                // const tempLink = document.createElement('a');
-                // tempLink.style.display = 'none';
-                // tempLink.href = blobURL;
-                // tempLink.setAttribute('download', 'Extrato.pdf');
-
-                // if (typeof tempLink.download === 'undefined') {
-                //     tempLink.setAttribute('target', '_blank');
-                // }
-
-                // document.body.appendChild(tempLink);
-                // tempLink.click();
-                // document.body.removeChild(tempLink);
-                // window.URL.revokeObjectURL(blobURL);
+                console.log(relatorio);
+                const blobURL = window.URL.createObjectURL(new Blob([relatorio]));
+                const tempLink = document.createElement('a');
+                tempLink.style.display = 'none';
+                tempLink.href = blobURL;
+                tempLink.setAttribute('download', "Extrato.pdf");
+    
+                if (typeof tempLink.download === 'undefined') {
+                    tempLink.setAttribute('target', '_blank');
+                }
+    
+                document.body.appendChild(tempLink);
+                tempLink.click();
+                document.body.removeChild(tempLink);
+                window.URL.revokeObjectURL(blobURL);
             }
             
         } catch(err) {
@@ -141,7 +144,7 @@ export default class DetalhesPlano extends React.Component {
 
     validarData = async (data, dataObjeto, nomeCampo) => {
         if(DataInvalida(dataObjeto, data))
-            await this.alert.current.adicionarErro(`Campo \"${nomeCampo}\" inválido.`);
+            await this.alert.current.adicionarErro(`Campo "${nomeCampo}" inválido.`);
     }
 
     converteData = (data) => {
@@ -152,7 +155,7 @@ export default class DetalhesPlano extends React.Component {
 
     render() {
         return(
-            <Page {...this.props}>
+            <Page {...this.props} ref={this.page}>
                 <Box>
                     <div className="form-row">
                         <FormFieldStatic titulo="Plano" valor={this.state.plano.DS_PLANO} />
