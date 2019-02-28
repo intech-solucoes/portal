@@ -43,31 +43,12 @@ export default class DetalhesPlano extends React.Component {
         }
     }
 
-    /** 
-     * @description Método que altera o state 'modalVisivel' que, consequentemente, deixa a modal visível ou não. Além disso, ao fechar a modal, os states de registros devem 
-     * permanecer vazios e os states de erro devem receber'false'. Ao abrir a modal, os states recebem os valores default. 
-     */ 
-    toggleModal = () => {
-        
-        if(this.state.modalVisivel === true) {
-            this.setState({
-                dataInicio: "",
-                dataFim: "",
-
-                erroCampoVazio: false,
-                erroCampoInvalido: false,
-                mensagemErro: "",
-    
-                modalVisivel: !this.state.modalVisivel
-            })
-        } else {
-            this.setState({
-                dataInicio: "",
-                dataFim: "",
-
-                modalVisivel: !this.state.modalVisivel
-            })
-        }
+    toggleModal = async () => {
+        await this.setState({
+            dataInicio: "",
+            dataFim: "",
+            modalVisivel: !this.state.modalVisivel
+        });
     }
 
     renderModal = () => {
@@ -97,7 +78,7 @@ export default class DetalhesPlano extends React.Component {
                                                         label={"Data Final"} underline />
                                         </Col>
                                     </Row>
-                                    <div></div>
+                                    <div>{/** Essa div vazia serve para a busca de campos dentro do Form funcionar. Não remova até eu corrigir. */}</div>
                                 </div>
 
                                 <Alert ref={this.alert} padraoFormulario tipo={"danger"} tamanho={"5"} rowClassName={"justify-content-end"} style={{marginRight: 15}} />
@@ -172,7 +153,6 @@ export default class DetalhesPlano extends React.Component {
         dataObjeto = new Date(dataObjeto[2], dataObjeto[1] - 1, dataObjeto[0]);
         return dataObjeto;
     }
-
 
     gerarCertificado = () => {
         var empresa = localStorage.getItem("empresa");

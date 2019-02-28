@@ -28,9 +28,9 @@ export default class Login extends React.Component {
                     matriculas.push(funcionarios[i].NUM_MATRICULA);
 
             if(matriculas.length > 1)
-                document.location = "/#/selecionarMatricula";
+                this.props.history.push("/selecionarMatricula");
             else
-                document.location = "/#/";
+                document.location = ".";
         } catch(erro) {
             if(erro.response) {
                 await this.loginForm.current.mostrarErro(erro.response.data);

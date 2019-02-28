@@ -144,7 +144,7 @@ export default class DetalhesPlano extends React.Component {
 
     validarData = async (data, dataObjeto, nomeCampo) => {
         if(DataInvalida(dataObjeto, data))
-            await this.alert.current.adicionarErro(`Campo \"${nomeCampo}\" inválido.`);
+            await this.alert.current.adicionarErro(`Campo "${nomeCampo}" inválido.`);
     }
 
     converteData = (data) => {
