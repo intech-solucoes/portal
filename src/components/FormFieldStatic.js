@@ -9,8 +9,6 @@ export default class FormFieldStatic extends Component {
         if(this.props.valor) {
             valor = this.props.valor;
 
-            console.log(this.props.titulo, typeof(valor));
-
             if(this.props.tipo === "dinheiro") {
                 if(typeof(valor) === "string")
                     valor = `R$ ${Number.parseInt(valor).toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2})}`;

@@ -1,8 +1,17 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import Modal from "../Modal";
 
 export default class ListaMensagens extends React.Component {
+    static propTypes = {
+        mostrarDados: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        mostrarDados: true
+    };
+
     constructor(props) {
         super(props);
 
@@ -25,13 +34,13 @@ export default class ListaMensagens extends React.Component {
                 </div>
             )
         } else if(badgeVisivel === "NAO")
-            return <div></div>
+            return null
     }
 
     render() {
         return (
             <div>
-                <Modal ref={this.modal} />
+                <Modal ref={this.modal} mostrarDados={this.props.mostrarDados} />
 
                 <table className="table table-hover">
                     <thead>
@@ -46,20 +55,26 @@ export default class ListaMensagens extends React.Component {
                             this.props.mensagens.map((mensagem, index) => {
                                 return (
                                     <tr key={index}>
-                                        <td width="1px" className="align-middle">
+
+                                        <td width="50px" className="align-middle">
                                             <button id={"mensagem-" + mensagem.OID_MENSAGEM} className="btn btn-link" onClick={() => this.modal.current.toggleModal(mensagem)}><i className="fa fa-search"></i></button>
                                         </td>
+
                                         <td width="150px" className="align-middle">
                                             {mensagem.DTA_MENSAGEM}
                                         </td>
+
                                         <td className="align-middle">
-                                            <div>
-                                                {this.renderBadge(mensagem.IND_PORTAL, "success", "Portal")}
-                                                {this.renderBadge(mensagem.IND_EMAIL, "danger", "E-mail")}
-                                            </div>
+                                            {this.props.mostrarDados &&
+                                                <div>
+                                                    {this.renderBadge(mensagem.IND_PORTAL, "success", "Portal")}
+                                                    {this.renderBadge(mensagem.IND_EMAIL, "danger", "E-mail")}
+                                                </div>
+                                            }
 
                                             {mensagem.TXT_TITULO}
                                         </td>
+
                                     </tr>
                                 );
                             })

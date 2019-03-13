@@ -13,12 +13,13 @@ export default class Home extends React.Component {
                 dadosPessoais: {}
             }
         }
-        
+        this.page = React.createRef();
     }
 
     componentWillMount = async () => {
-        var result = await DadosPessoaisService.Buscar();
-        await this.setState({ dados: result.data });
+        var { data: dados } = await DadosPessoaisService.Buscar();
+        await this.setState({ dados });
+        await this.page.current.loading(false);
     }
 
     render() {
@@ -36,11 +37,11 @@ export default class Home extends React.Component {
         );
 
         return (
-            <Page {...this.props}>
+            <Page {...this.props} ref={this.page}>
                 <Row>
                     <Col tamanho={"lg-12"}>
                         <Box>
-                            <h2>Olá, <span className="text-primary">{this.state.dados.dadosPessoais.NOME_ENTID},</span></h2>
+                            <h2>Olá, <span className="text-primary">{this.state.dados.dadosPessoais.NOME_ENTID}</span></h2>
                             <h5>
                                 <p className="text-justify">Bem vindo ao Portal do Participante. Aqui, você encontra as principais informações sobre seu Plano de Benefício.
                                 Nosso portal está em desenvolvimento, mas diversas funcionalidades já estão disponíveis para acesso, dentre elas: </p>
@@ -80,9 +81,8 @@ export default class Home extends React.Component {
                                 <HomeItem titulo={"Trocar senha"}>
                                     O participante tem a possibilidade de alterar a senha de acesso sempre que julgar necessário. Para isso, deverá informar a senha antiga, e a nova senha
                                 </HomeItem>
-                                <br/>
 
-                                <div className="box-footer">
+                                <div style={{marginTop: 20}} className="box-footer">
                                     <h5>
                                         <p className="text-justify">
                                             O Portal do Participante foi desenvolvido com o objetivo de facilitar a comunicação entre a PREVES e seus participantes. Caso tenha alguma sugestão ou dúvida quanto as informações

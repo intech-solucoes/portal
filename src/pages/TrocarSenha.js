@@ -1,5 +1,5 @@
 import React from 'react';
-import { handleFieldChange } from "@intechprev/react-lib";
+import { Row, Col, Box, Button, CampoTexto, Alert, Form } from "../components";
 import { UsuarioService } from "@intechprev/prevsystem-service";
 import { Page } from ".";
 
@@ -8,121 +8,91 @@ export default class TrocarSenha extends React.Component {
         super(props);
 
         this.state = {
-            // States dos valores dos campos
-            senhaAntiga: "",
+            senhaAtual: "",
             senhaNova: "",
             confirmarSenha: "",
-
-            // States de validação
-            erroSenhaAntiga: false,
-            mensagemErroSenhaAntiga: "",
-            erroConfirmarSenha: false,
-            mensagemSucesso: false,
+            mensagemSucesso: false
         }
 
         this.page = React.createRef();
+        this.form = React.createRef();
+        this.alert = React.createRef();
+    }
+
+    componentDidMount() {
+        this.page.current.loading(false);
     }
 
     trocarSenha = async () => {
-        var senhaNovaCoincide = this.validarSenha();
+        // Define os estados iniciais de alertas.
+        await this.alert.current.limparErros();
+        await this.form.current.validar();
+        this.setState({ mensagemSucesso: false })
+        
+        // Valida se a nova senha tem 6 ou mais caracteres.
+        if(this.state.senhaNova.length < 6)
+            this.alert.current.adicionarErro("A nova senha deve possuir no mínimo 6 caracteres.");
 
-        if(senhaNovaCoincide) {
-            await UsuarioService.TrocarSenha(this.state.senhaAntiga, this.state.senhaNova)
-                .then((result) => {
-                    this.setState({ 
-                        mensagemSucesso: true,
-                        erroSenhaAntiga: false
-                    }, () => alert(result.data));
-                    
-                })
-                .catch((err) => {
-                    console.error();
-                    this.setState({
-                        mensagemSucesso: false,
-                        erroSenhaAntiga: true,
-                        mensagemErroSenhaAntiga: err.response.data 
-                    })
-                })
-                
+        // Valida se os campos de nova senha e confirmação são iguais.
+        if(this.state.senhaNova !== this.state.confirmarSenha)
+            this.alert.current.adicionarErro("As senhas não coincidem.");
 
-        } else {
-            this.setState({
-                mensagemSucesso: false
-            })
-            window.scrollTo(0, 0);
+        try {
+            if(this.alert.current.state.mensagem.length === 0 && this.alert.current.props.mensagem.length === 0) {
+                await UsuarioService.TrocarSenha(this.state.senhaAtual, this.state.senhaNova);
+                this.setState({ mensagemSucesso: true })
+            }
+        } catch(err) {
+            if(err.response)
+                this.alert.current.adicionarErro(err.response.data)
+            else
+                console.error(err);
         }
-    }
 
-    validarSenha = () => {
-        if(this.state.senhaNova === this.state.confirmarSenha) {
-            this.setState({
-                erroConfirmarSenha: false
-            })
-            return true;
-        } else {
-            this.setState({
-                erroConfirmarSenha: true
-            })
-            return false;
-        }
-    }
-
-    renderizaErro = (stateErro, mensagemErro) => {
-        if(stateErro) {
-            return (    
-                <div className="text-danger">
-                    <i className="fas fa-exclamation-circle"></i>&nbsp;
-                    <label id='mensagem-erro'>
-                        {mensagemErro}
-                    </label>
-                </div>
-            )
-        }
     }
 
     render() {
         return (
             <Page {...this.props} ref={this.page}>
-                <div className="row">
-                    <div className="col-lg-12">
-                        <div className="box">
-                            <div className="box-content">
-                                <form className="validatedForm">
-                                    <div className="form-group row">
-                                        <label htmlFor="senhaAntiga" className="col-sm-2 col-form-label"><b>Senha antiga:</b></label>
-                                        <div className="col-sm-10">
-                                            <input name="senhaAntiga" id="senhaAntiga" className="form-control" type="password" value={this.state.senhaAntiga} onChange={(e) => handleFieldChange(this, e)}></input>
-                                        </div>
-                                    </div>
-                                    <div className="form-group row">
-                                        <label htmlFor="senhaNova" className="col-sm-2  col-form-label"><b>Nova senha:</b></label>
-                                        <div className="col-sm-10">
-                                            <input name="senhaNova" id="senhaNova" className="form-control" type="password" value={this.state.senhaNova} onChange={(e) => handleFieldChange(this, e)} ></input>
-                                        </div>
-                                    </div>
-                                    <div className="form-group row">
-                                        <label htmlFor="confirmarSenha" className="col-sm-2  col-form-label"><b>Confirme nova senha:</b></label>
-                                        <div className="col-sm-10">
-                                            <input name="confirmarSenha" id="confirmarSenha" className="form-control" type="password" value={this.state.confirmarSenha} onChange={(e) => handleFieldChange(this, e)} ></input>
-                                        </div>
-                                    </div>
-                                    {this.renderizaErro(this.state.erroConfirmarSenha, "As senhas não coincidem!")}
-                                    {this.renderizaErro(this.state.erroSenhaAntiga, this.state.mensagemErroSenhaAntiga)}
-                                    {this.state.mensagemSucesso &&
-                                        <div className="text-primary">
-                                            <i className="fas fa-check"></i>&nbsp;
-                                            <label id="mensagem-sucesso">
-                                                Senha alterada com sucesso!
-                                            </label>
-                                        </div>
-                                    }
-                                    <hr />
-                                    <button type="button" id="trocar-senha" className="btn btn-primary" onClick={() => this.trocarSenha()}>Trocar Senha</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <Row>
+                    <Col className={"col-lg-12"}>
+                        <Box>
+                            <Form ref={this.form}>
+                            
+                                <Row className={"form-group"}>
+                                    <label htmlFor="senhaAtual" className="col-2 col-form-label"><b>Senha atual</b></label>
+                                    <Col tamanho={"10"}>
+                                        <CampoTexto contexto={this} nome={"senhaAtual"} obrigatorio tipo={"password"} />
+                                    </Col>
+                                </Row>
+
+                                <Row className={"form-group"}>
+                                    <label htmlFor="senhaNova" className="col-sm-2  col-form-label"><b>Nova senha</b></label>
+                                    <Col tamanho={"10"}>
+                                        <CampoTexto contexto={this} nome={"senhaNova"} obrigatorio tipo={"password"} />
+                                    </Col>
+                                </Row>
+
+                                <Row className={"form-group"}>
+                                    <label htmlFor="confirmarSenha" className="col-sm-2  col-form-label"><b>Confirme nova senha</b></label>
+                                    <Col tamanho={"10"}>
+                                        <CampoTexto contexto={this} nome={"confirmarSenha"} obrigatorio tipo={"password"} />
+                                    </Col>
+                                </Row>
+
+                                {this.state.mensagemSucesso &&
+                                    <Alert tipo={"success"} mensagem={"Senha alterada com sucesso."} />
+                                }
+
+                                <Alert ref={this.alert} padraoFormulario tipo={"danger"} /> 
+                                <hr />
+
+                                <Button id="trocar-senha" submit titulo={"Trocar Senha"} tipo="primary" onClick={() => this.trocarSenha()} usaLoading />
+                            
+                            </Form>
+                        </Box>
+                    </Col>
+                </Row>
             </Page>
         );
     }

@@ -1,6 +1,5 @@
 import Page from "./Page";
 import PageClean from "./PageClean";
-import LoginAdmin from "./_admin/LoginAdmin";
 
 const config = require("../config.json");
 
@@ -30,8 +29,9 @@ export const ListarParticipantes = getPage("ListarParticipantes");
 export const EsqueciSenha = getPage("EsqueciSenha");
 export const PlanoDetalhes = getPage("PlanoDetalhes");
 export const DadosPessoais = getPage("DadosPessoais");
+export const Relacionamento = getPage("Relacionamento");
+export const SelecionarMatricula = getPage("SelecionarMatricula");
 
 export {
-    Page, PageClean,
-    LoginAdmin
+    Page, PageClean
 };

@@ -1,4 +1,4 @@
 {
-    "cliente": "saofrancisco",
-    "apiUrl": "http://localhost/SaoFranciscoAPI/api"
+  "cliente": "saofrancisco",
+  "apiUrl": "http://localhost/SaofranciscoAPI/api"
 }

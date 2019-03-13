@@ -1,5 +1,6 @@
 import React from 'react';
 import { MensagemService, PlanoService } from "@intechprev/prevsystem-service";
+import { Row, Col, Box, Button } from '../components';
 
 import ListaMensagens from "./_shared/mensagem/ListaMensagens";
 import { Page } from ".";
@@ -20,18 +21,19 @@ export default class Mensagens extends React.Component {
     async componentDidMount() {
 
         try {
-            var planoResult = await PlanoService.Buscar();
+            var { data: plano } = await PlanoService.Buscar();
 
-            planoResult.data.map(async (plano) => {
+            plano.map(async (plano) => {
 
-                var resultMensagens = await MensagemService.BuscarPorFundacaoEmpresaPlano(plano.CD_PLANO);
-                plano.mensagens = resultMensagens.data;
+                var { data: mensagens } = await MensagemService.BuscarPorFundacaoEmpresaPlano(plano.CD_PLANO);
+                plano.mensagens = mensagens;
                 await this.setState({
                     planos: [...this.state.planos, plano]
                 });
 
             });
 
+            await this.page.current.loading(false);
         } catch(err) {
             console.error(err);
         }
@@ -45,40 +47,34 @@ export default class Mensagens extends React.Component {
     render() {
         return (
             <Page {...this.props} ref={this.page}>
-                <div className="row">
+                <Row>
                     {
                         this.state.planos.map((plano, index) => {
                             return (
-                                <div className="col" key={index}>
-                                    <div key={index} className="box">
-                                        <div className="box-title">
-                                            Mensagens
-                                            <small>{plano.DS_PLANO}</small>
-                                        </div>
-                                        <div className="box-content">
-                                            { localStorage.getItem("admin") === "S" &&
-                                                <div>
-                                                    <button id="novaMensagem" type="button" className="btn btn-primary" onClick={this.handleClick}>
-                                                        <i className="fas fa-envelope"></i>&nbsp;
-                                                        Nova Mensagem
-                                                    </button>
-                                                    <br/>
-                                                    <br/>
-                                                </div>
-                                            }
+                                <Col key={index}>
+                                    <Box titulo={"Mensagens"}>
+                                        {localStorage.getItem("admin") === "S" &&
+                                            <div>
+                                                <Button id="novaMensagem" className="btn btn-primary" onClick={this.handleClick}>
+                                                    <i className="fas fa-envelope"></i>&nbsp;
+                                                    Nova Mensagem
+                                                </Button>
+                                                <br/>
+                                                <br/>
+                                            </div>
+                                        }
 
-                                            {plano.mensagens.length > 0 &&
-                                                <ListaMensagens mensagens={plano.mensagens} />}
+                                        {plano.mensagens.length > 0 &&
+                                            <ListaMensagens mostrarDados={false} mensagens={plano.mensagens} />}
 
-                                            {plano.mensagens.length === 0 &&
-                                                <div id="alertMensagem" className="alert alert-danger">Nenhuma mensagem enviada.</div>}
-                                        </div>
-                                    </div>
-                                </div>
+                                        {plano.mensagens.length === 0 &&
+                                            <div id="alertMensagem" className="alert alert-danger">Nenhuma mensagem enviada.</div>}
+                                    </Box>
+                                </Col>
                             )
                         })
                     }
-                </div>
+                </Row>
             </Page>
         );
     }

@@ -3,9 +3,9 @@ import axios from "axios";
 import { DocumentoService } from "@intechprev/prevsystem-service";
 import { Link } from "react-router-dom";
 
-import { Page } from ".";
-import { Row, Col, Box, Form, Button, Alert, CampoTexto } from '../components';
-import config from '../config.json';
+import PageAdmin from "./PageAdmin";
+import { Row, Col, Box, Form, Button, Alert, CampoTexto } from '../../components';
+import config from '../../config.json';
 
 const apiUrl = config.apiUrl
 
@@ -37,9 +37,8 @@ export default class Documentos extends Component {
         this.alertPasta = React.createRef();
     }
 
-    componentDidMount = async () => {
-        await this.buscarLista();
-        await this.page.current.loading(false);
+    componentDidMount = () => {
+        this.buscarLista();
     }
     
     UNSAFE_componentWillReceiveProps() {
@@ -48,6 +47,8 @@ export default class Documentos extends Component {
 
     buscarLista = async () => {
         var { data: resultado } = await DocumentoService.BuscarPorPasta(this.state.oidPasta);
+
+        console.log(resultado);
 
         var pastaPai = "";
 
@@ -128,8 +129,7 @@ export default class Documentos extends Component {
                     nomeDocumento: "",
                     arquivoUpload: "",
                     oidArquivoUpload: 0,
-                    visibilidadeFileInput: true,
-                    podeCriarDocumento: false
+                    visibilidadeFileInput: true
                 });
                 await this.buscarLista();
 
@@ -141,69 +141,67 @@ export default class Documentos extends Component {
 
     render() {
         return (
-            <Page {...this.props} ref={this.page}>
+            <PageAdmin {...this.props} ref={this.page}>
 
                 <Row>
-                    {localStorage.getItem("admin") === 'S' &&
-                        <Col className={"lg-4"}>
-                            <Box titulo={"UPLOAD DE DOCUMENTOS"}>
-                                <Form ref={this.formDocumento}>
+                    <Col className={"lg-4"}>
+                        <Box titulo={"UPLOAD DE DOCUMENTOS"}>
+                            <Form ref={this.formDocumento}>
+                            
+                                <CampoTexto contexto={this} nome={"nomeDocumento"} max={50} valor={this.state.nomeDocumento} label={"Título"} obrigatorio />
                                 
-                                    <CampoTexto contexto={this} nome={"nomeDocumento"} max={50} valor={this.state.nomeDocumento} label={"Título"} obrigatorio />
+                                <div className="form-group">
+
+                                    <label htmlFor="selecionar-documento"><b>Arquivo</b></label><br />
+
+                                    {this.state.uploading &&
+                                        <div className="progress" style={{ marginBottom: 10 }}>
+                                            <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style={{width: this.state.uploadPercentage + "%"}} aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    }
+
+                                    {this.state.visibilidadeFileInput && !this.state.uploading &&
+                                        <input name="selecionar-documento" id="selecionar-documento" type="file" onChange={this.uploadFile} />
+                                    }
                                     
-                                    <div className="form-group">
-
-                                        <label htmlFor="selecionar-documento"><b>Arquivo</b></label><br />
-
-                                        {this.state.uploading &&
-                                            <div className="progress" style={{ marginBottom: 10 }}>
-                                                <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style={{width: this.state.uploadPercentage + "%"}} aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        }
-
-                                        {this.state.visibilidadeFileInput && !this.state.uploading &&
-                                            <input name="selecionar-documento" id="selecionar-documento" type="file" onChange={this.uploadFile} />
-                                        }
-                                        
-                                        {!this.state.visibilidadeFileInput && !this.state.uploading &&
-                                            <div>
-                                                <Alert tipo={"success"} mensagem={"Arquivo enviado com sucesso"} />
-                                                <Button titulo={"Enviar outro arquivo"} tipo={"default"}
-                                                        onClick={async () => await this.setState({ visibilidadeFileInput: true, oidArquivoUpload: 0, podeCriarDocumento: false })} />
-                                            </div>
-                                        }
-                                        <hr/>
-                                        
-                                        <Button id="salvar-documento" titulo={"Salvar"} tipo={"primary"} submit desativado={!this.state.podeCriarDocumento} 
-                                                onClick={this.salvarDocumento} />
-                                    </div>
-
-                                    <Alert ref={this.alertDocumento} padraoFormulario tipo={"danger"} />
-
-                                </Form>
-                            </Box>
-
-                            <Box titulo={"CRIAÇÃO DE PASTA"}>
-                                <Form ref={this.formPasta}>
-                                
-                                    <CampoTexto contexto={this} nome={"nomePasta"} max={50} valor={this.state.nomePasta} label={"Nome"} obrigatorio />
+                                    {!this.state.visibilidadeFileInput && !this.state.uploading &&
+                                        <div>
+                                            <Alert tipo={"success"} mensagem={"Arquivo enviado com sucesso"} />
+                                            <Button titulo={"Enviar outro arquivo"} tipo={"default"}
+                                                    onClick={async () => await this.setState({ visibilidadeFileInput: true, oidArquivoUpload: 0, podeCriarDocumento: false })} />
+                                        </div>
+                                    }
                                     <hr/>
+                                    
+                                    <Button id="salvar-documento" titulo={"Salvar"} tipo={"primary"} submit desativado={!this.state.podeCriarDocumento} 
+                                            onClick={this.salvarDocumento} />
+                                </div>
 
-                                    <div className="form-group">
-                                        <Button id="salvar-pasta" className={"btn btn-primary"} titulo={"Salvar"} submit onClick={this.salvarPasta} />
-                                    </div>
+                                <Alert ref={this.alertDocumento} padraoFormulario tipo={"danger"} />
 
-                                    <Alert ref={this.alertPasta} padraoFormulario tipo={"danger"} />
+                            </Form>
+                        </Box>
 
-                                </Form>
-                            </Box>
-                        </Col>
-                    }
+                        <Box titulo={"CRIAÇÃO DE PASTA"}>
+                            <Form ref={this.formPasta}>
+                            
+                                <CampoTexto contexto={this} nome={"nomePasta"} max={50} valor={this.state.nomePasta} label={"Nome"} obrigatorio />
+                                <hr/>
+
+                                <div className="form-group">
+                                    <Button id="salvar-pasta" className={"btn btn-primary"} titulo={"Salvar"} submit onClick={this.salvarPasta} />
+                                </div>
+
+                                <Alert ref={this.alertPasta} padraoFormulario tipo={"danger"} />
+
+                            </Form>
+                        </Box>
+                    </Col>
 
                     <Col tamanho={"8"}>
                         <Box>
                             {this.state.pastaAtual &&
-                                <Link className={"btn btn-primary mb-4"} to={`/documentos/${this.state.pastaPai}`}>
+                                <Link className={"btn btn-primary mb-4"} to={`/admin/documentos/${this.state.pastaPai}`}>
                                     <i className={"fa fa-chevron-left mr-2"}></i>
                                     Voltar
                                 </Link>
@@ -223,7 +221,7 @@ export default class Documentos extends Component {
                     </Col>
                 </Row>
 
-            </Page>
+            </PageAdmin>
         );
     }
 }
@@ -286,7 +284,7 @@ class Tabelas extends React.Component {
 
                                 <Col className={"mt-1"}>
                                     {this.props.tipo === "pasta" &&
-                                        <Link className={"btn btn-link"} to={`/documentos/${item.OID_DOCUMENTO_PASTA}`}>{item[this.props.campoTexto]}</Link>
+                                        <Link className={"btn btn-link"} to={`/admin/documentos/${item.OID_DOCUMENTO_PASTA}`}>{item[this.props.campoTexto]}</Link>
                                     }
 
                                     {this.props.tipo !== "pasta" &&

@@ -24,6 +24,8 @@ export default class DadosPessoais extends Component {
         await this.setState({
             dados: result.data
         });
+        
+        await this.page.current.loading(false);
     }
 
     render() {
@@ -73,11 +75,11 @@ export default class DadosPessoais extends Component {
                                     <FormFieldStatic titulo="Nome da Mãe" valor={this.state.dados.DadosPessoais.NOME_MAE} id="14" />
                                 </div>
                                 <div className="form-row">
-                                    <FormFieldStatic titulo="Contrato Único" valor={"Não Assinado"} id="15" />
+                                    {/* <FormFieldStatic titulo="Contrato Único" valor={"Não Assinado"} id="15" /> */}
                                     <FormFieldStatic titulo="E-mail" valor={this.state.dados.DadosPessoais.EMAIL_AUX} col="6" id="16" />
                                 </div>
 
-                                <hr/>
+                                <hr />
 
                                 <div className="form-row">
                                     <FormFieldStatic titulo="Endereço" valor={this.state.dados.Entidade.END_ENTID} id="17" />
@@ -92,7 +94,7 @@ export default class DadosPessoais extends Component {
                                     <FormFieldStatic titulo="UF" valor={this.state.dados.Entidade.UF_ENTID} col="2" id="22" />
                                     <FormFieldStatic titulo="CEP" valor={this.state.dados.CEP} id="23" />
                                 </div>
-                                <br/>
+                                <br />
                             </div>
                         </div>
                     </div>

@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { Component } from "react";
+import { Row, Col, Box, Button } from '../components';
+import { Page } from ".";
 
-export default class ControleFuncionalidades extends React.Component {
+export default class ControleFuncionalidades extends Component {
     constructor(props) {
         super(props);
         this.state = {
             modalVisible: false
         }
+
+        this.page = React.createRef();
     }
 
-    renderModal() {
+    componentDidMount = async () => {
+    }
+
+    renderModal = () => {
         if (this.state.modalVisivel) {
             return (
                 <div className="modal" role="dialog">
@@ -78,81 +85,93 @@ export default class ControleFuncionalidades extends React.Component {
 
     render() {
         return (
-            <div className="row">
-                <div className="col-lg-12">
-                    <div className="box">
-                        <div className="box-title">
-                            PAINEL DE CONTROLE
-                        </div>
-                        <div className="box-content">
-                            <div className="form-group row">
-                                <label className="col-sm-3 col-form-label" align="right"><b>Planos:</b></label>
-                                <div className="col-sm-7">
-                                    <button className="btn btn-danger btn-sm" onClick={() => this.toggleModal()}>
+            <Page {...this.props} ref={this.page}>
+                <Row>
+                    <Col>
+                        <Box titulo={"PAINEL DE CONTROLE"}>
+
+                            <Row className="form-group">
+                                <label className="col-3" align="right"><b>Planos:</b></label>
+                                <Col className="sm-7">
+                                    <Button className="btn-danger btn-sm" onClick={() => this.toggleModal()}>
                                         <i className="fas fa-lock"></i>
-                                        Bloquear
-                                    </button>
+                                        {" Bloquear"}
+                                    </Button>
                                     {this.renderModal()}
-                                </div>
-                            </div>
-                            <div className="form-group row">
-                                <label className="col-sm-3 col-form-label" align="right"><b>Benefícios:</b></label>
-                                <div className="col-sm-7">
-                                    <button className="btn btn-danger btn-sm" onClick={() => this.toggleModal()}>
+                                </Col>
+                            </Row>
+
+                            <Row className="form-group">
+                                <label className="col-3" align="right"><b>Benefícios:</b></label>
+                                <Col className="sm-7">
+                                    <Button className="btn-danger btn-sm" onClick={() => this.toggleModal()}>
                                         <i className="fas fa-lock"></i>
-                                        Bloquear
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="form-group row">
-                                <label className="col-sm-3 col-form-label" align="right"><b>Contracheque:</b></label>
-                                <div className="col-sm-7">
-                                    <button className="btn btn-danger btn-sm" onClick={() => this.toggleModal()}>
+                                        {" Bloquear"}
+                                    </Button>
+                                    {this.renderModal()}
+                                </Col>
+                            </Row>
+
+                            <Row className="form-group">
+                                <label className="col-3" align="right"><b>Contracheque:</b></label>
+                                <Col className="sm-7">
+                                    <Button className="btn-danger btn-sm" onClick={() => this.toggleModal()}>
                                         <i className="fas fa-lock"></i>
-                                        Bloquear
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="form-group row">
-                                <label className="col-sm-3 col-form-label" align="right"><b>Inf. Rendimentos:</b></label>
-                                <div className="col-sm-7">
-                                    <button className="btn btn-danger btn-sm" onClick={() => this.toggleModal()}>
+                                        {" Bloquear"}
+                                    </Button>
+                                    {this.renderModal()}
+                                </Col>
+                            </Row>
+
+                            <Row className="form-group">
+                                <label className="col-3" align="right"><b>Inf. Rendimentos:</b></label>
+                                <Col className="sm-7">
+                                    <Button className="btn-danger btn-sm" onClick={() => this.toggleModal()}>
                                         <i className="fas fa-lock"></i>
-                                        Bloquear
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="form-group row">
-                                <label className="col-sm-3 col-form-label" align="right"><b>Documentos:</b></label>
-                                <div className="col-sm-7">
-                                    <button className="btn btn-danger btn-sm" onClick={() => this.toggleModal()}>
+                                        {" Bloquear"}
+                                    </Button>
+                                    {this.renderModal()}
+                                </Col>
+                            </Row>
+
+                            <Row className="form-group">
+                                <label className="col-3" align="right"><b>Documentos:</b></label>
+                                <Col className="sm-7">
+                                    <Button className="btn-danger btn-sm" onClick={() => this.toggleModal()}>
                                         <i className="fas fa-lock"></i>
-                                        Bloquear
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="form-group row">
-                                <label className="col-sm-3 col-form-label" align="right"><b>Mensagens:</b></label>
-                                <div className="col-sm-7">
-                                    <button className="btn btn-danger btn-sm" onClick={() => this.toggleModal()}>
+                                        {" Bloquear"}
+                                    </Button>
+                                    {this.renderModal()}
+                                </Col>
+                            </Row>
+                            
+
+                            <Row className="form-group">
+                                <label className="col-3" align="right"><b>Mensagens:</b></label>
+                                <Col className="sm-7">
+                                    <Button className="btn-danger btn-sm" onClick={() => this.toggleModal()}>
                                         <i className="fas fa-lock"></i>
-                                        Bloquear
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="form-group row">
-                                <label className="col-sm-3 col-form-label" align="right"><b>Recadastramento:</b></label>
-                                <div className="col-sm-7">
-                                    <button className="btn btn-danger btn-sm" onClick={() => this.toggleModal()}>
+                                        {" Bloquear"}
+                                    </Button>
+                                    {this.renderModal()}
+                                </Col>
+                            </Row>
+
+                            <Row className="form-group">
+                                <label className="col-3" align="right"><b>Recadastramento:</b></label>
+                                <Col className="sm-7">
+                                    <Button className="btn-danger btn-sm" onClick={() => this.toggleModal()}>
                                         <i className="fas fa-lock"></i>
-                                        Bloquear
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                        {" Bloquear"}
+                                    </Button>
+                                    {this.renderModal()}
+                                </Col>
+                            </Row>
+                            
+                        </Box>
+                    </Col>
+                </Row>
+            </Page>
         );
     }
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Box, Form, CampoTexto, Button } from '../components';
 
-import { FuncionarioService } from "@intechprev/prevsystem-service";
+import { FuncionarioService, UsuarioService } from "@intechprev/prevsystem-service";
 
 export default class ListarParticipantes extends Component {
 
@@ -22,8 +22,20 @@ export default class ListarParticipantes extends Component {
         await this.setState({ resultadoPesquisa });
     }
 
-    selecionar = () => {
+    selecionar = async (cpf) => {
+        try {
+            var { data: login } = await UsuarioService.SelecionarParticipante(cpf);
+            await localStorage.setItem("token", login.AccessToken);
+                        
+            var { data: dados } = await FuncionarioService.Buscar();
 
+            await localStorage.setItem("fundacao", dados.Funcionario.CD_FUNDACAO);
+            await localStorage.setItem("empresa", dados.Funcionario.CD_EMPRESA);
+
+            document.location = ".";
+        } catch(e) {
+            alert(e.response.data);
+        }
     }
 
     render() {
@@ -50,6 +62,7 @@ export default class ListarParticipantes extends Component {
                                             <th>Nome</th>
                                             <th>Matrícula</th>
                                             <th>Inscrição</th>
+                                            <th>CPF</th>
                                             <th>Empresa</th>
                                             <th></th>
                                         </tr>
@@ -62,9 +75,11 @@ export default class ListarParticipantes extends Component {
                                                     <td>{func.NOME_ENTID}</td>
                                                     <td>{func.NUM_MATRICULA}</td>
                                                     <td>{func.NUM_INSCRICAO}</td>
+                                                    <td>{func.CPF_CGC}</td>
                                                     <td>{func.CD_EMPRESA}</td>
                                                     <td>
-                                                        <Button titulo={"Selecionar"} tipo={"primary"} pequeno onClick={() => this.selecionar(func.COD_ENTID)} />
+                                                        <Button titulo={"Selecionar"} tipo={"primary"} pequeno 
+                                                                onClick={async () => await this.selecionar(func.CPF_CGC)} />
                                                     </td>
                                                 </tr>
                                             )
