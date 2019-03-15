@@ -9,6 +9,7 @@ export default class Alert extends Component {
         tamanho: PropTypes.string,
         rowClassName: PropTypes.string,
         colClassName: PropTypes.string,
+        id: PropTypes.string,
         style: PropTypes.object
     }
 
@@ -48,7 +49,7 @@ export default class Alert extends Component {
             <div className={"row " + this.props.rowClassName}>
                 <div className={"col-" + this.props.tamanho + ` ${this.props.colClassName}`} style={this.props.style}>
                     {(this.state.mensagem || this.props.mensagem) &&
-                        <div id="alerta" className={"alert alert-" + this.props.tipo}
+                        <div id="alerta" className={"alert alert-" + this.props.tipo} id={this.props.id}
                             dangerouslySetInnerHTML={{ __html: this.props.mensagem + this.state.mensagem }}>
                         </div>
                     }

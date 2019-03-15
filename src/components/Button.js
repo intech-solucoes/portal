@@ -9,7 +9,7 @@ export default class Button extends Component {
         titulo: PropTypes.string,
         tipo: PropTypes.string,
         className: PropTypes.string,
-
+        id: PropTypes.string,
         onClick: PropTypes.func
     }
 
@@ -40,7 +40,7 @@ export default class Button extends Component {
         var className = this.props.className ? this.props.className : "";
 
         return (
-            <button type={type} 
+            <button type={type} id={this.props.id}
                 className={"btn btn-" + this.props.tipo + block + sm + " " + className} 
                 onClick={this.onClick} disabled={this.props.desativado || this.state.carregando}
             >

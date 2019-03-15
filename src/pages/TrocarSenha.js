@@ -84,10 +84,10 @@ export default class TrocarSenha extends React.Component {
                                     <Alert tipo={"success"} mensagem={"Senha alterada com sucesso."} />
                                 }
 
-                                <Alert ref={this.alert} padraoFormulario tipo={"danger"} /> 
+                                <Alert id={"mensagem-erro"} ref={this.alert} padraoFormulario tipo={"danger"} /> 
                                 <hr />
 
-                                <Button id="trocar-senha" submit titulo={"Trocar Senha"} tipo="primary" onClick={() => this.trocarSenha()} usaLoading />
+                                <Button id={"trocar-senha"} submit titulo={"Trocar Senha"} tipo="primary" onClick={() => this.trocarSenha()} usaLoading />
                             
                             </Form>
                         </Box>
