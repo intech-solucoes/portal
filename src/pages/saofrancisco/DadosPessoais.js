@@ -76,23 +76,23 @@ export default class DadosPessoais extends Component {
                                 </div>
                                 <div className="form-row">
                                     {/* <FormFieldStatic titulo="Contrato Único" valor={"Não Assinado"} id="15" /> */}
-                                    <FormFieldStatic titulo="E-mail" valor={this.state.dados.DadosPessoais.EMAIL_AUX} col="6" id="16" />
+                                    <FormFieldStatic titulo="E-mail" valor={this.state.dados.DadosPessoais.EMAIL_AUX} col="6" id="15" />
                                 </div>
 
                                 <hr />
 
                                 <div className="form-row">
-                                    <FormFieldStatic titulo="Endereço" valor={this.state.dados.Entidade.END_ENTID} id="17" />
-                                    <FormFieldStatic titulo="Número" valor={this.state.dados.Entidade.NR_END_ENTID} id="18" />
+                                    <FormFieldStatic titulo="Endereço" valor={this.state.dados.Entidade.END_ENTID} id="16" />
+                                    <FormFieldStatic titulo="Número" valor={this.state.dados.Entidade.NR_END_ENTID} id="17" />
                                 </div>
                                 <div className="form-row">
-                                    <FormFieldStatic titulo="Complemento" valor={this.state.dados.Entidade.COMP_END_ENTID} id="19" />
-                                    <FormFieldStatic titulo="Bairro" valor={this.state.dados.Entidade.BAIRRO_ENTID} id="20" />
+                                    <FormFieldStatic titulo="Complemento" valor={this.state.dados.Entidade.COMP_END_ENTID} id="18" />
+                                    <FormFieldStatic titulo="Bairro" valor={this.state.dados.Entidade.BAIRRO_ENTID} id="19" />
                                 </div>
                                 <div className="form-row">
-                                    <FormFieldStatic titulo="Cidade" valor={this.state.dados.Entidade.CID_ENTID} col="4" id="21" />
-                                    <FormFieldStatic titulo="UF" valor={this.state.dados.Entidade.UF_ENTID} col="2" id="22" />
-                                    <FormFieldStatic titulo="CEP" valor={this.state.dados.CEP} id="23" />
+                                    <FormFieldStatic titulo="Cidade" valor={this.state.dados.Entidade.CID_ENTID} col="4" id="20" />
+                                    <FormFieldStatic titulo="UF" valor={this.state.dados.Entidade.UF_ENTID} col="2" id="21" />
+                                    <FormFieldStatic titulo="CEP" valor={this.state.dados.CEP} id="22" />
                                 </div>
                                 <br />
                             </div>

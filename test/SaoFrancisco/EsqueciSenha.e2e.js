@@ -10,15 +10,15 @@ describe('EsqueciSenha', () => {
     it("Valida CPF e data de nascimento inválidos", () => { 
         enviarNovaSenha("123", "01/01/18");
 
-        cy.get('.text-danger')
-            .contains("Preencha todos os campos corretamente!");
+        cy.get('#alerta-erro')
+            .contains("Campo \"Data de Nascimento\" inválido.Campo \"CPF\" inválido.");
     });
 
     it("Valida CPF e data de nascimento em branco", () => { 
         enviarNovaSenha("", "");
 
-        cy.get('.text-danger')
-            .contains("Preencha todos os campos!");
+        cy.get('#alerta-erro')
+            .contains("Campo \"Data de Nascimento\" inválido.Campo \"CPF\" inválido.");
     });
 
     // it("Faz requisição de nova senha com sucesso", async () => { 

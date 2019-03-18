@@ -17,7 +17,7 @@ describe('Login', () => {
     it("Valida credenciais inválidas", () => {
         doLogin("asd", "123");
 
-        cy.get("#alerta")
+        cy.get("#alerta-erro")
             .should("have.text", "Matrícula ou senha incorretos!");
     });
 

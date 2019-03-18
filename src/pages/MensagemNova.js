@@ -237,7 +237,7 @@ export default class MensagemNova extends React.Component {
                                 </Row>
                                 <Button id="enviar" titulo={"Enviar"} tipo="primary" submit onClick={this.validar} />
                                 <br /><br />
-                                <Alert ref={this.alert} padraoFormulario tipo={"danger"} tamanho={"6"} />
+                                <Alert id={"alerta-erro"} ref={this.alert} padraoFormulario tipo={"danger"} tamanho={"6"} />
                             </Form>      
                         </Box>
                             

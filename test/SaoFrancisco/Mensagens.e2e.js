@@ -19,20 +19,20 @@ describe('Mensagens', () => {
         cy.wait(3000);
     });
 
-    // it('Deve checar o painel de alerta do caso de não ter mensagens enviadas.', () => {
-    //     cy.get('#alertMensagem')
-    //         .should('have.text', 'Nenhuma mensagem enviada.');
-    // });
+    it('Deve checar o painel de alerta do caso de não ter mensagens enviadas.', () => {
+        cy.get('#alertMensagem')
+            .should('have.text', 'Nenhuma mensagem enviada.');
+    });
 
     it('Deve criar uma mensagem nova', () => {
-        cy.get('#titulo')
+        cy.get('#titulos')
             .should('have.text', 'Mensagens');
             
         cy.get('#novaMensagem')
             .click();
 
         cy.wait(3000);
-        cy.get('#titulo')
+        cy.get('#titulos')
             .should('have.text', 'Nova Mensagem');
 
         var tituloMensagem = 'Mensagem Teste';
@@ -68,14 +68,14 @@ describe('Mensagens', () => {
     });
 
     it('Não deve criar uma mensagem nova, com erros de campos obrigatórios e inválidos.', () => { 
-        cy.get('#titulo')
+        cy.get('#titulos')
             .should('have.text', 'Mensagens');
 
         cy.get('#novaMensagem')
             .click();
 
         cy.wait(3000);
-        cy.get('#titulo')
+        cy.get('#titulos')
             .should('have.text', 'Nova Mensagem');
 
         preencherCamposMensagem('', '', false, false, '', '', '', '', '', '123');
@@ -83,26 +83,18 @@ describe('Mensagens', () => {
         cy.get('#enviar')
             .click();
 
-        cy.get('#tituloVazio')
-            .should('have.text', 'Campo Obrigatório!');
-        
-        cy.get('#mensagemVazia')
-            .should('have.text', 'Campo Obrigatório!');
 
-        cy.get('#enviarViaVazio')
-            .should('have.text', 'Selecione ao menos uma opção!');
-
-        cy.get('#fundacaoVazia')
-            .should('have.text', 'Selecione a fundação!');
-
-        cy.get('#matriculaInvalida')
-            .should('have.text', 'Matrícula Inválida!');
+        cy.get('#alerta-erro')
+            .contains(`Campo "Título" obrigatório.
+                       Campo "Corpo da Mensagem" obrigatório.
+                       Campo "Fundação" obrigatório.
+                       Campo "Enviar via" obrigatório.`);
     })
 })
 
 function preencherCamposMensagem(titulo, mensagem, enviarEmail, enviarPortal, dataExpiracao, fundacao, empresa, plano, situacaoPlano, matricula) {
     if(titulo !== "")
-    cy.get('#tituloMensagem')
+    cy.get('#titulo')
         .clear()
         .type(titulo);
     

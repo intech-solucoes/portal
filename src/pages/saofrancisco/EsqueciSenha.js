@@ -73,7 +73,7 @@ export default class EsqueciSenha extends React.Component {
                     <Button id="enviarSenha" titulo={"Enviar Nova Senha"} tipo="primary" block submit usaLoading
                             onClick={this.enviarSenha} />
                     <br />
-                    <Alert ref={this.alert} padraoFormulario tipo={"danger"} tamanho={"12"} />
+                    <Alert id={"alerta-erro"} ref={this.alert} padraoFormulario tipo={"danger"} tamanho={"12"} />
 
                 </Form>
 

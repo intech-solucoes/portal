@@ -9,17 +9,17 @@ describe('Dados Pessoais', () => {
 
         cy.visit('/#/');
 
+        // cy.wait(5000);
         cy.get('#dadosPessoais')
             .click();
-
         cy.wait(3000);
     });
 
     it('Deve navegar para a tela e checar se há dados', () => {
-        cy.get("#titulo")
-            .should('have.text', 'Dados Pessoais');
+        cy.get("#titulos")
+            .should('have.text', 'Seus Dados');
 
-        for(var i = 0; i <= 23; i++) {  // Alterar isso aqui quando os ajustes na tela de Dados forem feitos.
+        for(var i = 0; i <= 22; i++) {  // Alterar isso aqui quando os ajustes na tela de Dados forem feitos.
             cy.get(`#${i}`)
                 .children().should('have.length.greaterThan', -1);
         }
