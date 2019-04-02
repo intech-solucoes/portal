@@ -156,26 +156,55 @@ export default class DetalhesPlano extends React.Component {
     render() {
         return(
             <Page {...this.props} ref={this.page}>
-                <Box>
-                    <div className="form-row">
-                        <FormFieldStatic titulo="Plano" valor={this.state.plano.DS_PLANO} />
-                    </div>
-                    
-                    <div className="form-row">
-                        <FormFieldStatic titulo="Situação no Plano" valor={this.state.plano.DS_CATEGORIA} col="6" />
-                        <FormFieldStatic titulo="Data de inscrição" valor={this.state.plano.DT_INSC_PLANO} col="6" />
-                    </div>
-                    
-                    <div className="form-row btn-toolbar">
-                        <div className="btn-group mr-2">
-                            <Button id={"gerarExtrato"} tipo={"primary"} className={"btn-md"} 
-                                    titulo={"Gerar Extrato"} onClick={() => this.toggleModal() } />
+            <Row>
+                <Col tamanho={"6"}>
+                    <Box>
+                        <div className="form-row">
+                            <FormFieldStatic titulo="Plano" valor={this.state.plano.DS_PLANO} />
+                        </div>
+                        
+                        <div className="form-row">
+                            <FormFieldStatic titulo="Situação no Plano" valor={this.state.plano.DS_CATEGORIA} col="6" />
+                            <FormFieldStatic titulo="Data de inscrição" valor={this.state.plano.DT_INSC_PLANO} col="6" />
+                        </div>
+                        
+                    </Box>
+                </Col>
+
+                <Col tamanho={"6"}>
+                    <Box titulo={"RESGATE"}>
+
+                        <div className="form-row">
+                            <FormFieldStatic titulo="Saldo" valor={"R$ 231.952,00"} col="6" />
                         </div>
 
-                        {this.renderModal()}
+                        <div className="form-row">
+                            <FormFieldStatic titulo="Valor Adicional" valor={"R$ 0,00"} col="6" />
+                        </div>
 
-                    </div>
-                </Box>
+                        <div className="form-row">
+                            <FormFieldStatic titulo="Outros Descontos" valor={"R$ 231.952,00"} col="6" />
+                            <FormFieldStatic titulo="Valor Isento de Tributação" valor={"R$ 7.083,63"} col="6" />
+                        </div>
+
+                        <div className="form-row">
+                            <FormFieldStatic titulo="IRPF" valor={"R$ 92.862,84"} col="6" />
+                            <FormFieldStatic titulo="Valor Total" valor={"R$ 210.180,16"} col="6" />
+                        </div>
+
+                        <div className="form-row btn-toolbar">
+                            <div className="btn-group mr-2">
+                                <Button id={"gerarExtrato"} tipo={"primary"} className={"btn-md"} 
+                                        titulo={"Gerar Extrato"} onClick={() => this.toggleModal() } />
+                            </div>
+
+                            {this.renderModal()}
+
+                        </div>
+
+                    </Box>
+                </Col>
+            </Row>
             </Page>
         );
     }
