@@ -47,7 +47,9 @@ export default class Planos extends React.Component {
                                             <td>{plano.DS_CATEGORIA}</td>
                                             <td>{plano.DT_INSC_PLANO}</td>
                                             <td align="center">
-                                                <Link className={"btn btn-primary btn-sm"} onClick={() => localStorage.setItem("empresa", plano.CD_EMPRESA)} to={`/planos/${plano.CD_PLANO}`}>Detalhes</Link>
+                                                {plano.CD_CATEGORIA !== "2" &&
+                                                    <Link className={"btn btn-primary btn-sm"} onClick={() => localStorage.setItem("empresa", plano.CD_EMPRESA)} to={`/planos/${plano.CD_PLANO}`}>Detalhes</Link>
+                                                }
                                             </td>
                                         </tr>
                                     );

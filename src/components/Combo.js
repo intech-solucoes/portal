@@ -28,8 +28,7 @@ export default class Combo extends Component {
 
 	static defaultProps = {
 		padrao: "",
-		opcoes: [],
-		textoVazio: "Selecione uma opção"
+		opcoes: []
 	}
 
 	async componentDidMount() {
@@ -55,10 +54,12 @@ export default class Combo extends Component {
 	}
 
 	onChange = async (e) => {
+        var target = e.target;
+
         await handleFieldChange(this.props.contexto, e);
         
 		if(this.props.onChange) {
-			await this.props.onChange(e);
+			await this.props.onChange(target);
 		}
 	}
 

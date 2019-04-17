@@ -61,9 +61,8 @@ export default class Home extends React.Component {
                                     Esta opção mostra o comprovante de pagamento realizado pela PREVES para aquele Participante que já está na condição de Beneficiário
                                 </HomeItem>
 
-                                <HomeItem titulo={"Informe de rendimentos"} emDesenvolvimento>
-                                    Este item só terá informações para os participantes que efetuarem contribuições esporádicas ou que estiverem na situação de Autopatrocinado. 
-                                    Os demais participantes terão o informe de rendimento disponibilizado por meio de seu órgão de lotação
+                                <HomeItem titulo={"Informe de rendimentos"}>
+                                    Este item só terá informações para os beneficiários e participantes que resgataram suas contribuições e para os participantes autopatrocinados e os que efetuaram contribuições esporádicas. Os demais participantes terão o informe de rendimentos disponibilizado por meio de seu órgão de lotação
                                 </HomeItem>
 
                                 <HomeItem titulo={"Recadastramento"} emDesenvolvimento>

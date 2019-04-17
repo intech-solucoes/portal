@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { FuncionarioService, UsuarioService } from "@intechprev/prevsystem-service";
+import { DadosPessoaisService, UsuarioService } from "@intechprev/prevsystem-service";
 
 import { Row, Col } from "../components";
 
@@ -32,7 +32,7 @@ export default class Page extends React.Component {
             var token = await localStorage.getItem("token");
 
             if (token) {
-                var { data: dados } = await FuncionarioService.Buscar();
+                var { data: dados } = await DadosPessoaisService.Buscar();
                 var nomeUsuario = dados.Funcionario.NOME_ENTID;
 
                 var { data: admin } = await UsuarioService.VerificarAdmin();

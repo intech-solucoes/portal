@@ -4,7 +4,7 @@ import packageJson from '../../../package.json';
 import LoginForm from "../_shared/LoginForm";
 import { PageClean } from "../";
 
-import { UsuarioService, FuncionarioService } from "@intechprev/prevsystem-service";
+import { UsuarioService } from "@intechprev/prevsystem-service";
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -17,41 +17,37 @@ export default class Login extends React.Component {
         try {
             this.loginForm.current.limparErro();
             
-            var loginResult = await UsuarioService.Login(cpf, senha);    
-            await localStorage.setItem("token", loginResult.data.AccessToken);
-            await localStorage.setItem("admin", loginResult.data.Admin);
+            var { data: login } = await UsuarioService.Login(cpf, senha, "v1");
+            await localStorage.setItem("token", login.AccessToken);
+            await localStorage.setItem("token-admin", login.AccessToken);
+                    
+            // var { data: dados } = await FuncionarioService.Buscar();
 
-            var { data: funcionarios } = await FuncionarioService.BuscarPorCpf();
-            var inscricoes = [];
-            for(var i = 0; i < funcionarios.length; i++) {
-                if(!inscricoes.includes(funcionarios[i].NUM_INSCRICAO))
-                    inscricoes.push(funcionarios[i].NUM_INSCRICAO);
-            }
+            // await localStorage.setItem("fundacao", dados.Funcionario.CD_FUNDACAO);
+            // await localStorage.setItem("empresa", dados.Funcionario.CD_EMPRESA);
 
-            if(inscricoes.length > 1)
-                this.props.history.push("/selecionarMatricula");
-            else
-                document.location = ".";
+            document.location = ".";
         } catch(erro) {
             if(erro.response) {
                 await this.loginForm.current.mostrarErro(erro.response.data);
             } else {
                 await this.loginForm.current.mostrarErro(erro);
+                //alert("Ocorreu um erro ao processar sua requisição!");
             }
         }
     }
 
     render() {
         return (
-            <PageClean {...this.props}>
-                <h4>Bem vindo ao portal da Preves</h4>
+			<PageClean {...this.props}>
+                <h4>Bem vindo ao portal da Cageprev</h4>
 
                 <h5>
                     <b>Área de Acesso Restrito</b><br />
-                    Para informações, entre em contato com a <a href="http://www.preves.es.gov.br/contato.html">Preves</a><br />
+                    <small>Para informações, entre em contato com a <a href="http://www.franweb.com.br/contact.html">Cageprev</a></small><br />
                     <br />
                 </h5>
-                
+
                 <LoginForm ref={this.loginForm} mostrarPrimeiroAcesso={true} onSubmit={this.onSubmit} usuarioPlaceholder={"CPF"} />
                 
                 <br/>

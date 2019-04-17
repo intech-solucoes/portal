@@ -18,10 +18,10 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@intechprev/prevsystem-service@^1.5.1":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@intechprev/prevsystem-service/-/prevsystem-service-1.5.1.tgz#37bd4833edab45482940636e7fab62454c40e697"
-  integrity sha512-tgaCkrG4MZXgkFshAzRtx6spv+y7QMk9cRRlneTTMkN9esICeTf4g/8L0nHFsz2HmVwO6YuZr40AGc5zjgGI7Q==
+"@intechprev/prevsystem-service@1.6.2":
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/@intechprev/prevsystem-service/-/prevsystem-service-1.6.2.tgz#c7469e2209623157fc1ba6fbb7707d4cf3beb6fe"
+  integrity sha512-GVv2eBv+I/Beamplm2X1kmi18T60fJLIk8U/1RpMw//OyZTYxVDSsrLpc5lk6Qqe902Ngw7i4Jts6ndxeo6auA==
   dependencies:
     "@intechprev/service" "^1.1.0"
 

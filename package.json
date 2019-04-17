@@ -1,10 +1,10 @@
 {
   "name": "portalprev",
-  "version": "1.10.0",
+  "version": "1.12.0",
   "private": true,
   "homepage": ".",
   "dependencies": {
-    "@intechprev/prevsystem-service": "^1.6.0",
+    "@intechprev/prevsystem-service": "1.6.2",
     "@intechprev/react-lib": "^0.0.8",
     "@intechprev/service": "^1.1.0",
     "autoprefixer": "7.1.6",

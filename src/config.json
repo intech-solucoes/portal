@@ -1,4 +1,4 @@
 {
-  "cliente": "saofrancisco",
-  "apiUrl": "http://localhost/SaofranciscoAPI/api"
+    "cliente": "preves",
+    "apiUrl": "http://api-portal.preves.es.gov.br/api"
 }
