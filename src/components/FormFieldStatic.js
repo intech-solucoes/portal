@@ -6,14 +6,22 @@ export default class FormFieldStatic extends Component {
     render() {
         var valor = "";
 
-        if(this.props.valor) {
-            valor = this.props.valor;
+        if(this.props.valor === 0) {
+            if(this.props.tipo === "dinheiro")
+                valor = "R$ 0,00";
+            else
+                valor = "0";    
+        }
+        else {
+            if(this.props.valor) {
+                valor = this.props.valor;
 
-            if(this.props.tipo === "dinheiro") {
-                if(typeof(valor) === "string")
-                    valor = `R$ ${Number.parseInt(valor).toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-                else
-                    valor = `R$ ${valor.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                if(this.props.tipo === "dinheiro") {
+                    if(typeof(valor) === "string")
+                        valor = `R$ ${Number.parseInt(valor).toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                    else
+                        valor = `R$ ${valor.toLocaleString('pt-br', { minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                }
             }
         }
 

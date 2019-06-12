@@ -35,7 +35,7 @@ export default class DetalhesPlano extends React.Component {
             var { data: possuiSeguro } = await PlanoService.PossuiCertificadoSeguro();
             var { data: salario } = await SalarioBaseService.Buscar();
             var { data: saldo } = await FichaFechamentoPrevesService.BuscarSaldoPorPlano(this.state.cdPlano);
-
+            
             await this.setState({ plano, possuiSeguro, salario, saldo });
             await this.page.current.loading(false);
         } catch(err) {

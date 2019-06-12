@@ -57,8 +57,7 @@ export default class DadosPessoais extends React.Component {
                                 <FormFieldStatic titulo="Nome da Mãe" valor={this.state.dados.DadosPessoais.NOME_MAE} id="14" />
                             </div>
                             <div className="form-row">
-                                <FormFieldStatic titulo="Contrato Único" valor={"Não Assinado"} id="15" />
-                                <FormFieldStatic titulo="E-mail" valor={this.state.dados.DadosPessoais.EMAIL_AUX} col="6" id="16" />
+                                <FormFieldStatic titulo="E-mail" valor={this.state.dados.DadosPessoais.EMAIL_AUX} id="16" />
                             </div>
                         </Box>
                     </Col>

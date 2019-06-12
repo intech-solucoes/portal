@@ -44,13 +44,13 @@ export default class Page extends React.Component {
             } else {
                 localStorage.removeItem("token");
                 localStorage.removeItem("token-admin");
-                this.props.history.push("login");
+                this.props.history.push("/login");
             }
         } catch (err) {
             if (err.message.indexOf("401") > -1) {
                 localStorage.removeItem("token");
                 localStorage.removeItem("token-admin");
-                this.props.history.push("login");
+                this.props.history.push("/login");
             }
         }
 
