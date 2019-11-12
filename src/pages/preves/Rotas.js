@@ -137,8 +137,9 @@ function GetRotas() {
         {
             titulo: "Selecionar Matrícula",
             caminho: "/selecionarMatricula",
+            icone: "fas fa-exchange-alt",
             componente: (routeProps) => <SelecionarMatricula {...routeProps} />,
-            mostrarMenu: false,
+            mostrarMenu: true,
             exact: false,
             id: "selecionarMatricula"
         },

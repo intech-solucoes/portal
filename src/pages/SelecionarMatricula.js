@@ -14,7 +14,6 @@ export default class SelecionarMatricula extends Component {
 
     async componentDidMount() {
         var { data: funcionarios } = await FuncionarioService.BuscarPorCpf();
-        console.log(funcionarios);
 
         await this.setState({ funcionarios });
     }
